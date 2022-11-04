@@ -1,0 +1,46 @@
+.App {
+  height: 100%;
+  display: grid;
+  grid: 1fr / 320px 1fr;
+  grid-template-areas: 'menu canvas-container';
+}
+
+.canvas-container {
+  position: relative;
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  background-color: rgb(216, 0, 0);
+  color: white;
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
+  pointer-events: none;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.alert-icon {
+  font-size: 1.6rem;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.alert.show {
+  opacity: 1;
+  pointer-events: initial;
+}
