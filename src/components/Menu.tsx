@@ -22,7 +22,6 @@ function Menu() {
             type='file'
             accept='.obj'
             onChange={(event) => {
-              console.log(event.target.files![0]);
               readFile(event.target.files![0]);
             }}
           />

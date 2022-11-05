@@ -4,6 +4,10 @@ export class ObjectData {
   constructor(faces: Face[]) {
     this.faces = faces;
   }
+
+  drawOutline(ctx: CanvasRenderingContext2D, scale: number): void {
+    this.faces.forEach((face) => face.drawOutline(ctx, scale));
+  }
 }
 
 export class Face {
@@ -11,6 +15,26 @@ export class Face {
 
   constructor(vertices: Vertex[]) {
     this.vertices = vertices;
+  }
+
+  drawOutline(ctx: CanvasRenderingContext2D, scale: number): void {
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'black';
+    for (let i = 0; i < this.vertices.length; i++) {
+      if (i === 0) {
+        ctx.moveTo(
+          this.vertices[i].x * scale + scale,
+          this.vertices[i].y * scale + scale
+        );
+      } else {
+        ctx.lineTo(
+          this.vertices[i].x * scale + scale,
+          this.vertices[i].y * scale + scale
+        );
+      }
+    }
+    ctx.stroke();
   }
 }
 
