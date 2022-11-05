@@ -1,8 +1,6 @@
 import { useEffect, useContext } from 'react';
 import { AppContext } from '../AppContext';
 
-const scale = 400;
-
 function Canvas() {
   const { canvasRef, canvasSize: size, objectData } = useContext(AppContext);
   const ctx = () => canvasRef.current?.getContext('2d', { alpha: false })!;
@@ -18,7 +16,8 @@ function Canvas() {
     );
 
     // draw
-    objectData?.drawOutline(ctx, scale);
+    objectData?.drawOutline(ctx);
+    objectData?.fill(ctx);
   };
 
   useEffect(() => draw(), [size, objectData]);
