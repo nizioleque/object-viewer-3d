@@ -6,14 +6,6 @@ export class ObjectData {
   constructor(faces: Face[]) {
     this.faces = faces;
   }
-
-  drawOutline(ctx: CanvasRenderingContext2D): void {
-    this.faces.forEach((face) => face.drawOutline(ctx));
-  }
-
-  fill(ctx: CanvasRenderingContext2D): void {
-    this.faces.forEach((face) => face.fillPolygon(ctx));
-  }
 }
 
 export class Face {
@@ -43,33 +35,6 @@ export class Face {
       if (!this.edgeTable[yMin]) this.edgeTable[yMin] = [];
       this.edgeTable[yMin].push(edgeData);
     }
-  }
-
-  fillPolygon(ctx: CanvasRenderingContext2D) {
-    const activeEdgeTable = [];
-
-    const tempEdgeTable: EdgeData[][] = [];
-    for (const edgeTableRow in this.edgeTable) {
-      tempEdgeTable[edgeTableRow] = [...this.edgeTable[edgeTableRow]];
-    }
-
-    const startIndex = Math.min(...Array.from(this.edgeTable.keys()));
-
-    while (activeEdgeTable.length > 0 && this.edgeTable.length > 0) {}
-  }
-
-  drawOutline(ctx: CanvasRenderingContext2D): void {
-    ctx.beginPath();
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = 'black';
-    for (let i = 0; i < this.vertices.length; i++) {
-      if (i === 0) {
-        ctx.moveTo(this.vertices[i].x, this.vertices[i].y);
-      } else {
-        ctx.lineTo(this.vertices[i].x, this.vertices[i].y);
-      }
-    }
-    ctx.stroke();
   }
 }
 
