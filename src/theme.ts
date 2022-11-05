@@ -1,1 +1,0 @@
-export const accentColor = '#00dddd';

@@ -1,11 +1,8 @@
-import { useEffect, MouseEvent, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { AppContext } from '../AppContext';
 
 function Canvas() {
-  const {
-    canvasRef,
-    canvasSize: size,
-  } = useContext(AppContext);
+  const { canvasRef, canvasSize: size } = useContext(AppContext);
   const ctx = () => canvasRef.current?.getContext('2d')!;
 
   const draw = () => _draw(ctx());

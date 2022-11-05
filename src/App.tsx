@@ -5,6 +5,7 @@ import Menu from './components/Menu';
 import { AppContext } from './AppContext';
 import useForceRerender from './hooks/useForceRerender';
 import useError from './hooks/useError';
+// import { ObjectData } from './types';
 
 function App() {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -28,6 +29,11 @@ function App() {
 
   const { showError, errorText, setErrorText } = useError();
 
+  // const [objectData, setObjectData] = useState<ObjectData>();
+  const readFile = (file: File) => {
+    console.log(file.name);
+  };
+
   useEffect(() => {
     updateCanvasSize();
     const resizeHandler = () => {
@@ -38,7 +44,9 @@ function App() {
   }, []);
 
   return (
-    <AppContext.Provider value={{}}>
+    <AppContext.Provider
+      value={{ canvasRef, canvasSize, setErrorText, forceRerender, readFile }}
+    >
       <div className='App'>
         <Menu />
         <div className='canvas-container' ref={canvasContainerRef}>
