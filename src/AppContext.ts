@@ -6,7 +6,7 @@ interface AppContext {
   canvasSize: { width: number; height: number; pixelRatio: number };
   setErrorText: (text: string) => void;
   forceRerender: () => void;
-  readFile: (file: File) => void;
+  readFile: (file: Blob) => void;
   objectData: ObjectData | undefined;
   lightPosition: Point3D;
 }

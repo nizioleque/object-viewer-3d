@@ -13,9 +13,9 @@ export class Face {
   b1: number = 0;
   b2: number = 0;
 
-  constructor(vertices: Vertex[], index: number) {
+  constructor(vertices: Vertex[]) {
     this.vertices = vertices;
-    this.createEdgeTable(index === 401);
+    this.createEdgeTable();
 
     this.det =
       (this.vertices[1].y - this.vertices[2].y) *
@@ -29,13 +29,11 @@ export class Face {
     this.b2 = this.vertices[0].x - this.vertices[2].x;
   }
 
-  createEdgeTable(log: boolean) {
+  createEdgeTable() {
     this.edgeTable = [];
 
     for (let i = 0; i < this.vertices.length; i++) {
       const iNext = (i + 1) % this.vertices.length;
-
-      log && console.log(this.vertices[i]);
 
       const leftVertex =
         this.vertices[i].x > this.vertices[iNext].x
@@ -46,10 +44,7 @@ export class Face {
           ? this.vertices[iNext]
           : this.vertices[i];
 
-      if (leftVertex.y === rightVertex.y) {
-        log && console.log('left equals right');
-        continue;
-      }
+      if (leftVertex.y === rightVertex.y) continue;
 
       const yMinVertex =
         this.vertices[i].y < this.vertices[iNext].y
@@ -65,8 +60,6 @@ export class Face {
 
       const yMin = yMinVertex.y;
       if (!this.edgeTable[yMin]) this.edgeTable[yMin] = [];
-
-      log && console.log(edgeData);
 
       this.edgeTable[yMin].push(edgeData);
     }

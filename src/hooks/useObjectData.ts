@@ -5,12 +5,12 @@ import { parsePoint, scalePoint } from '../utils';
 export default function useObjectData() {
   const [objectData, _setObjectData] = useState<ObjectData>();
 
-  const readFile = (file: File) => {
+  const readFile = (file: Blob) => {
     _setObjectData(undefined);
     parseFile(file);
   };
 
-  const parseFile = async (file: File) => {
+  const parseFile = async (file: Blob) => {
     const faceData: string[][] = [];
     const vertices: Point3D[] = [];
     const vectors: Point3D[] = [];
@@ -70,16 +70,14 @@ export default function useObjectData() {
           // add vertex to face
           verticesParsed.push(newVertex);
         } else {
-          console.log('vertex already exists');
           verticesParsed.push(existingVertex);
         }
       }
 
-      newObjectData.faces.push(new Face(verticesParsed, parseInt(faceIndex)));
+      newObjectData.faces.push(new Face(verticesParsed));
     }
 
     _setObjectData(newObjectData);
-    console.log(newObjectData);
   };
 
   return { objectData, readFile };

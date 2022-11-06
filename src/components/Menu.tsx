@@ -5,6 +5,14 @@ import './Menu.css';
 function Menu() {
   const { readFile } = useContext(AppContext);
 
+  const readExampleFile = (path: string) => {
+    fetch(path)
+      .then((res) => res.blob())
+      .then((blob) => {
+        readFile(blob);
+      });
+  };
+
   return (
     <div className='menu'>
       <header>
@@ -26,6 +34,20 @@ function Menu() {
             }}
           />
           <h5>Wczytaj przykładowy</h5>
+          <div
+            className='menu-button horizontal'
+            onClick={() => readExampleFile('/kula_1.obj')}
+          >
+            <div>Kula</div>
+            <button className='apply-button'>Otwórz</button>
+          </div>
+          <div
+            className='menu-button horizontal'
+            onClick={() => readExampleFile('/kula_2.obj')}
+          >
+            <div>Kula (wektory uśrednione)</div>
+            <button className='apply-button'>Otwórz</button>
+          </div>
         </div>
       </div>
       <div className='menu-section'>

@@ -31,8 +31,6 @@ export function fillPolygon(
 
     // fill pixels
     if (y > canvasHeight - 1) return;
-    // console.log(canvasHeight);
-    // fillLine();
 
     if (activeEdgeTable.length % 2 !== 0) return;
 
@@ -42,7 +40,7 @@ export function fillPolygon(
       for (let x = startX; x <= endX; x++) {
         if (x > canvasWidth - 1) continue;
         const offset = (y * canvasWidth + x) * 4;
-        pixels.set(getColor(face, x, y), offset);
+        pixels.set(getPixelColor(face, x, y), offset);
       }
     }
 
@@ -54,7 +52,7 @@ export function fillPolygon(
   } while (activeEdgeTable.length > 0 && tempEdgeTable.length > 0);
 }
 
-function getColor(face: Face, x: number, y: number) {
+function getPixelColor(face: Face, x: number, y: number) {
   const alpha =
     (face.a1 * (x - face.vertices[2].x) + face.a2 * (y - face.vertices[2].y)) /
     face.det;
