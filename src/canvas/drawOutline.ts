@@ -14,12 +14,13 @@ export function drawFaceOutline(
 ): void {
   ctx.beginPath();
   ctx.lineWidth = 1;
-  if (index === 300) ctx.strokeStyle = 'red';
-  else ctx.strokeStyle = 'black';
-  ctx.moveTo(face.vertices[0].x, face.vertices[0].y);
+  //   if (index === 401) ctx.strokeStyle = 'red';
+  //   else ctx.strokeStyle = 'black';
+  ctx.strokeStyle = 'red';
+  ctx.moveTo(face.vertices[0].x + 0.5, face.vertices[0].y + 0.5);
   for (let i = 1; i < face.vertices.length; i++) {
-    ctx.lineTo(face.vertices[i].x, face.vertices[i].y);
+    ctx.lineTo(face.vertices[i].x + 0.5, face.vertices[i].y + 0.5);
   }
-  ctx.lineTo(face.vertices[0].x, face.vertices[0].y);
+  ctx.lineTo(face.vertices[0].x + 0.5, face.vertices[0].y + 0.5);
   ctx.stroke();
 }

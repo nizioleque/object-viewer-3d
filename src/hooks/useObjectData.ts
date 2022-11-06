@@ -33,10 +33,10 @@ export default function useObjectData() {
       }
     }
 
-    for (const face of faces) {
+    for (const faceIndex in faces) {
       const verticesParsed: Vertex[] = [];
 
-      for (const vertex of face) {
+      for (const vertex of faces[parseInt(faceIndex)]) {
         const index = vertex.split('//');
         if (index.length !== 2) continue;
         const v = vertices[parseInt(index[0]) - 1];
@@ -44,7 +44,7 @@ export default function useObjectData() {
         verticesParsed.push(new Vertex(v, vn));
       }
 
-      newObjectData.faces.push(new Face(verticesParsed));
+      newObjectData.faces.push(new Face(verticesParsed, parseInt(faceIndex)));
     }
 
     _setObjectData(newObjectData);

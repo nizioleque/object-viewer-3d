@@ -5,7 +5,7 @@ import { fill } from '../canvas/fill';
 
 function Canvas() {
   const { canvasRef, canvasSize: size, objectData } = useContext(AppContext);
-  const ctx = () => canvasRef.current?.getContext('2d', { alpha: false })!;
+  const ctx = () => canvasRef.current?.getContext('2d')!;
 
   const draw = () => _draw(ctx());
   const _draw = (ctx: CanvasRenderingContext2D) => {
@@ -18,8 +18,9 @@ function Canvas() {
     );
 
     // draw
-    objectData && drawOutlines(objectData, ctx);
-    objectData && fill(objectData, ctx);
+    if (!objectData) return;
+    fill(objectData, ctx);
+    drawOutlines(objectData, ctx);
   };
 
   useEffect(() => draw(), [size, objectData]);

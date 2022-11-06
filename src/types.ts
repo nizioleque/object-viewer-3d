@@ -12,25 +12,32 @@ export class Face {
   vertices: Vertex[];
   edgeTable: EdgeData[][] = [];
 
-  constructor(vertices: Vertex[]) {
+  constructor(vertices: Vertex[], index: number) {
     this.vertices = vertices;
-    this.createEdgeTable();
+    this.createEdgeTable(index === 401);
   }
 
-  createEdgeTable() {
+  createEdgeTable(log: boolean) {
     this.edgeTable = [];
 
     for (let i = 0; i < this.vertices.length; i++) {
       const iNext = (i + 1) % this.vertices.length;
+
+      log && console.log(this.vertices[i]);
 
       const leftVertex =
         this.vertices[i].x > this.vertices[iNext].x
           ? this.vertices[iNext]
           : this.vertices[i];
       const rightVertex =
-        this.vertices[i].x < this.vertices[iNext].x
+        this.vertices[i] === leftVertex
           ? this.vertices[iNext]
           : this.vertices[i];
+
+      if (leftVertex.y === rightVertex.y) {
+        log && console.log('left equals right');
+        continue;
+      }
 
       const yMinVertex =
         this.vertices[i].y < this.vertices[iNext].y
@@ -38,13 +45,17 @@ export class Face {
           : this.vertices[iNext];
 
       const edgeData: EdgeData = {
-        xMin: yMinVertex.x,
+        xofYMin: yMinVertex.x,
         yMax: Math.max(this.vertices[i].y, this.vertices[iNext].y),
-        slope: (rightVertex.y - leftVertex.y) / (rightVertex.x - leftVertex.x),
+        slopeInverted:
+          (rightVertex.x - leftVertex.x) / (rightVertex.y - leftVertex.y),
       };
 
-      const yMin = Math.min(this.vertices[i].y, this.vertices[iNext].y);
+      const yMin = yMinVertex.y;
       if (!this.edgeTable[yMin]) this.edgeTable[yMin] = [];
+
+      log && console.log(edgeData);
+
       this.edgeTable[yMin].push(edgeData);
     }
   }
@@ -81,8 +92,8 @@ export class Vector extends Point3D {}
 
 export interface EdgeData {
   yMax: number;
-  xMin: number;
-  slope: number;
+  xofYMin: number;
+  slopeInverted: number;
 }
 
 export interface ActiveEdgeData {
