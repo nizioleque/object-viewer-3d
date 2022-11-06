@@ -26,7 +26,7 @@ function Menu() {
       <div className='menu-section'>
         <h3>Wczytytanie modelu</h3>
         <div className='buttons'>
-          <h5>Wczytaj z pliku</h5>
+          <h5>Z pliku</h5>
           <input
             type='file'
             accept='.obj'
@@ -34,7 +34,7 @@ function Menu() {
               readFile(event.target.files![0]);
             }}
           />
-          <h5>Wczytaj przykładowy</h5>
+          <h5>Przykład</h5>
           <div
             className='menu-button horizontal'
             onClick={() => readExampleFile('/kula_1.obj')}

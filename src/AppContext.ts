@@ -4,7 +4,6 @@ import { ObjectData, Point3D } from './types';
 
 interface AppContext {
   canvasRef: RefObject<HTMLCanvasElement>;
-  canvasSize: { width: number; height: number; pixelRatio: number };
   setErrorText: (text: string) => void;
   forceRerender: () => void;
   readFile: (file: Blob) => void;
@@ -15,7 +14,6 @@ interface AppContext {
 
 const appContextDefaultValue: AppContext = {
   canvasRef: { current: null },
-  canvasSize: { width: 0, height: 0, pixelRatio: 1 },
   setErrorText: () => {},
   forceRerender: () => {},
   readFile: () => {},

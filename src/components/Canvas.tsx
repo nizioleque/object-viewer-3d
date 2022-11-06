@@ -2,17 +2,13 @@ import { useEffect, useContext, useRef, useMemo } from 'react';
 import { AppContext } from '../AppContext';
 import { drawOutlines } from '../canvas/drawOutline';
 import { fill } from '../canvas/fill';
+import { scale } from '../constants';
 
 const rendersCount = 20;
 
 function Canvas() {
-  const {
-    canvasRef,
-    canvasSize: size,
-    objectData,
-    lightPosition,
-    params,
-  } = useContext(AppContext);
+  const { canvasRef, objectData, lightPosition, params } =
+    useContext(AppContext);
 
   const ctx = useMemo(
     () =>
@@ -29,12 +25,7 @@ function Canvas() {
     if (!ctx) return;
 
     ctx.fillStyle = 'white';
-    ctx.fillRect(
-      0,
-      0,
-      size.width * size.pixelRatio,
-      size.height * size.pixelRatio
-    );
+    ctx.fillRect(0, 0, scale * 2, scale * 2);
 
     // draw
     if (!objectData) return;
@@ -54,20 +45,9 @@ function Canvas() {
     );
   };
 
-  useEffect(() => draw(), [size, objectData, ...Object.values(params)]);
+  useEffect(() => draw(), [objectData, ...Object.values(params)]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className='canvas'
-      width={size.width * size.pixelRatio}
-      height={size.height * size.pixelRatio}
-      style={{
-        width: `${size.width}px`,
-        height: `${size.height}px`,
-      }}
-    />
-  );
+  return <canvas ref={canvasRef} width={scale * 2} height={scale * 2} />;
 }
 
 export default Canvas;

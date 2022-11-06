@@ -1,6 +1,6 @@
 import Canvas from './components/Canvas';
 import './App.css';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Menu from './components/Menu';
 import { AppContext } from './AppContext';
 import useForceRerender from './hooks/useForceRerender';
@@ -12,20 +12,6 @@ import useParams from './hooks/useParams';
 function App() {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  const [canvasSize, setCanvasSize] = useState({
-    width: 0,
-    height: 0,
-    pixelRatio: 1,
-  });
-  const updateCanvasSize = () => {
-    if (!canvasContainerRef.current) return;
-    setCanvasSize({
-      width: canvasContainerRef.current.offsetWidth,
-      height: canvasContainerRef.current.offsetHeight,
-      pixelRatio: window.devicePixelRatio || 1,
-    });
-  };
 
   const { forceRerender } = useForceRerender();
 
@@ -41,20 +27,10 @@ function App() {
 
   const params = useParams();
 
-  useEffect(() => {
-    updateCanvasSize();
-    const resizeHandler = () => {
-      updateCanvasSize();
-    };
-    window.addEventListener('resize', resizeHandler);
-    return () => window.removeEventListener('resize', resizeHandler);
-  }, []);
-
   return (
     <AppContext.Provider
       value={{
         canvasRef,
-        canvasSize,
         setErrorText,
         forceRerender,
         objectData,
