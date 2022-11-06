@@ -23,12 +23,24 @@ export class Face {
     for (let i = 0; i < this.vertices.length; i++) {
       const iNext = (i + 1) % this.vertices.length;
 
+      const leftVertex =
+        this.vertices[i].x > this.vertices[iNext].x
+          ? this.vertices[iNext]
+          : this.vertices[i];
+      const rightVertex =
+        this.vertices[i].x < this.vertices[iNext].x
+          ? this.vertices[iNext]
+          : this.vertices[i];
+
+      const yMinVertex =
+        this.vertices[i].y < this.vertices[iNext].y
+          ? this.vertices[i]
+          : this.vertices[iNext];
+
       const edgeData: EdgeData = {
-        xMin: Math.min(this.vertices[i].x, this.vertices[iNext].x),
+        xMin: yMinVertex.x,
         yMax: Math.max(this.vertices[i].y, this.vertices[iNext].y),
-        slope:
-          (this.vertices[iNext].y - this.vertices[i].y) /
-          (this.vertices[iNext].x - this.vertices[i].x),
+        slope: (rightVertex.y - leftVertex.y) / (rightVertex.x - leftVertex.x),
       };
 
       const yMin = Math.min(this.vertices[i].y, this.vertices[iNext].y);
@@ -71,4 +83,9 @@ export interface EdgeData {
   yMax: number;
   xMin: number;
   slope: number;
+}
+
+export interface ActiveEdgeData {
+  edgeData: EdgeData;
+  x: number;
 }
