@@ -1,11 +1,16 @@
-import { ActiveEdgeData, EdgeData, Face, ObjectData, Point3D } from '../types';
+import { ObjectData, Point3D, Vertex } from '../types';
+import { fillPolygon } from './fillPolygon';
 
 export function fill(
   objectData: ObjectData,
   ctx: CanvasRenderingContext2D
 ): number {
-  ctx.fillStyle = 'black';
   const t0 = performance.now();
+
+  calculateVertexColors(objectData);
+
+  // console.log(objectData);
+  // return 0;
 
   const canvasWidth = ctx.canvas.width;
   const canvasHeight = ctx.canvas.height;
@@ -14,6 +19,7 @@ export function fill(
   objectData.faces.forEach((face) =>
     fillPolygon(face, imageData.data, canvasWidth, canvasHeight)
   );
+  // fillPolygon(objectData.faces[403], imageData.data, canvasWidth, canvasHeight);
   ctx.putImageData(imageData, 0, 0);
 
   const t1 = performance.now();
@@ -21,58 +27,16 @@ export function fill(
   return t1 - t0;
 }
 
-export function fillPolygon(
-  face: Face,
-  pixels: Uint8ClampedArray,
-  canvasWidth: number,
-  canvasHeight: number
-) {
-  let activeEdgeTable: ActiveEdgeData[] = [];
-
-  const tempEdgeTable: EdgeData[][] = [];
-  for (const edgeTableRow in face.edgeTable) {
-    tempEdgeTable[edgeTableRow] = [...face.edgeTable[edgeTableRow]];
+function calculateVertexColors(objectData: ObjectData) {
+  for (const row of objectData.vertices) {
+    // const row = objectData.vertices[parseInt(rowIndex)];
+    if (!row) continue;
+    for (const vertex of row) {
+      // const vertex = row[parseInt(vertexIndex)];
+      if (!vertex) continue;
+      calculateColor(vertex);
+    }
   }
-
-  let y = Math.min(...Object.keys(tempEdgeTable).map((key) => parseInt(key)));
-
-  do {
-    // move from ET to AET
-    if (tempEdgeTable[y]) {
-      tempEdgeTable[y].forEach((e) => {
-        activeEdgeTable.push({ edgeData: e, x: e.xofYMin });
-      });
-    }
-
-    // remove from AET
-    activeEdgeTable = activeEdgeTable.filter((e) => y < e.edgeData.yMax);
-
-    // sort AET
-    activeEdgeTable.sort((a, b) => a.x - b.x);
-
-    // fill pixels
-    if (y > canvasHeight - 1) return;
-    // console.log(canvasHeight);
-    // fillLine();
-
-    if (activeEdgeTable.length % 2 !== 0) return;
-
-    for (let i = 0; i < activeEdgeTable.length; i += 2) {
-      const startX = activeEdgeTable[i].x << 0;
-      const endX = activeEdgeTable[i + 1].x << 0;
-      for (let x = startX; x <= endX; x++) {
-        if (x > canvasWidth - 1) continue;
-        const offset = (y * canvasWidth + x) * 4;
-        pixels.set(calculateColor(), offset);
-      }
-    }
-
-    // move to next scan line
-    y++;
-
-    // update x in AET
-    activeEdgeTable.forEach((e) => (e.x += e.edgeData.slopeInverted));
-  } while (activeEdgeTable.length > 0 && tempEdgeTable.length > 0);
 }
 
 const V: Point3D = { x: 0, y: 0, z: 1 };
@@ -83,20 +47,21 @@ const kd = 0.5;
 const ks = 0.5;
 const m = 10;
 
-function calculateColor() {
-
+function calculateColor(vertex: Vertex) {
   // const cosNL = ;
   // const cosVR = ;
 
   // const I1;
   // const I2;
 
-  return [
+  vertex.color = [
     (Math.random() * 255) << 0,
     (Math.random() * 255) << 0,
     (Math.random() * 255) << 0,
     255,
   ];
+
+  // console.log('a');
 }
 
 function prod(p1: Point3D, p2: Point3D) {

@@ -49,16 +49,29 @@ export default function useObjectData() {
         const v = vertices[vIndex];
         const vn = vectors[vnIndex];
 
-        // create vertex object
-        const newVertex = { ...scalePoint(v), vector: vn };
+        // check if vertex already exists
+        const existingVertex: Vertex | undefined =
+          newObjectData.vertices[vIndex]?.[vnIndex];
 
-        // add vertex to data
-        if (!newObjectData.vertices[vIndex])
-          newObjectData.vertices[vIndex] = [];
-        newObjectData.vertices[vIndex][vnIndex] = newVertex;
+        if (!existingVertex) {
+          // create vertex object
+          const newVertex = {
+            ...scalePoint(v),
+            vector: vn,
+            color: [0, 0, 0, 255] as [number, number, number, number],
+          };
 
-        // add vertex to face
-        verticesParsed.push(newVertex);
+          // add vertex to data
+          if (!newObjectData.vertices[vIndex])
+            newObjectData.vertices[vIndex] = [];
+          newObjectData.vertices[vIndex][vnIndex] = newVertex;
+
+          // add vertex to face
+          verticesParsed.push(newVertex);
+        } else {
+          console.log('vertex already exists');
+          verticesParsed.push(existingVertex);
+        }
       }
 
       newObjectData.faces.push(new Face(verticesParsed, parseInt(faceIndex)));
