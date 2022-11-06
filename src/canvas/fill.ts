@@ -1,24 +1,24 @@
-import { ActiveEdgeData, EdgeData, Face, ObjectData } from '../types';
+import { ActiveEdgeData, EdgeData, Face, ObjectData, Point3D } from '../types';
 
 export function fill(
   objectData: ObjectData,
   ctx: CanvasRenderingContext2D
-): void {
+): number {
   ctx.fillStyle = 'black';
   const t0 = performance.now();
 
   const canvasWidth = ctx.canvas.width;
   const canvasHeight = ctx.canvas.height;
-  if (canvasHeight === 0 || canvasWidth === 0) return;
-  const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+  if (canvasHeight === 0 || canvasWidth === 0) return 0;
+  const imageData = ctx.createImageData(canvasWidth, canvasHeight);
   objectData.faces.forEach((face) =>
     fillPolygon(face, imageData.data, canvasWidth, canvasHeight)
   );
   ctx.putImageData(imageData, 0, 0);
-  //   fillPolygon(objectData.faces[401], ctx);
 
   const t1 = performance.now();
-  console.log('filling time', t1 - t0, 'ms');
+
+  return t1 - t0;
 }
 
 export function fillPolygon(
@@ -53,7 +53,19 @@ export function fillPolygon(
     // fill pixels
     if (y > canvasHeight - 1) return;
     // console.log(canvasHeight);
-    fillLine();
+    // fillLine();
+
+    if (activeEdgeTable.length % 2 !== 0) return;
+
+    for (let i = 0; i < activeEdgeTable.length; i += 2) {
+      const startX = activeEdgeTable[i].x << 0;
+      const endX = activeEdgeTable[i + 1].x << 0;
+      for (let x = startX; x <= endX; x++) {
+        if (x > canvasWidth - 1) continue;
+        const offset = (y * canvasWidth + x) * 4;
+        pixels.set(calculateColor(), offset);
+      }
+    }
 
     // move to next scan line
     y++;
@@ -61,18 +73,32 @@ export function fillPolygon(
     // update x in AET
     activeEdgeTable.forEach((e) => (e.x += e.edgeData.slopeInverted));
   } while (activeEdgeTable.length > 0 && tempEdgeTable.length > 0);
+}
 
-  function fillLine() {
-    if (activeEdgeTable.length % 2 !== 0) return;
+const V: Point3D = { x: 0, y: 0, z: 1 };
+const IL = [1, 1, 1];
+const IO = [1, 0.2, 0.2];
 
-    for (let i = 0; i < activeEdgeTable.length; i += 2) {
-      const startX = Math.round(activeEdgeTable[i].x);
-      const endX = Math.round(activeEdgeTable[i + 1].x);
-      for (let x = startX; x <= endX; x++) {
-        if (x > canvasWidth - 1) continue;
-        const offset = (y * canvasWidth + x) * 4;
-        pixels.set([0, 0, 0, 255], offset);
-      }
-    }
-  }
+const kd = 0.5;
+const ks = 0.5;
+const m = 10;
+
+function calculateColor() {
+
+  // const cosNL = ;
+  // const cosVR = ;
+
+  // const I1;
+  // const I2;
+
+  return [
+    (Math.random() * 255) << 0,
+    (Math.random() * 255) << 0,
+    (Math.random() * 255) << 0,
+    255,
+  ];
+}
+
+function prod(p1: Point3D, p2: Point3D) {
+  return p1.x * p2.x + p1.y * p2.y + p1.z * p2.z;
 }

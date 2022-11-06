@@ -1,14 +1,27 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useRef, useMemo } from 'react';
 import { AppContext } from '../AppContext';
 import { drawOutlines } from '../canvas/drawOutline';
 import { fill } from '../canvas/fill';
 
+const rendersCount = 20;
+
 function Canvas() {
   const { canvasRef, canvasSize: size, objectData } = useContext(AppContext);
-  const ctx = () => canvasRef.current?.getContext('2d')!;
 
-  const draw = () => _draw(ctx());
-  const _draw = (ctx: CanvasRenderingContext2D) => {
+  const ctx = useMemo(
+    () =>
+      canvasRef.current?.getContext('2d', {
+        willReadFrequently: true,
+      })!,
+    [canvasRef.current]
+  );
+
+  const renderTimes = useRef<number[]>([]);
+  const i = useRef<number>(0);
+
+  const draw = () => {
+    if (!ctx) return;
+
     ctx.fillStyle = 'white';
     ctx.fillRect(
       0,
@@ -19,12 +32,23 @@ function Canvas() {
 
     // draw
     if (!objectData) return;
-    fill(objectData, ctx);
+
+    const newTime = fill(objectData, ctx);
+
     drawOutlines(objectData, ctx);
+
+    renderTimes.current[i.current++ % rendersCount] = newTime;
+
+    const average =
+      renderTimes.current.reduce((a, b) => a + b, 0) /
+      renderTimes.current.length;
+    console.log(
+      `avg fps (${renderTimes.current.length} renders)`,
+      1000 / average
+    );
   };
 
   useEffect(() => draw(), [size, objectData]);
-  if (ctx()) draw();
 
   return (
     <canvas
