@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Face, ObjectData, Vertex } from '../types';
+import { Face, ObjectData, Point3D, Vertex } from '../types';
+import { parsePoint, scalePoint } from '../utils';
 
 export default function useObjectData() {
   const [objectData, _setObjectData] = useState<ObjectData>();
@@ -10,10 +11,10 @@ export default function useObjectData() {
   };
 
   const parseFile = async (file: File) => {
-    const vertices: string[][] = [];
-    const normalVectors: string[][] = [];
-    const faces: string[][] = [];
-    const newObjectData: ObjectData = new ObjectData([]);
+    const faceData: string[][] = [];
+    const vertices: Point3D[] = [];
+    const vectors: Point3D[] = [];
+    const newObjectData: ObjectData = { faces: [], vertices: [] };
 
     const readObjectDataString = await file.text();
     const readObjectData = readObjectDataString.split('\n');
@@ -22,32 +23,49 @@ export default function useObjectData() {
       const lineContent = line.split(' ');
       switch (lineContent[0]) {
         case 'v':
-          vertices.push(lineContent);
+          vertices.push(parsePoint(lineContent));
           break;
         case 'vn':
-          normalVectors.push(lineContent);
+          vectors.push(parsePoint(lineContent));
           break;
         case 'f':
-          faces.push(lineContent);
+          faceData.push(lineContent);
           break;
       }
     }
 
-    for (const faceIndex in faces) {
+    for (const faceIndex in faceData) {
       const verticesParsed: Vertex[] = [];
 
-      for (const vertex of faces[parseInt(faceIndex)]) {
+      for (const vertex of faceData[parseInt(faceIndex)]) {
         const index = vertex.split('//');
         if (index.length !== 2) continue;
-        const v = vertices[parseInt(index[0]) - 1];
-        const vn = normalVectors[parseInt(index[1]) - 1];
-        verticesParsed.push(new Vertex(v, vn));
+
+        // get indices
+        const vIndex = parseInt(index[0]) - 1;
+        const vnIndex = parseInt(index[1]) - 1;
+
+        // get objects
+        const v = vertices[vIndex];
+        const vn = vectors[vnIndex];
+
+        // create vertex object
+        const newVertex = { ...scalePoint(v), vector: vn };
+
+        // add vertex to data
+        if (!newObjectData.vertices[vIndex])
+          newObjectData.vertices[vIndex] = [];
+        newObjectData.vertices[vIndex][vnIndex] = newVertex;
+
+        // add vertex to face
+        verticesParsed.push(newVertex);
       }
 
       newObjectData.faces.push(new Face(verticesParsed, parseInt(faceIndex)));
     }
 
     _setObjectData(newObjectData);
+    console.log(newObjectData);
   };
 
   return { objectData, readFile };
