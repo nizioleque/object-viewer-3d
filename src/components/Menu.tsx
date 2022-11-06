@@ -1,9 +1,10 @@
 import { useContext } from 'react';
 import { AppContext } from '../AppContext';
 import './Menu.css';
+import MenuSlider from './MenuSlider';
 
 function Menu() {
-  const { readFile } = useContext(AppContext);
+  const { readFile, params } = useContext(AppContext);
 
   const readExampleFile = (path: string) => {
     fetch(path)
@@ -53,10 +54,33 @@ function Menu() {
       <div className='menu-section'>
         <h3>Parametry obliczeń</h3>
         <div className='buttons'>
-          <h5>Suwak k_d</h5>
-          <h5>Suwak k_s</h5>
-          <h5>Suwak m</h5>
-          <h5>Kolor I_L</h5>
+          <MenuSlider
+            name={
+              <>
+                k<sub>d</sub>
+              </>
+            }
+            value={params.kd}
+            setFn={params.setKd}
+          />
+          <MenuSlider
+            name={
+              <>
+                k<sub>s</sub>
+              </>
+            }
+            value={params.ks}
+            setFn={params.setKs}
+          />
+          <MenuSlider
+            name='m'
+            value={params.m}
+            setFn={params.setM}
+            min={1}
+            max={100}
+            step={1}
+            noDecimal
+          />
         </div>
       </div>
       <div className='menu-section'>
@@ -67,10 +91,11 @@ function Menu() {
         </div>
       </div>
       <div className='menu-section'>
-        <h3>Pozycja źródła światła</h3>
+        <h3>Światło</h3>
         <div className='buttons'>
+          <h5>Kolor (I_L)</h5>
           <h5>Współrzędna Z</h5>
-          <h5>Uruchom animację</h5>
+          <h5>Animacja</h5>
         </div>
       </div>
       <div className='menu-section'>

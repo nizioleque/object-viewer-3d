@@ -11,6 +11,7 @@ function Canvas() {
     canvasSize: size,
     objectData,
     lightPosition,
+    params,
   } = useContext(AppContext);
 
   const ctx = useMemo(
@@ -38,7 +39,7 @@ function Canvas() {
     // draw
     if (!objectData) return;
 
-    const newTime = fill(objectData, ctx, lightPosition);
+    const newTime = fill(objectData, ctx, lightPosition, params);
 
     drawOutlines(objectData, ctx);
 
@@ -53,7 +54,7 @@ function Canvas() {
     );
   };
 
-  useEffect(() => draw(), [size, objectData]);
+  useEffect(() => draw(), [size, objectData, ...Object.values(params)]);
 
   return (
     <canvas

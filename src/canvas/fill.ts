@@ -1,14 +1,16 @@
+import { Params } from '../hooks/useParams';
 import { ObjectData, Point3D, Vertex } from '../types';
 import { fillPolygon } from './fillPolygon';
 
 export function fill(
   objectData: ObjectData,
   ctx: CanvasRenderingContext2D,
-  lightPosition: Point3D
+  lightPosition: Point3D,
+  params: Params
 ): number {
   const t0 = performance.now();
 
-  calculateVertexColors(objectData, lightPosition);
+  calculateVertexColors(objectData, lightPosition, params);
 
   const canvasWidth = ctx.canvas.width;
   const canvasHeight = ctx.canvas.height;
@@ -24,12 +26,16 @@ export function fill(
   return t1 - t0;
 }
 
-function calculateVertexColors(objectData: ObjectData, lightPosition: Point3D) {
+function calculateVertexColors(
+  objectData: ObjectData,
+  lightPosition: Point3D,
+  params: Params
+) {
   for (const rowIndex in objectData.vertices) {
     const row = objectData.vertices[parseInt(rowIndex)];
     for (const vertexIndex in row) {
       const vertex = row[parseInt(vertexIndex)];
-      calculateColor(vertex, lightPosition);
+      calculateColor(vertex, lightPosition, params);
     }
   }
 }
@@ -37,11 +43,11 @@ function calculateVertexColors(objectData: ObjectData, lightPosition: Point3D) {
 const IL = [1, 1, 1];
 const IO = [1, 1, 0];
 
-const kd = 0.5;
-const ks = 0.5;
-const m = 10;
-
-function calculateColor(vertex: Vertex, lightPosition: Point3D) {
+function calculateColor(
+  vertex: Vertex,
+  lightPosition: Point3D,
+  params: Params
+) {
   const L = calculateL(vertex, lightPosition);
   const prodNL = prod(vertex.vector, L);
   const cosNL = Math.max(prodNL, 0);
@@ -50,16 +56,21 @@ function calculateColor(vertex: Vertex, lightPosition: Point3D) {
   const cosVR = Math.max(Rz, 0);
 
   vertex.color = [
-    (calculateColorAtIndex(0, cosNL, cosVR) * 255) << 0,
-    (calculateColorAtIndex(1, cosNL, cosVR) * 255) << 0,
-    (calculateColorAtIndex(2, cosNL, cosVR) * 255) << 0,
+    (calculateColorAtIndex(0, cosNL, cosVR, params) * 255) << 0,
+    (calculateColorAtIndex(1, cosNL, cosVR, params) * 255) << 0,
+    (calculateColorAtIndex(2, cosNL, cosVR, params) * 255) << 0,
     255,
   ];
 }
 
-function calculateColorAtIndex(i: number, cosNL: number, cosVR: number) {
-  const I1 = kd * IL[i] * IO[i] * cosNL;
-  const I2 = ks * IL[i] * IL[i] * Math.pow(cosVR, m);
+function calculateColorAtIndex(
+  i: number,
+  cosNL: number,
+  cosVR: number,
+  params: Params
+) {
+  const I1 = params.kd * IL[i] * IO[i] * cosNL;
+  const I2 = params.ks * IL[i] * IL[i] * Math.pow(cosVR, params.m);
   return I1 + I2;
 }
 
