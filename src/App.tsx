@@ -6,6 +6,7 @@ import { AppContext } from './AppContext';
 import useForceRerender from './hooks/useForceRerender';
 import useError from './hooks/useError';
 import useObjectData from './hooks/useObjectData';
+import { Point3D } from './types';
 
 function App() {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -31,6 +32,12 @@ function App() {
 
   const { objectData, readFile } = useObjectData();
 
+  const [lightPosition, _setLightPosition] = useState<Point3D>({
+    x: 0.2,
+    y: 0.4,
+    z: 1.1,
+  });
+
   useEffect(() => {
     updateCanvasSize();
     const resizeHandler = () => {
@@ -49,6 +56,7 @@ function App() {
         forceRerender,
         objectData,
         readFile,
+        lightPosition,
       }}
     >
       <div className='App'>

@@ -6,7 +6,12 @@ import { fill } from '../canvas/fill';
 const rendersCount = 20;
 
 function Canvas() {
-  const { canvasRef, canvasSize: size, objectData } = useContext(AppContext);
+  const {
+    canvasRef,
+    canvasSize: size,
+    objectData,
+    lightPosition,
+  } = useContext(AppContext);
 
   const ctx = useMemo(
     () =>
@@ -33,7 +38,7 @@ function Canvas() {
     // draw
     if (!objectData) return;
 
-    const newTime = fill(objectData, ctx);
+    const newTime = fill(objectData, ctx, lightPosition);
 
     drawOutlines(objectData, ctx);
 

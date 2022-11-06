@@ -1,5 +1,5 @@
 import { createContext, RefObject } from 'react';
-import { ObjectData } from './types';
+import { ObjectData, Point3D } from './types';
 
 interface AppContext {
   canvasRef: RefObject<HTMLCanvasElement>;
@@ -8,6 +8,7 @@ interface AppContext {
   forceRerender: () => void;
   readFile: (file: File) => void;
   objectData: ObjectData | undefined;
+  lightPosition: Point3D;
 }
 
 const appContextDefaultValue: AppContext = {
@@ -17,6 +18,7 @@ const appContextDefaultValue: AppContext = {
   forceRerender: () => {},
   readFile: () => {},
   objectData: undefined,
+  lightPosition: { x: 0, y: 0, z: 0 },
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);

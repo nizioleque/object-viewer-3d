@@ -55,21 +55,13 @@ export function fillPolygon(
 }
 
 function getColor(face: Face, x: number, y: number) {
-  const det =
-    (face.vertices[1].y - face.vertices[2].y) *
-      (face.vertices[0].x - face.vertices[2].x) +
-    (face.vertices[2].x - face.vertices[1].x) *
-      (face.vertices[0].y - face.vertices[2].y);
-
   const alpha =
-    ((face.vertices[1].y - face.vertices[2].y) * (x - face.vertices[2].x) +
-      (face.vertices[2].x - face.vertices[1].x) * (y - face.vertices[2].y)) /
-    det;
+    (face.a1 * (x - face.vertices[2].x) + face.a2 * (y - face.vertices[2].y)) /
+    face.det;
 
   const beta =
-    ((face.vertices[2].y - face.vertices[0].y) * (x - face.vertices[2].x) +
-      (face.vertices[0].x - face.vertices[2].x) * (y - face.vertices[2].y)) /
-    det;
+    (face.b1 * (x - face.vertices[2].x) + face.b2 * (y - face.vertices[2].y)) /
+    face.det;
 
   const gamma = 1 - alpha - beta;
 
@@ -87,11 +79,4 @@ function getColor(face: Face, x: number, y: number) {
     face.vertices[2].color[2] * gamma;
 
   return [r, g, b, 255];
-
-  //   return [
-  //     (Math.random() * 255) << 0,
-  //     (Math.random() * 255) << 0,
-  //     (Math.random() * 255) << 0,
-  //     255,
-  //   ];
 }

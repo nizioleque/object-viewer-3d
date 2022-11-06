@@ -57,6 +57,7 @@ export default function useObjectData() {
           // create vertex object
           const newVertex = {
             ...scalePoint(v),
+            original: v,
             vector: vn,
             color: [0, 0, 0, 255] as [number, number, number, number],
           };

@@ -7,9 +7,26 @@ export class Face {
   vertices: Vertex[];
   edgeTable: EdgeData[][] = [];
 
+  det: number;
+  a1: number = 0;
+  a2: number = 0;
+  b1: number = 0;
+  b2: number = 0;
+
   constructor(vertices: Vertex[], index: number) {
     this.vertices = vertices;
     this.createEdgeTable(index === 401);
+
+    this.det =
+      (this.vertices[1].y - this.vertices[2].y) *
+        (this.vertices[0].x - this.vertices[2].x) +
+      (this.vertices[2].x - this.vertices[1].x) *
+        (this.vertices[0].y - this.vertices[2].y);
+
+    this.a1 = this.vertices[1].y - this.vertices[2].y;
+    this.a2 = this.vertices[2].x - this.vertices[1].x;
+    this.b1 = this.vertices[2].y - this.vertices[0].y;
+    this.b2 = this.vertices[0].x - this.vertices[2].x;
   }
 
   createEdgeTable(log: boolean) {
@@ -64,6 +81,7 @@ export interface Point3D {
 
 export interface Vertex extends Point3D {
   vector: Point3D;
+  original: Point3D;
   color: [number, number, number, number];
 }
 
