@@ -64,17 +64,20 @@ function getPixelColor(face: Face, x: number, y: number) {
   const gamma = 1 - alpha - beta;
 
   const r =
-    face.vertices[0].color[0] * alpha +
+    (face.vertices[0].color[0] * alpha +
     face.vertices[1].color[0] * beta +
-    face.vertices[2].color[0] * gamma;
+      face.vertices[2].color[0] * gamma) <<
+    0;
   const g =
-    face.vertices[0].color[1] * alpha +
+    (face.vertices[0].color[1] * alpha +
     face.vertices[1].color[1] * beta +
-    face.vertices[2].color[1] * gamma;
+      face.vertices[2].color[1] * gamma) <<
+    0;
   const b =
-    face.vertices[0].color[2] * alpha +
+    (face.vertices[0].color[2] * alpha +
     face.vertices[1].color[2] * beta +
-    face.vertices[2].color[2] * gamma;
+      face.vertices[2].color[2] * gamma) <<
+    0;
 
   return [r, g, b, 255];
 }
