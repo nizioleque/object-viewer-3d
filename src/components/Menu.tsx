@@ -1,7 +1,9 @@
 import { useContext } from 'react';
 import { AppContext } from '../AppContext';
+import { CalculationMode } from '../types';
 import './Menu.css';
 import MenuSlider from './MenuSlider';
+import CalculationModeButton from './CalculationModeButton';
 
 function Menu() {
   const { readFile, params } = useContext(AppContext);
@@ -52,8 +54,17 @@ function Menu() {
         </div>
       </div>
       <div className='menu-section'>
-        <h3>Parametry obliczeń</h3>
+        <h3>Parametry</h3>
         <div className='buttons'>
+          <h5>Tryb interpolacji</h5>
+          <CalculationModeButton
+            text='Interpolacja koloru'
+            mode={CalculationMode.InterpolateColor}
+          />
+          <CalculationModeButton
+            text='Interpolacja wektora'
+            mode={CalculationMode.InterpolateVector}
+          />
           <MenuSlider
             name={
               <>

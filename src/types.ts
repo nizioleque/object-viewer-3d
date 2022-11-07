@@ -88,3 +88,8 @@ export interface ActiveEdgeData {
   edgeData: EdgeData;
   x: number;
 }
+
+export enum CalculationMode {
+  InterpolateColor,
+  InterpolateVector,
+}

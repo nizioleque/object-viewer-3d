@@ -1,6 +1,6 @@
-import { createContext, RefObject } from 'react';
+import { createContext, Dispatch, RefObject, SetStateAction } from 'react';
 import { Params } from './hooks/useParams';
-import { ObjectData, Point3D } from './types';
+import { CalculationMode, ObjectData, Point3D } from './types';
 
 interface AppContext {
   canvasRef: RefObject<HTMLCanvasElement>;
@@ -10,6 +10,8 @@ interface AppContext {
   objectData: ObjectData | undefined;
   lightPosition: Point3D;
   params: Params;
+  calculationMode: CalculationMode;
+  setCalculationMode: Dispatch<SetStateAction<CalculationMode>>;
 }
 
 const appContextDefaultValue: AppContext = {
@@ -27,6 +29,8 @@ const appContextDefaultValue: AppContext = {
     m: 0,
     setM: () => {},
   },
+  calculationMode: CalculationMode.InterpolateColor,
+  setCalculationMode: () => {},
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);

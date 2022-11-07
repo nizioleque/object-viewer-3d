@@ -21,7 +21,7 @@ function Canvas() {
   const renderTimes = useRef<number[]>([]);
   const i = useRef<number>(0);
 
-  const draw = () => {
+  const draw = async () => {
     if (!ctx) return;
 
     ctx.fillStyle = 'white';
@@ -43,9 +43,12 @@ function Canvas() {
       `avg fps (${renderTimes.current.length} renders)`,
       1000 / average
     );
+    console.log(params.kd, params.ks, params.m);
   };
 
-  useEffect(() => draw(), [objectData, ...Object.values(params)]);
+  useEffect(() => {
+    draw();
+  }, [objectData, ...Object.values(params)]);
 
   return <canvas ref={canvasRef} width={scale * 2} height={scale * 2} />;
 }

@@ -6,7 +6,7 @@ import { AppContext } from './AppContext';
 import useForceRerender from './hooks/useForceRerender';
 import useError from './hooks/useError';
 import useObjectData from './hooks/useObjectData';
-import { Point3D } from './types';
+import { CalculationMode, Point3D } from './types';
 import useParams from './hooks/useParams';
 
 function App() {
@@ -25,6 +25,10 @@ function App() {
     z: 2,
   });
 
+  const [calculationMode, setCalculationMode] = useState<CalculationMode>(
+    CalculationMode.InterpolateColor
+  );
+
   const params = useParams();
 
   return (
@@ -37,6 +41,8 @@ function App() {
         readFile,
         lightPosition,
         params,
+        calculationMode,
+        setCalculationMode,
       }}
     >
       <div className='App'>
