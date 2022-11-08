@@ -30,8 +30,7 @@ function MenuSlider({
           min={min ?? 0}
           max={max ?? 1}
           step={step ?? 0.01}
-          // defaultValue={(max ?? 1) / 2}
-          value={value}
+          defaultValue={(max ?? 1) / 2}
           onInput={(event) => {
             setFn(parseFloat((event.target as HTMLInputElement).value));
           }}

@@ -1,14 +1,17 @@
 import { Params } from '../hooks/useParams';
 import { ObjectData, Point3D, Vertex } from '../types';
+import { drawOutlines } from './drawOutline';
 import { fillPolygon } from './fillPolygon';
 
-export async function fill(
+export function fill(
   objectData: ObjectData,
-  ctx: CanvasRenderingContext2D,
   lightPosition: Point3D,
-  params: Params
-  // worker: Worker
-): Promise<number> {
+  params: Params,
+  drawOutline: boolean,
+  ctx: CanvasRenderingContext2D
+): number {
+  if (!ctx) return NaN;
+
   const t0 = performance.now();
 
   calculateVertexColors(objectData, lightPosition, params);
@@ -18,20 +21,18 @@ export async function fill(
   if (canvasHeight === 0 || canvasWidth === 0) return 0;
   const imageData = ctx.createImageData(canvasWidth, canvasHeight);
   objectData.faces.forEach((face) =>
-    fillPolygon(
-      face,
-      imageData.data,
-      canvasWidth,
-      canvasHeight
-      // worker
-    )
+    fillPolygon(face, imageData.data, canvasWidth, canvasHeight)
   );
   ctx.putImageData(imageData, 0, 0);
 
-  const t1 = performance.now();
+  if (drawOutline) drawOutlines(objectData, ctx);
 
+  const t1 = performance.now();
   return t1 - t0;
 }
+
+const IL = [1, 1, 1];
+const IO = [0.5, 1, 1];
 
 function calculateVertexColors(
   objectData: ObjectData,
@@ -45,10 +46,9 @@ function calculateVertexColors(
       calculateColor(vertex, lightPosition, params);
     }
   }
-}
 
-const IL = [1, 1, 1];
-const IO = [0.5, 1, 1];
+  return objectData.vertices;
+}
 
 function calculateColor(
   vertex: Vertex,

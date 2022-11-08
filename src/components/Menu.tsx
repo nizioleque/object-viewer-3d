@@ -6,7 +6,7 @@ import MenuSlider from './MenuSlider';
 import CalculationModeButton from './CalculationModeButton';
 
 function Menu() {
-  const { readFile, params } = useContext(AppContext);
+  const { readFile, params, paramSetters } = useContext(AppContext);
 
   const readExampleFile = (path: string) => {
     fetch(path)
@@ -72,7 +72,7 @@ function Menu() {
               </>
             }
             value={params.kd}
-            setFn={params.setKd}
+            setFn={paramSetters.setKd}
           />
           <MenuSlider
             name={
@@ -81,12 +81,12 @@ function Menu() {
               </>
             }
             value={params.ks}
-            setFn={params.setKs}
+            setFn={paramSetters.setKs}
           />
           <MenuSlider
             name='m'
             value={params.m}
-            setFn={params.setM}
+            setFn={paramSetters.setM}
             min={1}
             max={100}
             step={1}

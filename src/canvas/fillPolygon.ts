@@ -5,7 +5,6 @@ export function fillPolygon(
   pixels: Uint8ClampedArray,
   canvasWidth: number,
   canvasHeight: number
-  // worker: Worker
 ) {
   let activeEdgeTable: ActiveEdgeData[] = [];
 
@@ -59,12 +58,7 @@ export function fillPolygon(
   } while (activeEdgeTable.length > 0 && tempEdgeTable.length > 0);
 }
 
-function getPixelColor(
-  face: Face,
-  x: number,
-  y: number
-  // worker: Worker
-) {
+function getPixelColor(face: Face, x: number, y: number) {
   const alpha =
     (face.a1 * (x - face.vertices[2].x) + face.a2 * (y - face.vertices[2].y)) /
     face.det;

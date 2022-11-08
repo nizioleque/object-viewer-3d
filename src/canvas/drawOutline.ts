@@ -14,10 +14,10 @@ export function drawFaceOutline(
   ctx.beginPath();
   ctx.lineWidth = 1;
   ctx.strokeStyle = 'rgba(255, 0, 0, 0.15)';
-  ctx.moveTo(face.vertices[0].x + 0.5, face.vertices[0].y + 0.5);
+  ctx.moveTo(face.vertices[0].x, face.vertices[0].y);
   for (let i = 1; i < face.vertices.length; i++) {
-    ctx.lineTo(face.vertices[i].x + 0.5, face.vertices[i].y + 0.5);
+    ctx.lineTo(face.vertices[i].x, face.vertices[i].y);
   }
-  ctx.lineTo(face.vertices[0].x + 0.5, face.vertices[0].y + 0.5);
+  ctx.lineTo(face.vertices[0].x, face.vertices[0].y);
   ctx.stroke();
 }

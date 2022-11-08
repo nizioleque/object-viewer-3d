@@ -1,57 +1,87 @@
-import { useEffect, useContext, useRef, useMemo } from 'react';
+import { useEffect, useContext, useRef, useCallback } from 'react';
+import { spawn, Transfer, Worker } from 'threads';
 import { AppContext } from '../AppContext';
-import { drawOutlines } from '../canvas/drawOutline';
 import { fill } from '../canvas/fill';
 import { scale } from '../constants';
+import { FillWorker } from '../workers/fillWorker';
 
 const rendersCount = 20;
+const drawOutline = true;
 
 function Canvas() {
-  const { canvasRef, objectData, lightPosition, params } =
+  const { objectData, lightPosition, params, supportsOffscreenCanvas } =
     useContext(AppContext);
 
-  const ctx = useMemo(
-    () =>
-      canvasRef.current?.getContext('2d', {
-        willReadFrequently: true,
-      })!,
-    [canvasRef.current]
+  const offscreenCanvas = useRef<HTMLCanvasElement>();
+  const worker = useRef<FillWorker>();
+  const canvasCtx = useRef<CanvasRenderingContext2D>();
+
+  const canvasRef = useCallback(
+    (node: HTMLCanvasElement) => {
+      if (supportsOffscreenCanvas === undefined) return;
+      if (node !== null) {
+        if (supportsOffscreenCanvas) {
+          if (!offscreenCanvas.current) {
+            offscreenCanvas.current = (
+              node as any
+            ).transferControlToOffscreen();
+            initializeWorker();
+          }
+        } else {
+          canvasCtx.current = node.getContext('2d', {
+            willReadFrequently: true,
+          })!;
+        }
+      }
+    },
+    [supportsOffscreenCanvas]
   );
+
+  const initializeWorker = async () => {
+    const newWorker = await spawn<FillWorker>(
+      new Worker(
+        new URL(
+          '../workers/fillWorker.ts',
+          import.meta.url
+        ) as unknown as string
+      )
+    );
+    newWorker.init(
+      Transfer(
+        offscreenCanvas.current as unknown as Transferable
+      ) as unknown as HTMLCanvasElement
+    );
+    worker.current = newWorker as unknown as FillWorker;
+  };
 
   const renderTimes = useRef<number[]>([]);
   const i = useRef<number>(0);
 
-  console.log('canvas rerendered');
-
   const isRendering = useRef<boolean>(false);
 
   const draw = async () => {
-    if (!ctx) return;
-    if (isRendering.current) {
-      console.log('rendering in progress');
-      return;
-    }
+    if (!offscreenCanvas) return;
+    if (!objectData) return;
+    if (isRendering.current) return;
     isRendering.current = true;
-    // return;
 
-    ctx.fillStyle = 'white';
-    ctx.fillRect(0, 0, scale * 2, scale * 2);
-
-    // draw
-    if (!objectData) {
-      isRendering.current = false;
-      return;
+    let newTime = NaN;
+    if (worker.current) {
+      newTime = await worker.current.runFill(
+        objectData,
+        lightPosition,
+        params,
+        drawOutline
+      );
+    } else {
+      newTime = fill(
+        objectData,
+        lightPosition,
+        params,
+        drawOutline,
+        canvasCtx.current!
+      );
     }
-
-    const newTime = await fill(
-      objectData,
-      ctx,
-      lightPosition,
-      params
-      // worker.current!
-    );
-
-    drawOutlines(objectData, ctx);
 
     renderTimes.current[i.current++ % rendersCount] = newTime;
 
@@ -62,9 +92,7 @@ function Canvas() {
       `avg fps (${renderTimes.current.length} renders)`,
       1000 / average
     );
-    console.log(params.kd, params.ks, params.m);
 
-    console.log('finished rendering');
     isRendering.current = false;
   };
 

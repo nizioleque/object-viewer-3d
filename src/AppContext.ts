@@ -1,21 +1,21 @@
-import { createContext, Dispatch, RefObject, SetStateAction } from 'react';
-import { Params } from './hooks/useParams';
+import { createContext, Dispatch, SetStateAction } from 'react';
+import { Params, ParamSetters } from './hooks/useParams';
 import { CalculationMode, ObjectData, Point3D } from './types';
 
 interface AppContext {
-  canvasRef: RefObject<HTMLCanvasElement>;
-  setErrorText: (text: string) => void;
+  setErrorText: (text: string, timeout?: number) => void;
   forceRerender: () => void;
   readFile: (file: Blob) => void;
   objectData: ObjectData | undefined;
   lightPosition: Point3D;
   params: Params;
+  paramSetters: ParamSetters;
   calculationMode: CalculationMode;
   setCalculationMode: Dispatch<SetStateAction<CalculationMode>>;
+  supportsOffscreenCanvas: boolean | undefined;
 }
 
 const appContextDefaultValue: AppContext = {
-  canvasRef: { current: null },
   setErrorText: () => {},
   forceRerender: () => {},
   readFile: () => {},
@@ -23,14 +23,17 @@ const appContextDefaultValue: AppContext = {
   lightPosition: { x: 0, y: 0, z: 0 },
   params: {
     kd: 0,
-    setKd: () => {},
     ks: 0,
-    setKs: () => {},
     m: 0,
+  },
+  paramSetters: {
+    setKd: () => {},
+    setKs: () => {},
     setM: () => {},
   },
   calculationMode: CalculationMode.InterpolateColor,
   setCalculationMode: () => {},
+  supportsOffscreenCanvas: undefined,
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);
