@@ -2,12 +2,13 @@ import { Params } from '../hooks/useParams';
 import { ObjectData, Point3D, Vertex } from '../types';
 import { fillPolygon } from './fillPolygon';
 
-export function fill(
+export async function fill(
   objectData: ObjectData,
   ctx: CanvasRenderingContext2D,
   lightPosition: Point3D,
   params: Params
-): number {
+  // worker: Worker
+): Promise<number> {
   const t0 = performance.now();
 
   calculateVertexColors(objectData, lightPosition, params);
@@ -17,7 +18,13 @@ export function fill(
   if (canvasHeight === 0 || canvasWidth === 0) return 0;
   const imageData = ctx.createImageData(canvasWidth, canvasHeight);
   objectData.faces.forEach((face) =>
-    fillPolygon(face, imageData.data, canvasWidth, canvasHeight)
+    fillPolygon(
+      face,
+      imageData.data,
+      canvasWidth,
+      canvasHeight
+      // worker
+    )
   );
   ctx.putImageData(imageData, 0, 0);
 
@@ -41,7 +48,7 @@ function calculateVertexColors(
 }
 
 const IL = [1, 1, 1];
-const IO = [1, 1, 0];
+const IO = [0.5, 1, 1];
 
 function calculateColor(
   vertex: Vertex,

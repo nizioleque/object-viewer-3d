@@ -8,8 +8,22 @@ import useError from './hooks/useError';
 import useObjectData from './hooks/useObjectData';
 import { CalculationMode, Point3D } from './types';
 import useParams from './hooks/useParams';
+import { spawn, Thread, Worker } from 'threads';
+
+async function runWorker() {
+  const add = await spawn(
+    new Worker(new URL('./add.ts', import.meta.url) as unknown as string)
+  );
+  const sum = await add(2, 3);
+
+  console.log(`2 + 3 = ${sum}`);
+
+  await Thread.terminate(add);
+}
 
 function App() {
+  runWorker().catch(console.error);
+
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 

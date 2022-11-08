@@ -21,16 +21,35 @@ function Canvas() {
   const renderTimes = useRef<number[]>([]);
   const i = useRef<number>(0);
 
+  console.log('canvas rerendered');
+
+  const isRendering = useRef<boolean>(false);
+
   const draw = async () => {
     if (!ctx) return;
+    if (isRendering.current) {
+      console.log('rendering in progress');
+      return;
+    }
+    isRendering.current = true;
+    // return;
 
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, scale * 2, scale * 2);
 
     // draw
-    if (!objectData) return;
+    if (!objectData) {
+      isRendering.current = false;
+      return;
+    }
 
-    const newTime = fill(objectData, ctx, lightPosition, params);
+    const newTime = await fill(
+      objectData,
+      ctx,
+      lightPosition,
+      params
+      // worker.current!
+    );
 
     drawOutlines(objectData, ctx);
 
@@ -44,6 +63,9 @@ function Canvas() {
       1000 / average
     );
     console.log(params.kd, params.ks, params.m);
+
+    console.log('finished rendering');
+    isRendering.current = false;
   };
 
   useEffect(() => {
