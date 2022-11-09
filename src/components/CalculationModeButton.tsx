@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { AppContext } from '../AppContext';
 import { CalculationMode } from '../types';
+import Button from './Button';
 
 interface CalculationModeButtonProps {
   text: string;
@@ -11,12 +12,12 @@ function CalculationModeButton({ text, mode }: CalculationModeButtonProps) {
   const { calculationMode, setCalculationMode } = useContext(AppContext);
 
   return (
-    <button
-      onClick={() => setCalculationMode(mode)}
-      className={`menu-button ${calculationMode === mode ? 'active' : ''}`}
-    >
-      {text}
-    </button>
+    <Button
+      text={text}
+      value={mode}
+      currentValue={calculationMode}
+      setValue={setCalculationMode}
+    />
   );
 }
 

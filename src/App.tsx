@@ -9,6 +9,7 @@ import useObjectData from './hooks/useObjectData';
 import { CalculationMode, Point3D } from './types';
 import useParams from './hooks/useParams';
 import useSupportsOffscreenCanvas from './hooks/useSupportsOffscreenCanvas';
+import useStyleOptions from './hooks/useStyleOptions';
 
 function App() {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -18,6 +19,7 @@ function App() {
   const { objectData, readFile } = useObjectData();
   const { params, paramSetters } = useParams();
   const supportsOffscreenCanvas = useSupportsOffscreenCanvas(setErrorText);
+  const { styleOptions, updateStyleOptions } = useStyleOptions();
 
   const [lightPosition, _setLightPosition] = useState<Point3D>({
     x: 0.8,
@@ -46,6 +48,8 @@ function App() {
         supportsOffscreenCanvas,
         currentFps,
         setCurrentFps,
+        styleOptions,
+        updateStyleOptions,
       }}
     >
       <div className='App'>

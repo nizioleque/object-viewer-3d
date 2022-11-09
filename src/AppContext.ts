@@ -1,5 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 import { Params, ParamSetters } from './hooks/useParams';
+import { FillType, StyleOptions } from './hooks/useStyleOptions';
 import { CalculationMode, ObjectData, Point3D } from './types';
 
 interface AppContext {
@@ -15,6 +16,8 @@ interface AppContext {
   supportsOffscreenCanvas: boolean | undefined;
   currentFps: number;
   setCurrentFps: Dispatch<SetStateAction<number>>;
+  styleOptions: StyleOptions;
+  updateStyleOptions: (options: Partial<StyleOptions>) => void;
 }
 
 const appContextDefaultValue: AppContext = {
@@ -38,6 +41,13 @@ const appContextDefaultValue: AppContext = {
   supportsOffscreenCanvas: undefined,
   currentFps: 0,
   setCurrentFps: () => {},
+  styleOptions: {
+    fillColor: [],
+    fillType: FillType.Color,
+    lightColor: [],
+    fillTexture: undefined,
+  },
+  updateStyleOptions: () => {},
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);

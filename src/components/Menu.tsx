@@ -4,6 +4,8 @@ import { CalculationMode } from '../types';
 import './Menu.css';
 import MenuSlider from './MenuSlider';
 import CalculationModeButton from './CalculationModeButton';
+import Button from './Button';
+import { FillType } from '../hooks/useStyleOptions';
 
 function Menu() {
   const {
@@ -12,6 +14,8 @@ function Menu() {
     paramSetters,
     currentFps,
     supportsOffscreenCanvas,
+    styleOptions,
+    updateStyleOptions,
   } = useContext(AppContext);
 
   const readExampleFile = (path: string) => {
@@ -115,8 +119,19 @@ function Menu() {
       <div className='menu-section'>
         <h3>Wypełnienie obiektu</h3>
         <div className='buttons'>
-          <h5>Kolor</h5>
-          <h5>Tekstura</h5>
+          <h5>Tryb</h5>
+          <Button
+            text='Kolor'
+            value={FillType.Color}
+            currentValue={styleOptions.fillType}
+            setValue={(value) => updateStyleOptions({ fillType: value })}
+          />
+          <Button
+            text='Tekstura'
+            value={FillType.Texture}
+            currentValue={styleOptions.fillType}
+            setValue={(value) => updateStyleOptions({ fillType: value })}
+          />
         </div>
       </div>
       <div className='menu-section'>
