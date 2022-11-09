@@ -11,7 +11,7 @@ export default function useDraw(
   worker: MutableRefObject<FillWorker | undefined>,
   canvasCtx: MutableRefObject<CanvasRenderingContext2D | undefined>
 ) {
-  const { objectData, lightPosition, params, setCurrentFps } =
+  const { objectData, lightPosition, params, setCurrentFps, calculationMode } =
     useContext(AppContext);
 
   const renderTimes = useRef<number[]>([]);
@@ -31,7 +31,8 @@ export default function useDraw(
         objectData,
         lightPosition,
         params,
-        drawOutline
+        drawOutline,
+        calculationMode
       );
     } else {
       newTime = fill(
@@ -39,6 +40,7 @@ export default function useDraw(
         lightPosition,
         params,
         drawOutline,
+        calculationMode,
         canvasCtx.current!
       );
     }

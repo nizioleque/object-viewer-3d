@@ -75,7 +75,7 @@ export interface Point3D {
 export interface Vertex extends Point3D {
   vector: Point3D;
   original: Point3D;
-  color: [number, number, number, number];
+  color: number[];
 }
 
 export interface EdgeData {

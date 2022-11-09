@@ -1,10 +1,23 @@
-import { Face, ActiveEdgeData, EdgeData } from '../types';
+import { scale } from '../constants';
+import { Params } from '../hooks/useParams';
+import {
+  Face,
+  ActiveEdgeData,
+  EdgeData,
+  CalculationMode,
+  Point3D,
+  Vertex,
+} from '../types';
+import { calculateColor } from './fillColor';
 
 export function fillPolygon(
   face: Face,
   pixels: Uint8ClampedArray,
   canvasWidth: number,
-  canvasHeight: number
+  canvasHeight: number,
+  mode: CalculationMode,
+  lightPosition: Point3D,
+  params: Params
 ) {
   let activeEdgeTable: ActiveEdgeData[] = [];
 
@@ -40,13 +53,13 @@ export function fillPolygon(
       for (let x = startX; x <= endX; x++) {
         if (x > canvasWidth - 1) continue;
         const offset = (y * canvasWidth + x) * 4;
-        const pixelColor = getPixelColor(
-          face,
-          x,
-          y
-          // worker
-        );
-        pixels.set(pixelColor, offset);
+        let pixelColor: number[];
+        if (mode === CalculationMode.InterpolateColor) {
+          pixelColor = getPixelColorColorMode(x, y);
+        } else if (mode === CalculationMode.InterpolateVector) {
+          pixelColor = getPixelColorVectorMode(x, y);
+        }
+        pixels.set(pixelColor!, offset);
       }
     }
 
@@ -56,6 +69,26 @@ export function fillPolygon(
     // update x in AET
     activeEdgeTable.forEach((e) => (e.x += e.edgeData.slopeInverted));
   } while (activeEdgeTable.length > 0 && tempEdgeTable.length > 0);
+
+  function getPixelColorColorMode(x: number, y: number) {
+    return getPixelColor(face, x, y);
+  }
+
+  function getPixelColorVectorMode(x: number, y: number) {
+    const interpolatedVector = getPixelVector(face, x, y);
+    return calculateColor(
+      {
+        original: {
+          x: (x - scale) / scale,
+          y: (y - scale) / scale,
+          z: interpolatedVector.pointZ,
+        },
+        vector: interpolatedVector.vector,
+      } as Vertex,
+      lightPosition,
+      params
+    );
+  }
 }
 
 function getPixelColor(face: Face, x: number, y: number) {
@@ -86,4 +119,40 @@ function getPixelColor(face: Face, x: number, y: number) {
     0;
 
   return [r, g, b, 255];
+}
+
+function getPixelVector(
+  face: Face,
+  x: number,
+  y: number
+): { vector: Point3D; pointZ: number } {
+  const alpha =
+    (face.a1 * (x - face.vertices[2].x) + face.a2 * (y - face.vertices[2].y)) /
+    face.det;
+
+  const beta =
+    (face.b1 * (x - face.vertices[2].x) + face.b2 * (y - face.vertices[2].y)) /
+    face.det;
+
+  const gamma = 1 - alpha - beta;
+
+  const vectorX =
+    face.vertices[0].vector.x * alpha +
+    face.vertices[1].vector.x * beta +
+    face.vertices[2].vector.x * gamma;
+  const vectorY =
+    face.vertices[0].vector.y * alpha +
+    face.vertices[1].vector.y * beta +
+    face.vertices[2].vector.y * gamma;
+  const vectorZ =
+    face.vertices[0].vector.z * alpha +
+    face.vertices[1].vector.z * beta +
+    face.vertices[2].vector.z * gamma;
+
+  const pointZ =
+    face.vertices[0].original.z * alpha +
+    face.vertices[1].original.z * beta +
+    face.vertices[2].original.z * gamma;
+
+  return { vector: { x: vectorX, y: vectorY, z: vectorZ }, pointZ };
 }

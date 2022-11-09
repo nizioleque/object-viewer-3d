@@ -59,7 +59,7 @@ export default function useObjectData() {
             ...scalePoint(v),
             original: v,
             vector: vn,
-            color: [0, 0, 0, 255] as [number, number, number, number],
+            color: [0, 0, 0, 255],
           };
 
           // add vertex to data
