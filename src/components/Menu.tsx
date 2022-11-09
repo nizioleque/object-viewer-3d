@@ -6,7 +6,13 @@ import MenuSlider from './MenuSlider';
 import CalculationModeButton from './CalculationModeButton';
 
 function Menu() {
-  const { readFile, params, paramSetters } = useContext(AppContext);
+  const {
+    readFile,
+    params,
+    paramSetters,
+    currentFps,
+    supportsOffscreenCanvas,
+  } = useContext(AppContext);
 
   const readExampleFile = (path: string) => {
     fetch(path)
@@ -25,6 +31,18 @@ function Menu() {
           Kod źródłowy i dokumentacja
         </a>
       </header>
+      <div className='menu-section center'>
+        <div>
+          Średnie FPS: <span className='bold'>{currentFps.toFixed(0)}</span>
+        </div>
+        <div className='spacer' />
+        <div title='Nie działa w Safari!'>
+          Wielowątkowość:{' '}
+          <span className={`bold ${!supportsOffscreenCanvas ? 'red' : ''}`}>
+            {supportsOffscreenCanvas?.toString()}
+          </span>
+        </div>
+      </div>
       <div className='menu-section'>
         <h3>Wczytytanie modelu</h3>
         <div className='buttons'>

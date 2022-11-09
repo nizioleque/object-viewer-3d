@@ -9,8 +9,13 @@ const rendersCount = 20;
 const drawOutline = true;
 
 function Canvas() {
-  const { objectData, lightPosition, params, supportsOffscreenCanvas } =
-    useContext(AppContext);
+  const {
+    objectData,
+    lightPosition,
+    params,
+    supportsOffscreenCanvas,
+    setCurrentFps,
+  } = useContext(AppContext);
 
   const offscreenCanvas = useRef<HTMLCanvasElement>();
   const worker = useRef<FillWorker>();
@@ -85,15 +90,12 @@ function Canvas() {
 
     renderTimes.current[i.current++ % rendersCount] = newTime;
 
+    isRendering.current = false;
+
     const average =
       renderTimes.current.reduce((a, b) => a + b, 0) /
       renderTimes.current.length;
-    console.log(
-      `avg fps (${renderTimes.current.length} renders)`,
-      1000 / average
-    );
-
-    isRendering.current = false;
+    setCurrentFps(1000 / average);
   };
 
   useEffect(() => {

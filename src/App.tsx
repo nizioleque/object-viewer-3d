@@ -29,6 +29,8 @@ function App() {
     CalculationMode.InterpolateColor
   );
 
+  const [currentFps, setCurrentFps] = useState<number>(0);
+
   return (
     <AppContext.Provider
       value={{
@@ -42,6 +44,8 @@ function App() {
         calculationMode,
         setCalculationMode,
         supportsOffscreenCanvas,
+        currentFps,
+        setCurrentFps,
       }}
     >
       <div className='App'>

@@ -13,6 +13,8 @@ interface AppContext {
   calculationMode: CalculationMode;
   setCalculationMode: Dispatch<SetStateAction<CalculationMode>>;
   supportsOffscreenCanvas: boolean | undefined;
+  currentFps: number;
+  setCurrentFps: Dispatch<SetStateAction<number>>;
 }
 
 const appContextDefaultValue: AppContext = {
@@ -34,6 +36,8 @@ const appContextDefaultValue: AppContext = {
   calculationMode: CalculationMode.InterpolateColor,
   setCalculationMode: () => {},
   supportsOffscreenCanvas: undefined,
+  currentFps: 0,
+  setCurrentFps: () => {},
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);
