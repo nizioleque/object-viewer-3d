@@ -27,6 +27,17 @@ function App() {
     z: 2,
   });
 
+
+  // interface LightOptions {
+  //   lightPosition: Point3D;
+  // }
+
+  // const defaultLightOptions: LightOptions = {
+
+  // }
+
+  // const [lightOptions, setLightOptions] = useState<LightOptions>();
+
   const [calculationMode, setCalculationMode] = useState<CalculationMode>(
     CalculationMode.InterpolateColor
   );

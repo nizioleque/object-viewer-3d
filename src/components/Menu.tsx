@@ -137,9 +137,28 @@ function Menu() {
       <div className='menu-section'>
         <h3>Światło</h3>
         <div className='buttons'>
-          <h5>Kolor (I_L)</h5>
+          <h5>Kolor (kliknij aby wybrać)</h5>
+          <input type='color' name='' id='' />
           <h5>Współrzędna Z</h5>
+          <div className='horizontal'>
+            <button className='menu-button'>- 0.5</button>
+            <button className='menu-button'>- 0.1</button>
+            <input type='number' name='' id='' />
+            <button className='menu-button'>+ 0.1</button>
+            <button className='menu-button'>+ 0.5</button>
+          </div>
           <h5>Animacja</h5>
+          <div className='horizontal flex-fill'>
+            <button className='menu-button'>
+              <span className='material-symbols-outlined'>play_arrow</span>
+            </button>
+            <button className='menu-button'>
+              <span className='material-symbols-outlined'>pause</span>
+            </button>
+            <button className='menu-button'>
+              <span className='material-symbols-outlined'>replay</span>
+            </button>
+          </div>
         </div>
       </div>
       <div className='menu-section'>

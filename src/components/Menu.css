@@ -60,7 +60,7 @@
 .horizontal {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   gap: 5px;
 }
 
@@ -126,6 +126,16 @@ input {
   accent-color: #6761e6;
 }
 
+input[type='color'] {
+  flex: unset;
+  padding: 0;
+  width: 100%;
+}
+
+input[type='number'] {
+  width: 50px;
+}
+
 .center {
   text-align: center;
 }
@@ -175,4 +185,21 @@ h1 {
 
 .red {
   color: red;
+}
+
+input[type='number'] {
+  appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+.flex-fill > * {
+  flex: 1;
+}
+
+.material-symbols-outlined {
+  font-size: 1.2rem !important;
 }
