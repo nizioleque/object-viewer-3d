@@ -1,3 +1,5 @@
+import { Params } from './hooks/useParams';
+
 export interface ObjectData {
   vertices: Vertex[][];
   faces: Face[];
@@ -92,4 +94,12 @@ export interface ActiveEdgeData {
 export enum CalculationMode {
   InterpolateColor,
   InterpolateVector,
+}
+
+export interface DrawArgs {
+  objectData: ObjectData;
+  lightPosition: Point3D;
+  params: Params;
+  drawOutline: boolean;
+  calculationMode: CalculationMode;
 }

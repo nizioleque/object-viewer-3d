@@ -1,6 +1,7 @@
 import { MutableRefObject, useContext, useRef } from 'react';
 import { AppContext } from '../AppContext';
 import { fill } from '../canvas/fill';
+import { DrawArgs } from '../types';
 import { FillWorker } from '../workers/fillWorker';
 
 const rendersCount = 20;
@@ -18,34 +19,32 @@ export default function useDraw(
   const i = useRef<number>(0);
 
   const isRendering = useRef<boolean>(false);
+  const nextDrawArgs = useRef<DrawArgs | undefined>(undefined);
 
   const draw = async () => {
     if (!offscreenCanvas) return;
     if (!objectData) return;
-    if (isRendering.current) return;
+
+    const drawArgs: DrawArgs = {
+      objectData,
+      lightPosition,
+      params,
+      drawOutline,
+      calculationMode,
+    };
+
+    if (isRendering.current) {
+      nextDrawArgs.current = drawArgs;
+      return;
+    }
     isRendering.current = true;
 
-    let newTime = NaN;
-    if (worker.current) {
-      newTime = await worker.current.runFill(
-        objectData,
-        lightPosition,
-        params,
-        drawOutline,
-        calculationMode
-      );
-    } else {
-      newTime = fill(
-        objectData,
-        lightPosition,
-        params,
-        drawOutline,
-        calculationMode,
-        canvasCtx.current!
-      );
-    }
+    await _draw(drawArgs);
 
-    renderTimes.current[i.current++ % rendersCount] = newTime;
+    if (nextDrawArgs.current) {
+      await _draw(nextDrawArgs.current);
+      nextDrawArgs.current = undefined;
+    }
 
     isRendering.current = false;
 
@@ -53,6 +52,17 @@ export default function useDraw(
       renderTimes.current.reduce((a, b) => a + b, 0) /
       renderTimes.current.length;
     setCurrentFps(1000 / average);
+  };
+
+  const _draw = async (drawArgs: DrawArgs) => {
+    let newTime = NaN;
+    if (worker.current) {
+      newTime = await worker.current.runFill(drawArgs);
+    } else {
+      newTime = fill(drawArgs, canvasCtx.current!);
+    }
+
+    renderTimes.current[i.current++ % rendersCount] = newTime;
   };
 
   return { draw };

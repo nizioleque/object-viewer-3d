@@ -1,15 +1,11 @@
 import { Params } from '../hooks/useParams';
-import { CalculationMode, ObjectData, Point3D } from '../types';
+import { CalculationMode, DrawArgs, ObjectData, Point3D } from '../types';
 import { drawOutlines } from './drawOutline';
 import { calculateColor } from './fillColor';
 import { fillPolygon as fillPolygon } from './fillPolygon';
 
 export function fill(
-  objectData: ObjectData,
-  lightPosition: Point3D,
-  params: Params,
-  drawOutline: boolean,
-  calculationMode: CalculationMode,
+  { objectData, lightPosition, params, drawOutline, calculationMode }: DrawArgs,
   ctx: CanvasRenderingContext2D
 ): number {
   if (!ctx) return NaN;
