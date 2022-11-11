@@ -16,6 +16,7 @@ function Menu() {
     supportsOffscreenCanvas,
     styleOptions,
     updateStyleOptions,
+    animationActions,
   } = useContext(AppContext);
 
   const readExampleFile = (path: string) => {
@@ -147,15 +148,24 @@ function Menu() {
             <button className='menu-button'>+ 0.1</button>
             <button className='menu-button'>+ 0.5</button>
           </div>
-          <h5>Animacja</h5>
+          <h5>Animacja – spirala</h5>
           <div className='horizontal flex-fill'>
-            <button className='menu-button'>
+            <button
+              className='menu-button'
+              onClick={animationActions.startAnimation}
+            >
               <span className='material-symbols-outlined'>play_arrow</span>
             </button>
-            <button className='menu-button'>
+            <button
+              className='menu-button'
+              onClick={animationActions.pauseAnimation}
+            >
               <span className='material-symbols-outlined'>pause</span>
             </button>
-            <button className='menu-button'>
+            <button
+              className='menu-button'
+              onClick={animationActions.resetAnimation}
+            >
               <span className='material-symbols-outlined'>replay</span>
             </button>
           </div>

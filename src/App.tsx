@@ -6,10 +6,11 @@ import { AppContext } from './AppContext';
 import useForceRerender from './hooks/useForceRerender';
 import useError from './hooks/useError';
 import useObjectData from './hooks/useObjectData';
-import { CalculationMode, Point3D } from './types';
+import { CalculationMode } from './types';
 import useParams from './hooks/useParams';
 import useSupportsOffscreenCanvas from './hooks/useSupportsOffscreenCanvas';
 import useStyleOptions from './hooks/useStyleOptions';
+import useLightOptions from './hooks/useLightOptions';
 
 function App() {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -20,23 +21,7 @@ function App() {
   const { params, paramSetters } = useParams();
   const supportsOffscreenCanvas = useSupportsOffscreenCanvas(setErrorText);
   const { styleOptions, updateStyleOptions } = useStyleOptions();
-
-  const [lightPosition, _setLightPosition] = useState<Point3D>({
-    x: 0.8,
-    y: 1,
-    z: 2,
-  });
-
-
-  // interface LightOptions {
-  //   lightPosition: Point3D;
-  // }
-
-  // const defaultLightOptions: LightOptions = {
-
-  // }
-
-  // const [lightOptions, setLightOptions] = useState<LightOptions>();
+  const { lightOptions, animationActions } = useLightOptions();
 
   const [calculationMode, setCalculationMode] = useState<CalculationMode>(
     CalculationMode.InterpolateColor
@@ -51,7 +36,6 @@ function App() {
         forceRerender,
         objectData,
         readFile,
-        lightPosition,
         params,
         paramSetters,
         calculationMode,
@@ -61,6 +45,8 @@ function App() {
         setCurrentFps,
         styleOptions,
         updateStyleOptions,
+        lightOptions,
+        animationActions,
       }}
     >
       <div className='App'>

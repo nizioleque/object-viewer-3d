@@ -3,6 +3,7 @@ import { AppContext } from '../AppContext';
 import { fill } from '../canvas/fill';
 import { DrawArgs } from '../types';
 import { FillWorker } from '../workers/fillWorker';
+import { getLightPoint } from './useLightOptions';
 
 const rendersCount = 20;
 const drawOutline = true;
@@ -12,8 +13,10 @@ export default function useDraw(
   worker: MutableRefObject<FillWorker | undefined>,
   canvasCtx: MutableRefObject<CanvasRenderingContext2D | undefined>
 ) {
-  const { objectData, lightPosition, params, setCurrentFps, calculationMode } =
+  const { objectData, lightOptions, params, setCurrentFps, calculationMode } =
     useContext(AppContext);
+
+  const lightPosition = getLightPoint(lightOptions);
 
   const renderTimes = useRef<number[]>([]);
   const i = useRef<number>(0);
