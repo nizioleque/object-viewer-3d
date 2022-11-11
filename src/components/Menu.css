@@ -134,6 +134,7 @@ input[type='color'] {
 
 input[type='number'] {
   width: 50px;
+  text-align: center;
 }
 
 .center {

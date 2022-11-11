@@ -71,8 +71,21 @@ export default function useLightOptions() {
     };
   }, []);
 
+  const setLightZ = (value: number) => {
+    const newZ = +value.toFixed(2);
+    _setLightOptions((oldValue) => ({
+      position: oldValue.position,
+      z: newZ,
+    }));
+  };
+
   return {
     lightOptions,
-    animationActions: { startAnimation, pauseAnimation, resetAnimation },
+    animationActions: {
+      startAnimation,
+      pauseAnimation,
+      resetAnimation,
+      setLightZ,
+    },
   };
 }

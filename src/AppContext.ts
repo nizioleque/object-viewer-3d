@@ -23,6 +23,7 @@ interface AppContext {
     startAnimation: () => void;
     pauseAnimation: () => void;
     resetAnimation: () => void;
+    setLightZ: (value: number) => void;
   };
 }
 
@@ -58,6 +59,7 @@ const appContextDefaultValue: AppContext = {
     startAnimation: () => {},
     pauseAnimation: () => {},
     resetAnimation: () => {},
+    setLightZ: () => {},
   },
 };
 

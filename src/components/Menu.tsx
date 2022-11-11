@@ -16,6 +16,7 @@ function Menu() {
     supportsOffscreenCanvas,
     styleOptions,
     updateStyleOptions,
+    lightOptions,
     animationActions,
   } = useContext(AppContext);
 
@@ -25,6 +26,10 @@ function Menu() {
       .then((blob) => {
         readFile(blob);
       });
+  };
+
+  const changeZBy = (offset: number) => {
+    animationActions.setLightZ(lightOptions.z + offset);
   };
 
   return (
@@ -142,11 +147,25 @@ function Menu() {
           <input type='color' name='' id='' />
           <h5>Współrzędna Z</h5>
           <div className='horizontal'>
-            <button className='menu-button'>- 0.5</button>
-            <button className='menu-button'>- 0.1</button>
-            <input type='number' name='' id='' />
-            <button className='menu-button'>+ 0.1</button>
-            <button className='menu-button'>+ 0.5</button>
+            <button className='menu-button' onClick={() => changeZBy(-0.5)}>
+              - 0.5
+            </button>
+            <button className='menu-button' onClick={() => changeZBy(-0.1)}>
+              - 0.1
+            </button>
+            <input
+              type='number'
+              value={lightOptions.z}
+              onChange={(event) =>
+                animationActions.setLightZ(parseFloat(event.target.value))
+              }
+            />
+            <button className='menu-button' onClick={() => changeZBy(+0.1)}>
+              + 0.1
+            </button>
+            <button className='menu-button' onClick={() => changeZBy(+0.5)}>
+              + 0.5
+            </button>
           </div>
           <h5>Animacja – spirala</h5>
           <div className='horizontal flex-fill'>
