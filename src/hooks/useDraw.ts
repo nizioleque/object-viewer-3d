@@ -13,8 +13,14 @@ export default function useDraw(
   worker: MutableRefObject<FillWorker | undefined>,
   canvasCtx: MutableRefObject<CanvasRenderingContext2D | undefined>
 ) {
-  const { objectData, lightOptions, params, setCurrentFps, calculationMode } =
-    useContext(AppContext);
+  const {
+    objectData,
+    lightOptions,
+    params,
+    setCurrentFps,
+    calculationMode,
+    styleOptions,
+  } = useContext(AppContext);
 
   const lightPosition = getLightPoint(lightOptions);
 
@@ -34,6 +40,7 @@ export default function useDraw(
       params,
       drawOutline,
       calculationMode,
+      styleOptions,
     };
 
     if (isRendering.current) {

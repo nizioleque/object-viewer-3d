@@ -1,4 +1,5 @@
 import { Params } from './hooks/useParams';
+import { StyleOptions } from './hooks/useStyleOptions';
 
 export interface ObjectData {
   vertices: Vertex[][];
@@ -102,4 +103,5 @@ export interface DrawArgs {
   params: Params;
   drawOutline: boolean;
   calculationMode: CalculationMode;
+  styleOptions: StyleOptions;
 }

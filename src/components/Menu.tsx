@@ -5,7 +5,7 @@ import './Menu.css';
 import MenuSlider from './MenuSlider';
 import CalculationModeButton from './CalculationModeButton';
 import Button from './Button';
-import { FillType } from '../hooks/useStyleOptions';
+import { FillType, getColorAsArray } from '../hooks/useStyleOptions';
 
 function Menu() {
   const {
@@ -54,7 +54,7 @@ function Menu() {
         </div>
       </div>
       <div className='menu-section'>
-        <h3>Wczytytanie modelu</h3>
+        <h3>Wczytywanie modelu</h3>
         <div className='buttons'>
           <h5>Z pliku</h5>
           <input
@@ -144,7 +144,15 @@ function Menu() {
         <h3>Światło</h3>
         <div className='buttons'>
           <h5>Kolor (kliknij aby wybrać)</h5>
-          <input type='color' name='' id='' />
+          <input
+            type='color'
+            defaultValue='#ffffff'
+            onChange={(event) =>
+              updateStyleOptions({
+                lightColor: getColorAsArray(event.target.value),
+              })
+            }
+          />
           <h5>Współrzędna Z</h5>
           <div className='horizontal'>
             <button className='menu-button' onClick={() => changeZBy(-0.5)}>

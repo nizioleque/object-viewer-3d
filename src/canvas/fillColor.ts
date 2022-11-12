@@ -1,13 +1,14 @@
 import { Params } from '../hooks/useParams';
+import { StyleOptions } from '../hooks/useStyleOptions';
 import { Vertex, Point3D } from '../types';
 
-const IL = [1, 1, 1];
 const IO = [0.5, 1, 1];
 
 export function calculateColor(
   vertex: Vertex,
   lightPosition: Point3D,
-  params: Params
+  params: Params,
+  styleOptions: StyleOptions
 ) {
   const L = calculateL(vertex, lightPosition);
   const prodNL = prod(vertex.vector, L);
@@ -17,9 +18,9 @@ export function calculateColor(
   const cosVR = Math.max(Rz, 0);
 
   return [
-    (calculateColorAtIndex(0, cosNL, cosVR, params) * 255) << 0,
-    (calculateColorAtIndex(1, cosNL, cosVR, params) * 255) << 0,
-    (calculateColorAtIndex(2, cosNL, cosVR, params) * 255) << 0,
+    (calculateColorAtIndex(0, cosNL, cosVR, params, styleOptions) * 255) << 0,
+    (calculateColorAtIndex(1, cosNL, cosVR, params, styleOptions) * 255) << 0,
+    (calculateColorAtIndex(2, cosNL, cosVR, params, styleOptions) * 255) << 0,
     255,
   ];
 }
@@ -28,10 +29,12 @@ function calculateColorAtIndex(
   i: number,
   cosNL: number,
   cosVR: number,
-  params: Params
+  params: Params,
+  styleOptions: StyleOptions
 ) {
-  const I1 = params.kd * IL[i] * IO[i] * cosNL;
-  const I2 = params.ks * IL[i] * IL[i] * Math.pow(cosVR, params.m);
+  const I1 = params.kd * styleOptions.lightColor[i] * IO[i] * cosNL;
+  const I2 =
+    params.ks * styleOptions.lightColor[i] * IO[i] * Math.pow(cosVR, params.m);
   return I1 + I2;
 }
 

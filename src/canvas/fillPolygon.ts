@@ -1,5 +1,6 @@
 import { scale } from '../constants';
 import { Params } from '../hooks/useParams';
+import { StyleOptions } from '../hooks/useStyleOptions';
 import {
   Face,
   ActiveEdgeData,
@@ -17,7 +18,8 @@ export function fillPolygon(
   canvasHeight: number,
   mode: CalculationMode,
   lightPosition: Point3D,
-  params: Params
+  params: Params,
+  styleOptions: StyleOptions
 ) {
   let activeEdgeTable: ActiveEdgeData[] = [];
 
@@ -86,7 +88,8 @@ export function fillPolygon(
         vector: interpolatedVector.vector,
       } as Vertex,
       lightPosition,
-      params
+      params,
+      styleOptions
     );
   }
 }
