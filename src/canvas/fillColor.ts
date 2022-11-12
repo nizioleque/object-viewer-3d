@@ -2,8 +2,6 @@ import { Params } from '../hooks/useParams';
 import { StyleOptions } from '../hooks/useStyleOptions';
 import { Vertex, Point3D } from '../types';
 
-const IO = [0.5, 1, 1];
-
 export function calculateColor(
   vertex: Vertex,
   lightPosition: Point3D,
@@ -32,9 +30,13 @@ function calculateColorAtIndex(
   params: Params,
   styleOptions: StyleOptions
 ) {
-  const I1 = params.kd * styleOptions.lightColor[i] * IO[i] * cosNL;
+  const I1 =
+    params.kd * styleOptions.lightColor[i] * styleOptions.fillColor[i] * cosNL;
   const I2 =
-    params.ks * styleOptions.lightColor[i] * IO[i] * Math.pow(cosVR, params.m);
+    params.ks *
+    styleOptions.lightColor[i] *
+    styleOptions.fillColor[i] *
+    Math.pow(cosVR, params.m);
   return I1 + I2;
 }
 

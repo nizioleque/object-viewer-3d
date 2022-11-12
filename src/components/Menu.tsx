@@ -138,6 +138,24 @@ function Menu() {
             currentValue={styleOptions.fillType}
             setValue={(value) => updateStyleOptions({ fillType: value })}
           />
+          <h5>Kolor wypełnienia</h5>
+          <input
+            type='color'
+            defaultValue='#ffffff'
+            onChange={(event) =>
+              updateStyleOptions({
+                fillColor: getColorAsArray(event.target.value),
+              })
+            }
+          />
+          <h5>Tekstura – z pliku</h5>
+          <input
+            type='file'
+            onChange={(event) => {
+              // readFile(event.target.files![0]);
+            }}
+          />
+          <h5>Tekstura – przykładowa</h5>
         </div>
       </div>
       <div className='menu-section'>
