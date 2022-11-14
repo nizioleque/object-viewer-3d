@@ -6,8 +6,16 @@ import { calculateColor } from './fillColor';
 import { fillPolygon as fillPolygon } from './fillPolygon';
 
 export function fill(
-  { objectData, lightPosition, params, drawOutline, calculationMode, styleOptions }: DrawArgs,
-  ctx: CanvasRenderingContext2D
+  {
+    objectData,
+    lightPosition,
+    params,
+    drawOutline,
+    calculationMode,
+    styleOptions,
+  }: DrawArgs,
+  ctx: CanvasRenderingContext2D,
+  texture: number[] | undefined
 ): number {
   if (!ctx) return NaN;
 
@@ -19,7 +27,7 @@ export function fill(
   const imageData = ctx.createImageData(canvasWidth, canvasHeight);
 
   if (calculationMode === CalculationMode.InterpolateColor) {
-    calculateVertexColors(objectData, lightPosition, params, styleOptions);
+    calculateVertexColors(objectData, lightPosition, params, styleOptions, texture);
   }
 
   for (const face of objectData.faces) {
@@ -31,7 +39,8 @@ export function fill(
       calculationMode,
       lightPosition,
       params,
-      styleOptions
+      styleOptions,
+      texture
     );
   }
 
@@ -47,7 +56,8 @@ function calculateVertexColors(
   objectData: ObjectData,
   lightPosition: Point3D,
   params: Params,
-  styleOptions: StyleOptions
+  styleOptions: StyleOptions,
+  texture: number[] | undefined
 ) {
   for (const rowIndex in objectData.vertices) {
     const row = objectData.vertices[parseInt(rowIndex)];
@@ -57,7 +67,8 @@ function calculateVertexColors(
         vertex,
         lightPosition,
         params,
-        styleOptions
+        styleOptions,
+        texture
       );
     }
   }

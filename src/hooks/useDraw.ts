@@ -20,6 +20,7 @@ export default function useDraw(
     setCurrentFps,
     calculationMode,
     styleOptions,
+    texture,
   } = useContext(AppContext);
 
   const lightPosition = getLightPoint(lightOptions);
@@ -69,7 +70,7 @@ export default function useDraw(
     if (worker.current) {
       newTime = await worker.current.runFill(drawArgs);
     } else {
-      newTime = fill(drawArgs, canvasCtx.current!);
+      newTime = fill(drawArgs, canvasCtx.current!, texture);
     }
 
     renderTimes.current[i.current++ % rendersCount] = newTime;

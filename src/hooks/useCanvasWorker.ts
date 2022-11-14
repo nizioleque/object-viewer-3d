@@ -1,10 +1,10 @@
-import { useCallback, useContext, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { spawn, Transfer, Worker } from 'threads';
 import { AppContext } from '../AppContext';
 import { FillWorker } from '../workers/fillWorker';
 
 export default function useCanvasWorker() {
-  const { supportsOffscreenCanvas } = useContext(AppContext);
+  const { supportsOffscreenCanvas, texture } = useContext(AppContext);
 
   const offscreenCanvas = useRef<HTMLCanvasElement>();
   const worker = useRef<FillWorker>();
@@ -47,6 +47,10 @@ export default function useCanvasWorker() {
     );
     worker.current = newWorker as unknown as FillWorker;
   };
+
+  useEffect(() => {
+    if (worker.current) worker.current.setTexture(texture);
+  }, [texture]);
 
   return { offscreenCanvas, worker, canvasCtx, canvasRef };
 }

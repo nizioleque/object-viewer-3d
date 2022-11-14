@@ -5,8 +5,14 @@ import useCanvasWorker from '../hooks/useCanvasWorker';
 import useDraw from '../hooks/useDraw';
 
 function Canvas() {
-  const { objectData, params, calculationMode, lightOptions, styleOptions } =
-    useContext(AppContext);
+  const {
+    objectData,
+    params,
+    calculationMode,
+    lightOptions,
+    styleOptions,
+    texture,
+  } = useContext(AppContext);
 
   const { offscreenCanvas, worker, canvasCtx, canvasRef } = useCanvasWorker();
   const { draw } = useDraw(offscreenCanvas, worker, canvasCtx);
@@ -19,6 +25,7 @@ function Canvas() {
     calculationMode,
     lightOptions,
     styleOptions,
+    texture,
   ]);
 
   return <canvas ref={canvasRef} width={scale * 2} height={scale * 2} />;

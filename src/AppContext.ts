@@ -7,7 +7,7 @@ import { CalculationMode, ObjectData } from './types';
 interface AppContext {
   setErrorText: (text: string, timeout?: number) => void;
   forceRerender: () => void;
-  readFile: (file: Blob) => void;
+  readObjectFile: (file: Blob) => void;
   objectData: ObjectData | undefined;
   params: Params;
   paramSetters: ParamSetters;
@@ -25,12 +25,14 @@ interface AppContext {
     resetAnimation: () => void;
     setLightZ: (value: number) => void;
   };
+  texture: number[] | undefined;
+  readTextureFile: (file: Blob) => void;
 }
 
 const appContextDefaultValue: AppContext = {
   setErrorText: () => {},
   forceRerender: () => {},
-  readFile: () => {},
+  readObjectFile: () => {},
   objectData: undefined,
   params: {
     kd: 0,
@@ -51,7 +53,6 @@ const appContextDefaultValue: AppContext = {
     fillColor: [],
     fillType: FillType.Color,
     lightColor: [],
-    fillTexture: undefined,
   },
   updateStyleOptions: () => {},
   lightOptions: { position: { r: 0, theta: 0 }, z: 0 },
@@ -61,6 +62,8 @@ const appContextDefaultValue: AppContext = {
     resetAnimation: () => {},
     setLightZ: () => {},
   },
+  texture: undefined,
+  readTextureFile: () => {},
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);

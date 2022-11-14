@@ -11,16 +11,19 @@ import useParams from './hooks/useParams';
 import useSupportsOffscreenCanvas from './hooks/useSupportsOffscreenCanvas';
 import useStyleOptions from './hooks/useStyleOptions';
 import useLightOptions from './hooks/useLightOptions';
+import { scale } from './constants';
+import useTexture from './hooks/useTexture';
 
 function App() {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
 
   const { forceRerender } = useForceRerender();
   const { showError, errorText, setErrorText } = useError();
-  const { objectData, readFile } = useObjectData();
+  const { objectData, readObjectFile } = useObjectData();
   const { params, paramSetters } = useParams();
   const supportsOffscreenCanvas = useSupportsOffscreenCanvas(setErrorText);
   const { styleOptions, updateStyleOptions } = useStyleOptions();
+  const { texture, readTextureFile } = useTexture(scale * 2, scale * 2);
   const { lightOptions, animationActions } = useLightOptions();
 
   const [calculationMode, setCalculationMode] = useState<CalculationMode>(
@@ -35,7 +38,7 @@ function App() {
         setErrorText,
         forceRerender,
         objectData,
-        readFile,
+        readObjectFile,
         params,
         paramSetters,
         calculationMode,
@@ -47,6 +50,8 @@ function App() {
         updateStyleOptions,
         lightOptions,
         animationActions,
+        texture,
+        readTextureFile,
       }}
     >
       <div className='App'>

@@ -6,10 +6,11 @@ import MenuSlider from './MenuSlider';
 import CalculationModeButton from './CalculationModeButton';
 import Button from './Button';
 import { FillType, getColorAsArray } from '../hooks/useStyleOptions';
+import AnimateHeight from 'react-animate-height';
 
 function Menu() {
   const {
-    readFile,
+    readObjectFile,
     params,
     paramSetters,
     currentFps,
@@ -18,13 +19,14 @@ function Menu() {
     updateStyleOptions,
     lightOptions,
     animationActions,
+    readTextureFile,
   } = useContext(AppContext);
 
   const readExampleFile = (path: string) => {
     fetch(path)
       .then((res) => res.blob())
       .then((blob) => {
-        readFile(blob);
+        readObjectFile(blob);
       });
   };
 
@@ -61,7 +63,7 @@ function Menu() {
             type='file'
             accept='.obj'
             onChange={(event) => {
-              readFile(event.target.files![0]);
+              readObjectFile(event.target.files![0]);
             }}
           />
           <h5>Przykład</h5>
@@ -138,24 +140,40 @@ function Menu() {
             currentValue={styleOptions.fillType}
             setValue={(value) => updateStyleOptions({ fillType: value })}
           />
-          <h5>Kolor wypełnienia</h5>
-          <input
-            type='color'
-            defaultValue='#ffffff'
-            onChange={(event) =>
-              updateStyleOptions({
-                fillColor: getColorAsArray(event.target.value),
-              })
-            }
-          />
-          <h5>Tekstura – z pliku</h5>
-          <input
-            type='file'
-            onChange={(event) => {
-              // readFile(event.target.files![0]);
-            }}
-          />
-          <h5>Tekstura – przykładowa</h5>
+          <AnimateHeight
+            height={styleOptions.fillType === FillType.Color ? 'auto' : 0}
+            duration={300}
+            easing='ease-in-out'
+          >
+            <div className='buttons'>
+              <h5>Kolor wypełnienia</h5>
+              <input
+                type='color'
+                defaultValue='#ffffff'
+                onChange={(event) =>
+                  updateStyleOptions({
+                    fillColor: getColorAsArray(event.target.value),
+                  })
+                }
+              />
+            </div>
+          </AnimateHeight>
+          <AnimateHeight
+            height={styleOptions.fillType === FillType.Texture ? 'auto' : 0}
+            duration={300}
+            easing='ease-in-out'
+          >
+            <div className='buttons'>
+              <h5>Tekstura – z pliku</h5>
+              <input
+                type='file'
+                onChange={(event) => {
+                  readTextureFile(event.target.files![0]);
+                }}
+              />
+              <h5>Tekstura – przykładowa</h5>
+            </div>
+          </AnimateHeight>
         </div>
       </div>
       <div className='menu-section'>

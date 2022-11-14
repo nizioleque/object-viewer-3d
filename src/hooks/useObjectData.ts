@@ -5,7 +5,7 @@ import { parsePoint, scalePoint } from '../utils';
 export default function useObjectData() {
   const [objectData, _setObjectData] = useState<ObjectData>();
 
-  const readFile = (file: Blob) => {
+  const readObjectFile = (file: Blob) => {
     _setObjectData(undefined);
     parseFile(file);
   };
@@ -80,5 +80,5 @@ export default function useObjectData() {
     _setObjectData(newObjectData);
   };
 
-  return { objectData, readFile };
+  return { objectData, readObjectFile };
 }

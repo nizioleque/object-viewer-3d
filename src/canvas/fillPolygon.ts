@@ -19,7 +19,8 @@ export function fillPolygon(
   mode: CalculationMode,
   lightPosition: Point3D,
   params: Params,
-  styleOptions: StyleOptions
+  styleOptions: StyleOptions,
+  texture: number[] | undefined
 ) {
   let activeEdgeTable: ActiveEdgeData[] = [];
 
@@ -80,6 +81,9 @@ export function fillPolygon(
     const interpolatedVector = getPixelVector(face, x, y);
     return calculateColor(
       {
+        x: x,
+        y: y,
+        z: interpolatedVector.pointZ * 255,
         original: {
           x: (x - scale) / scale,
           y: (y - scale) / scale,
@@ -89,7 +93,8 @@ export function fillPolygon(
       } as Vertex,
       lightPosition,
       params,
-      styleOptions
+      styleOptions,
+      texture
     );
   }
 }
