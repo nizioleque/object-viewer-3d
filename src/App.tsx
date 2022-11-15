@@ -11,20 +11,21 @@ import useParams from './hooks/useParams';
 import useSupportsOffscreenCanvas from './hooks/useSupportsOffscreenCanvas';
 import useStyleOptions from './hooks/useStyleOptions';
 import useLightOptions from './hooks/useLightOptions';
-import { scale } from './constants';
 import useTexture from './hooks/useTexture';
+import useSize from './hooks/useSize';
 
 function App() {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
 
   const { forceRerender } = useForceRerender();
+  const { size, setSize } = useSize();
   const { showError, errorText, setErrorText } = useError();
-  const { objectData, readObjectFile } = useObjectData();
+  const { objectData, readObjectFile } = useObjectData(size);
   const { params, paramSetters } = useParams();
   const supportsOffscreenCanvas = useSupportsOffscreenCanvas(setErrorText);
   const { styleOptions, updateStyleOptions } = useStyleOptions();
-  const { texture, readTextureFile } = useTexture(scale * 2, scale * 2);
   const { lightOptions, animationActions } = useLightOptions();
+  const { texture, readTextureFile } = useTexture(size);
 
   const [calculationMode, setCalculationMode] = useState<CalculationMode>(
     CalculationMode.InterpolateColor
@@ -52,6 +53,8 @@ function App() {
         animationActions,
         texture,
         readTextureFile,
+        size,
+        setSize,
       }}
     >
       <div className='App'>

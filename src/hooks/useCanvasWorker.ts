@@ -4,7 +4,7 @@ import { AppContext } from '../AppContext';
 import { FillWorker } from '../workers/fillWorker';
 
 export default function useCanvasWorker() {
-  const { supportsOffscreenCanvas, texture } = useContext(AppContext);
+  const { supportsOffscreenCanvas, texture, size } = useContext(AppContext);
 
   const offscreenCanvas = useRef<HTMLCanvasElement>();
   const worker = useRef<FillWorker>();
@@ -51,6 +51,12 @@ export default function useCanvasWorker() {
   useEffect(() => {
     if (worker.current) worker.current.setTexture(texture);
   }, [texture]);
+
+  useEffect(() => {
+    if (worker.current) {
+      worker.current.setSize(size);
+    }
+  }, [size]);
 
   return { offscreenCanvas, worker, canvasCtx, canvasRef };
 }

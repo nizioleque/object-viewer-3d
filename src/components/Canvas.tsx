@@ -1,6 +1,5 @@
 import { useContext, useEffect } from 'react';
 import { AppContext } from '../AppContext';
-import { scale } from '../constants';
 import useCanvasWorker from '../hooks/useCanvasWorker';
 import useDraw from '../hooks/useDraw';
 
@@ -12,6 +11,7 @@ function Canvas() {
     lightOptions,
     styleOptions,
     texture,
+    size,
   } = useContext(AppContext);
 
   const { offscreenCanvas, worker, canvasCtx, canvasRef } = useCanvasWorker();
@@ -28,7 +28,7 @@ function Canvas() {
     texture,
   ]);
 
-  return <canvas ref={canvasRef} width={scale * 2} height={scale * 2} />;
+  return <canvas ref={canvasRef} width={size} height={size} />;
 }
 
 export default Canvas;

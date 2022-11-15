@@ -7,6 +7,7 @@ import CalculationModeButton from './CalculationModeButton';
 import Button from './Button';
 import { FillType, getColorAsArray } from '../hooks/useStyleOptions';
 import AnimateHeight from 'react-animate-height';
+import { CanvasSize } from '../hooks/useSize';
 
 function Menu() {
   const {
@@ -20,13 +21,23 @@ function Menu() {
     lightOptions,
     animationActions,
     readTextureFile,
+    size,
+    setSize,
   } = useContext(AppContext);
 
-  const readExampleFile = (path: string) => {
+  const readExampleObject = (path: string) => {
     fetch(path)
       .then((res) => res.blob())
       .then((blob) => {
         readObjectFile(blob);
+      });
+  };
+
+  const readExampleTexture = (path: string) => {
+    fetch(path)
+      .then((res) => res.blob())
+      .then((blob) => {
+        readTextureFile(blob);
       });
   };
 
@@ -69,18 +80,41 @@ function Menu() {
           <h5>Przykład</h5>
           <div
             className='menu-button horizontal'
-            onClick={() => readExampleFile('/kula_1.obj')}
+            onClick={() => readExampleObject('/kula_1.obj')}
           >
             <div>Kula</div>
             <button className='apply-button'>Otwórz</button>
           </div>
           <div
             className='menu-button horizontal'
-            onClick={() => readExampleFile('/kula_2.obj')}
+            onClick={() => readExampleObject('/kula_2.obj')}
           >
             <div>Kula (wektory uśrednione)</div>
             <button className='apply-button'>Otwórz</button>
           </div>
+        </div>
+      </div>
+      <div className='menu-section'>
+        <h3>Rozmiar obrazu</h3>
+        <div className='buttons'>
+          <Button
+            text='Mały (400 pikseli)'
+            value={CanvasSize.Small}
+            setValue={setSize}
+            currentValue={size}
+          />
+          <Button
+            text='Średni (600 pikseli)'
+            value={CanvasSize.Medium}
+            setValue={setSize}
+            currentValue={size}
+          />
+          <Button
+            text='Duży (800 pikseli)'
+            value={CanvasSize.Large}
+            setValue={setSize}
+            currentValue={size}
+          />
         </div>
       </div>
       <div className='menu-section'>
@@ -146,7 +180,7 @@ function Menu() {
             easing='ease-in-out'
           >
             <div className='buttons'>
-              <h5>Kolor wypełnienia</h5>
+              <h5>Kolor wypełnienia (kliknij aby wybrać)</h5>
               <input
                 type='color'
                 defaultValue='#ffffff'
@@ -172,6 +206,20 @@ function Menu() {
                 }}
               />
               <h5>Tekstura – przykładowa</h5>
+              <div
+                className='menu-button horizontal'
+                onClick={() => readExampleTexture('/tecza.png')}
+              >
+                <div>Tęczowy gradient</div>
+                <button className='apply-button'>Otwórz</button>
+              </div>
+              <div
+                className='menu-button horizontal'
+                onClick={() => readExampleTexture('/bialy_kropki.png')}
+              >
+                <div>Biały w kropki</div>
+                <button className='apply-button'>Otwórz</button>
+              </div>
             </div>
           </AnimateHeight>
         </div>
@@ -191,8 +239,8 @@ function Menu() {
           />
           <h5>Współrzędna Z</h5>
           <div className='horizontal'>
-            <button className='menu-button' onClick={() => changeZBy(-0.5)}>
-              - 0.5
+            <button className='menu-button' onClick={() => changeZBy(-1)}>
+              - 1
             </button>
             <button className='menu-button' onClick={() => changeZBy(-0.1)}>
               - 0.1
@@ -207,8 +255,8 @@ function Menu() {
             <button className='menu-button' onClick={() => changeZBy(+0.1)}>
               + 0.1
             </button>
-            <button className='menu-button' onClick={() => changeZBy(+0.5)}>
-              + 0.5
+            <button className='menu-button' onClick={() => changeZBy(+1)}>
+              + 1
             </button>
           </div>
           <h5>Animacja – spirala</h5>

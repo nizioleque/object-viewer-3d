@@ -1,4 +1,3 @@
-import { scale } from '../constants';
 import { Params } from '../hooks/useParams';
 import { FillType, StyleOptions } from '../hooks/useStyleOptions';
 import { Vertex, Point3D } from '../types';
@@ -8,7 +7,8 @@ export function calculateColor(
   lightPosition: Point3D,
   params: Params,
   styleOptions: StyleOptions,
-  texture: number[] | undefined
+  texture: number[] | undefined,
+  size: number
 ) {
   const L = calculateL(vertex, lightPosition);
   const prodNL = prod(vertex.vector, L);
@@ -19,7 +19,7 @@ export function calculateColor(
 
   let fillColor: number[] | Uint8ClampedArray;
   if (styleOptions.fillType === FillType.Texture && texture) {
-    const offset = (vertex.y * scale * 2 + vertex.x) * 4;
+    const offset = (vertex.y * size + vertex.x) * 4;
     fillColor = texture.slice(offset, offset + 3);
   } else {
     fillColor = styleOptions.fillColor;

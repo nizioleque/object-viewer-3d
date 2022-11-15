@@ -1,4 +1,3 @@
-import { scale } from '../constants';
 import { Params } from '../hooks/useParams';
 import { StyleOptions } from '../hooks/useStyleOptions';
 import {
@@ -20,7 +19,8 @@ export function fillPolygon(
   lightPosition: Point3D,
   params: Params,
   styleOptions: StyleOptions,
-  texture: number[] | undefined
+  texture: number[] | undefined,
+  size: number
 ) {
   let activeEdgeTable: ActiveEdgeData[] = [];
 
@@ -85,8 +85,8 @@ export function fillPolygon(
         y: y,
         z: interpolatedVector.pointZ * 255,
         original: {
-          x: (x - scale) / scale,
-          y: (y - scale) / scale,
+          x: (x - size / 2) / (size / 2),
+          y: (y - size / 2) / (size / 2),
           z: interpolatedVector.pointZ,
         },
         vector: interpolatedVector.vector,
@@ -94,7 +94,8 @@ export function fillPolygon(
       lightPosition,
       params,
       styleOptions,
-      texture
+      texture,
+      size
     );
   }
 }

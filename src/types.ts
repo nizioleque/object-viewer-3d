@@ -104,4 +104,5 @@ export interface DrawArgs {
   drawOutline: boolean;
   calculationMode: CalculationMode;
   styleOptions: StyleOptions;
+  size: number;
 }

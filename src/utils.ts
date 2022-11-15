@@ -1,4 +1,3 @@
-import { scale } from './constants';
 import { Point3D } from './types';
 
 export function parsePoint(vertices: string[] | number[]): Point3D {
@@ -15,10 +14,4 @@ export function parsePoint(vertices: string[] | number[]): Point3D {
   return p;
 }
 
-export function scalePoint(p: Point3D): Point3D {
-  return {
-    x: Math.round(p.x * scale + scale),
-    y: Math.round(p.y * scale + scale),
-    z: Math.round(p.z * scale + scale),
-  };
-}
+

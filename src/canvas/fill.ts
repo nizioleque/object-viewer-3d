@@ -13,6 +13,7 @@ export function fill(
     drawOutline,
     calculationMode,
     styleOptions,
+    size,
   }: DrawArgs,
   ctx: CanvasRenderingContext2D,
   texture: number[] | undefined
@@ -27,7 +28,14 @@ export function fill(
   const imageData = ctx.createImageData(canvasWidth, canvasHeight);
 
   if (calculationMode === CalculationMode.InterpolateColor) {
-    calculateVertexColors(objectData, lightPosition, params, styleOptions, texture);
+    calculateVertexColors(
+      objectData,
+      lightPosition,
+      params,
+      styleOptions,
+      texture,
+      size
+    );
   }
 
   for (const face of objectData.faces) {
@@ -40,10 +48,12 @@ export function fill(
       lightPosition,
       params,
       styleOptions,
-      texture
+      texture,
+      size
     );
   }
 
+  // ctx.clearRect(0, 0, 1000, 1000);
   ctx.putImageData(imageData, 0, 0);
 
   if (drawOutline) drawOutlines(objectData, ctx);
@@ -57,7 +67,8 @@ function calculateVertexColors(
   lightPosition: Point3D,
   params: Params,
   styleOptions: StyleOptions,
-  texture: number[] | undefined
+  texture: number[] | undefined,
+  size: number
 ) {
   for (const rowIndex in objectData.vertices) {
     const row = objectData.vertices[parseInt(rowIndex)];
@@ -68,7 +79,8 @@ function calculateVertexColors(
         lightPosition,
         params,
         styleOptions,
-        texture
+        texture,
+        size
       );
     }
   }

@@ -2,16 +2,25 @@ import { expose } from 'threads/worker';
 import { fill } from '../canvas/fill';
 import { DrawArgs } from '../types';
 
+let offscreenCanvas: HTMLCanvasElement | null = null;
 let ctx: CanvasRenderingContext2D | null = null;
 let texture: number[] | undefined;
 
 const worker = {
-  init(offscreenCanvas: HTMLCanvasElement) {
-    ctx = offscreenCanvas.getContext('2d');
+  init(newOffscreenCanvas: HTMLCanvasElement) {
+    offscreenCanvas = newOffscreenCanvas;
+    ctx = offscreenCanvas?.getContext('2d');
   },
 
   setTexture(newTexture: number[] | undefined) {
     texture = newTexture;
+  },
+
+  setSize(size: number) {
+    if (!offscreenCanvas) return;
+    offscreenCanvas.width = size;
+    offscreenCanvas.height = size;
+    ctx = offscreenCanvas?.getContext('2d');
   },
 
   runFill(drawArgs: DrawArgs): number {

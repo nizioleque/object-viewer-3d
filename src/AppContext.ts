@@ -1,6 +1,7 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 import { LightOptions } from './hooks/useLightOptions';
 import { Params, ParamSetters } from './hooks/useParams';
+import { CanvasSize } from './hooks/useSize';
 import { FillType, StyleOptions } from './hooks/useStyleOptions';
 import { CalculationMode, ObjectData } from './types';
 
@@ -27,6 +28,8 @@ interface AppContext {
   };
   texture: number[] | undefined;
   readTextureFile: (file: Blob) => void;
+  size: CanvasSize;
+  setSize: Dispatch<SetStateAction<CanvasSize>>;
 }
 
 const appContextDefaultValue: AppContext = {
@@ -64,6 +67,8 @@ const appContextDefaultValue: AppContext = {
   },
   texture: undefined,
   readTextureFile: () => {},
+  size: CanvasSize.Medium,
+  setSize: () => {},
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);

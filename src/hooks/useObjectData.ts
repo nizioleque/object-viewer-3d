@@ -1,14 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Face, ObjectData, Point3D, Vertex } from '../types';
-import { parsePoint, scalePoint } from '../utils';
+import { parsePoint } from '../utils';
 
-export default function useObjectData() {
+export default function useObjectData(size: number) {
   const [objectData, _setObjectData] = useState<ObjectData>();
+  const [currentObjectFile, setCurrentObjectFile] = useState<Blob>();
 
   const readObjectFile = (file: Blob) => {
     _setObjectData(undefined);
+    setCurrentObjectFile(file);
     parseFile(file);
   };
+
+  useEffect(() => {
+    if (currentObjectFile) {
+      parseFile(currentObjectFile);
+    }
+  }, [size]);
 
   const parseFile = async (file: Blob) => {
     const faceData: string[][] = [];
@@ -81,4 +89,12 @@ export default function useObjectData() {
   };
 
   return { objectData, readObjectFile };
+
+  function scalePoint(p: Point3D): Point3D {
+    return {
+      x: Math.round(p.x * (size / 2) + size / 2),
+      y: Math.round(p.y * (size / 2) + size / 2),
+      z: Math.round(p.z * (size / 2) + size / 2),
+    };
+  }
 }
