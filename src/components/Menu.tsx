@@ -21,6 +21,7 @@ function Menu() {
     lightOptions,
     animationActions,
     readTextureFile,
+    readTextureSet,
     size,
     setSize,
   } = useContext(AppContext);
@@ -30,14 +31,6 @@ function Menu() {
       .then((res) => res.blob())
       .then((blob) => {
         readObjectFile(blob);
-      });
-  };
-
-  const readExampleTexture = (path: string) => {
-    fetch(path)
-      .then((res) => res.blob())
-      .then((blob) => {
-        readTextureFile(blob);
       });
   };
 
@@ -208,14 +201,26 @@ function Menu() {
               <h5>Tekstura – przykładowa</h5>
               <div
                 className='menu-button horizontal'
-                onClick={() => readExampleTexture('/tecza.png')}
+                onClick={() =>
+                  readTextureSet({
+                    400: 'rainbow_400.jpg',
+                    600: 'rainbow_600.jpg',
+                    800: 'rainbow_800.jpg',
+                  })
+                }
               >
                 <div>Tęczowy gradient</div>
                 <button className='apply-button'>Otwórz</button>
               </div>
               <div
                 className='menu-button horizontal'
-                onClick={() => readExampleTexture('/bialy_kropki.png')}
+                onClick={() =>
+                  readTextureSet({
+                    400: 'dots_400.png',
+                    600: 'dots_600.png',
+                    800: 'dots_800.png',
+                  })
+                }
               >
                 <div>Biały w kropki</div>
                 <button className='apply-button'>Otwórz</button>

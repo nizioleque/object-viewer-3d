@@ -3,6 +3,7 @@ import { LightOptions } from './hooks/useLightOptions';
 import { Params, ParamSetters } from './hooks/useParams';
 import { CanvasSize } from './hooks/useSize';
 import { FillType, StyleOptions } from './hooks/useStyleOptions';
+import { TextureSet } from './hooks/useTexture';
 import { CalculationMode, ObjectData } from './types';
 
 interface AppContext {
@@ -28,6 +29,7 @@ interface AppContext {
   };
   texture: number[] | undefined;
   readTextureFile: (file: Blob) => void;
+  readTextureSet: (textureSet: TextureSet) => void;
   size: CanvasSize;
   setSize: Dispatch<SetStateAction<CanvasSize>>;
 }
@@ -67,6 +69,7 @@ const appContextDefaultValue: AppContext = {
   },
   texture: undefined,
   readTextureFile: () => {},
+  readTextureSet: () => {},
   size: CanvasSize.Medium,
   setSize: () => {},
 };

@@ -25,7 +25,7 @@ function App() {
   const supportsOffscreenCanvas = useSupportsOffscreenCanvas(setErrorText);
   const { styleOptions, updateStyleOptions } = useStyleOptions();
   const { lightOptions, animationActions } = useLightOptions();
-  const { texture, readTextureFile } = useTexture(size);
+  const { texture, readTextureFile, readTextureSet } = useTexture(size);
 
   const [calculationMode, setCalculationMode] = useState<CalculationMode>(
     CalculationMode.InterpolateColor
@@ -53,6 +53,7 @@ function App() {
         animationActions,
         texture,
         readTextureFile,
+        readTextureSet,
         size,
         setSize,
       }}
