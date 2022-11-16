@@ -32,7 +32,7 @@ export default function useNormalMap(size: number) {
     img.onload = function () {
       ctx.drawImage(img, 0, 0);
       const imageData = Array.from(ctx.getImageData(0, 0, size, size).data).map(
-        (x) => x / 127.5 - 1
+        (x, index) => (index % 4 === 2 ? x / 127.5 - 1 : x / 255)
       );
       setNormalMap(imageData);
     };

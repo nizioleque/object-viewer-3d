@@ -20,6 +20,7 @@ export function fillPolygon(
   params: Params,
   styleOptions: StyleOptions,
   texture: number[] | undefined,
+  normalMap: number[] | null,
   size: number
 ) {
   let activeEdgeTable: ActiveEdgeData[] = [];
@@ -95,6 +96,7 @@ export function fillPolygon(
       params,
       styleOptions,
       texture,
+      normalMap,
       size
     );
   }

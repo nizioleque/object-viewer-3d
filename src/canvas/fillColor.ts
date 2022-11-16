@@ -8,22 +8,28 @@ export function calculateColor(
   params: Params,
   styleOptions: StyleOptions,
   texture: number[] | undefined,
+  normalMap: number[] | null,
   size: number
 ) {
-  const L = calculateL(vertex, lightPosition);
-  const prodNL = prod(vertex.vector, L);
-  const cosNL = Math.max(prodNL, 0);
+  const offset = (vertex.y * size + vertex.x) * 4;
 
-  const Rz = 2 * prodNL * (vertex.vector.z - L.z);
-  const cosVR = Math.max(Rz, 0);
+  const normalMapColor = normalMap?.slice(offset, offset + 3);
+  const normalVector = normalMapColor
+    ? getMappedVector(normalMapColor, vertex)
+    : vertex.vector;
 
   let fillColor: number[] | Uint8ClampedArray;
   if (styleOptions.fillType === FillType.Texture && texture) {
-    const offset = (vertex.y * size + vertex.x) * 4;
     fillColor = texture.slice(offset, offset + 3);
   } else {
     fillColor = styleOptions.fillColor;
   }
+
+  const L = calculateL(vertex, lightPosition);
+  const prodNL = prod(normalVector, L);
+  const cosNL = Math.max(prodNL, 0);
+  const Rz = 2 * prodNL * (normalVector.z - L.z);
+  const cosVR = Math.max(Rz, 0);
 
   return [
     (calculateColorAtIndex(0) * 255) << 0,
@@ -54,6 +60,37 @@ function calculateL(vertex: Vertex, lightPosition: Point3D): Point3D {
     y: lightPosition.y - vertex.original.y,
     z: lightPosition.z - vertex.original.z,
   };
+  return normalizeVector(v);
+}
+
+const v001 = { x: 0, y: 0, z: 1 };
+
+function getMappedVector(normalMapColor: number[], vertex: Vertex): Point3D {
+  const nTexture = {
+    x: normalMapColor[0],
+    y: normalMapColor[1],
+    z: normalMapColor[2],
+  };
+  const nSurface = vertex.vector;
+  const b = crossProduct(nSurface, v001);
+  const t = crossProduct(b, nSurface);
+
+  return normalizeVector({
+    x: t.x * nTexture.x + b.x * nTexture.y + nSurface.x * nTexture.z,
+    y: t.y * nTexture.x + b.y * nTexture.y + nSurface.y * nTexture.z,
+    z: t.z * nTexture.x + b.z * nTexture.y + nSurface.z * nTexture.z,
+  });
+}
+
+function crossProduct(p1: Point3D, p2: Point3D): Point3D {
+  return {
+    x: p1.y * p2.z - p1.z * p2.y,
+    y: p1.z * p2.x - p1.x * p2.z,
+    z: p1.x * p2.y - p1.y * p2.x,
+  };
+}
+
+function normalizeVector(v: Point3D): Point3D {
   const len = Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2));
   return { x: v.x / len, y: v.y / len, z: v.z / len };
 }

@@ -35,6 +35,7 @@ export function fill(
       params,
       styleOptions,
       texture,
+      normalMap,
       size
     );
   }
@@ -50,6 +51,7 @@ export function fill(
       params,
       styleOptions,
       texture,
+      normalMap,
       size
     );
   }
@@ -69,6 +71,7 @@ function calculateVertexColors(
   params: Params,
   styleOptions: StyleOptions,
   texture: number[] | undefined,
+  normalMap: number[] | null,
   size: number
 ) {
   for (const rowIndex in objectData.vertices) {
@@ -81,6 +84,7 @@ function calculateVertexColors(
         params,
         styleOptions,
         texture,
+        normalMap,
         size
       );
     }
