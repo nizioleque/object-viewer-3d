@@ -6,7 +6,6 @@ import { FillWorker } from '../workers/fillWorker';
 import { getLightPoint } from './useLightOptions';
 
 const rendersCount = 20;
-const drawOutline = true;
 
 export default function useDraw(
   offscreenCanvas: MutableRefObject<HTMLCanvasElement | undefined>,
@@ -23,6 +22,7 @@ export default function useDraw(
     texture,
     size,
     normalMap,
+    drawOutline,
   } = useContext(AppContext);
 
   const lightPosition = getLightPoint(lightOptions);

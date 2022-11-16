@@ -37,6 +37,8 @@ interface AppContext {
   readNormalMapFile: (file: Blob) => void;
   readNormalMapSet: (normalMapSet: NormalMapSet) => void;
   resetNormalMap: () => void;
+  drawOutline: boolean;
+  setDrawOutline: Dispatch<SetStateAction<boolean>>;
 }
 
 const appContextDefaultValue: AppContext = {
@@ -81,6 +83,8 @@ const appContextDefaultValue: AppContext = {
   readNormalMapFile: () => {},
   readNormalMapSet: () => {},
   resetNormalMap: () => {},
+  drawOutline: false,
+  setDrawOutline: () => {},
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);

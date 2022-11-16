@@ -11,6 +11,8 @@ function Canvas() {
     lightOptions,
     styleOptions,
     texture,
+    normalMap,
+    drawOutline,
     size,
   } = useContext(AppContext);
 
@@ -26,6 +28,8 @@ function Canvas() {
     lightOptions,
     styleOptions,
     texture,
+    normalMap,
+    drawOutline,
   ]);
 
   return <canvas ref={canvasRef} width={size} height={size} />;

@@ -7,6 +7,7 @@ import MenuParams from './MenuParams';
 import MenuFill from './MenuFill';
 import MenuLight from './MenuLight';
 import MenuNormalMap from './MenuNormalMap';
+import MenuOutline from './MenuOutline';
 
 function Menu() {
   const { currentFps, supportsOffscreenCanvas } = useContext(AppContext);
@@ -34,6 +35,7 @@ function Menu() {
       </div>
       <MenuObject />
       <MenuSize />
+      <MenuOutline />
       <MenuParams />
       <MenuFill />
       <MenuLight />
