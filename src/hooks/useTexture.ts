@@ -62,5 +62,5 @@ export default function useTexture(size: number) {
     updateTexture();
   }, [size, currentTextureSet]);
 
-  return { texture, readTextureFile, setCurrentTextureSet, readTextureSet };
+  return { texture, readTextureFile, readTextureSet };
 }

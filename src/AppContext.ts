@@ -1,5 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 import { LightOptions } from './hooks/useLightOptions';
+import { NormalMapSet } from './hooks/useNormalMap';
 import { Params, ParamSetters } from './hooks/useParams';
 import { CanvasSize } from './hooks/useSize';
 import { FillType, StyleOptions } from './hooks/useStyleOptions';
@@ -32,6 +33,9 @@ interface AppContext {
   readTextureSet: (textureSet: TextureSet) => void;
   size: CanvasSize;
   setSize: Dispatch<SetStateAction<CanvasSize>>;
+  normalMap: number[] | undefined;
+  readNormalMapFile: (file: Blob) => void;
+  readNormalMapSet: (normalMapSet: NormalMapSet) => void;
 }
 
 const appContextDefaultValue: AppContext = {
@@ -72,6 +76,9 @@ const appContextDefaultValue: AppContext = {
   readTextureSet: () => {},
   size: CanvasSize.Medium,
   setSize: () => {},
+  normalMap: undefined,
+  readNormalMapFile: () => {},
+  readNormalMapSet: () => {},
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);

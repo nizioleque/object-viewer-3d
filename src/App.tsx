@@ -13,6 +13,7 @@ import useStyleOptions from './hooks/useStyleOptions';
 import useLightOptions from './hooks/useLightOptions';
 import useTexture from './hooks/useTexture';
 import useSize from './hooks/useSize';
+import useNormalMap from './hooks/useNormalMap';
 
 function App() {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -26,6 +27,7 @@ function App() {
   const { styleOptions, updateStyleOptions } = useStyleOptions();
   const { lightOptions, animationActions } = useLightOptions();
   const { texture, readTextureFile, readTextureSet } = useTexture(size);
+  const { normalMap, readNormalMapFile, readNormalMapSet } = useNormalMap();
 
   const [calculationMode, setCalculationMode] = useState<CalculationMode>(
     CalculationMode.InterpolateColor
@@ -56,6 +58,9 @@ function App() {
         readTextureSet,
         size,
         setSize,
+        normalMap,
+        readNormalMapFile,
+        readNormalMapSet,
       }}
     >
       <div className='App'>

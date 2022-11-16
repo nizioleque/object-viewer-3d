@@ -1,14 +1,14 @@
 interface ButtonProps {
   text: string;
-  value: any;
-  setValue: (value: any) => void;
-  currentValue: any;
+  value?: any;
+  setValue?: (value: any) => void;
+  currentValue?: any;
 }
 
 function Button({ text, value, setValue, currentValue }: ButtonProps) {
   return (
     <button
-      onClick={() => setValue(value)}
+      onClick={() => setValue?.(value)}
       className={`menu-button ${currentValue === value ? 'active' : ''}`}
     >
       {text}
