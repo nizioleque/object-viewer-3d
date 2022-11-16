@@ -13,7 +13,7 @@ export function drawFaceOutline(
 ): void {
   ctx.beginPath();
   ctx.lineWidth = 1;
-  ctx.strokeStyle = 'rgba(255, 0, 0, 0.15)';
+  ctx.strokeStyle = 'rgb(255, 0, 255, 0.3)';
   ctx.moveTo(face.vertices[0].x, face.vertices[0].y);
   for (let i = 1; i < face.vertices.length; i++) {
     ctx.lineTo(face.vertices[i].x, face.vertices[i].y);
