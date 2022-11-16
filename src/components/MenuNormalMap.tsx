@@ -12,6 +12,7 @@ function MenuNormalMap() {
         <h5>Z pliku</h5>
         <input
           type='file'
+          accept='image/*'
           onChange={(event) => {
             readNormalMapFile(event.target.files![0]);
           }}

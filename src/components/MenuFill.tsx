@@ -52,6 +52,7 @@ function MenuFill() {
             <h5>Tekstura – z pliku</h5>
             <input
               type='file'
+              accept='image/*'
               onChange={(event) => {
                 readTextureFile(event.target.files![0]);
               }}
@@ -96,7 +97,6 @@ function MenuFill() {
               <div>Kotek</div>
               <button className='apply-button'>Otwórz</button>
             </div>
-
           </div>
         </AnimateHeight>
       </div>
