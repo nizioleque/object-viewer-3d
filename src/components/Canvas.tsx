@@ -2,6 +2,7 @@ import { useContext, useEffect } from 'react';
 import { AppContext } from '../AppContext';
 import useCanvasWorker from '../hooks/useCanvasWorker';
 import useDraw from '../hooks/useDraw';
+import { CalculationMode } from '../types';
 
 function Canvas() {
   const {
@@ -14,6 +15,7 @@ function Canvas() {
     normalMap,
     drawOutline,
     size,
+    setErrorText,
   } = useContext(AppContext);
 
   const { offscreenCanvas, worker, canvasCtx, canvasRef } = useCanvasWorker();
@@ -31,6 +33,17 @@ function Canvas() {
     normalMap,
     drawOutline,
   ]);
+
+  useEffect(() => {
+    if (
+      calculationMode === CalculationMode.InterpolateColor &&
+      (texture || normalMap)
+    ) {
+      setErrorText(
+        'Dla lepszego efektu wizualnego zalecane jest przełączenie w tryb interpolacji "Interpolacja wektora"'
+      );
+    }
+  }, [texture, normalMap]);
 
   return <canvas ref={canvasRef} width={size} height={size} />;
 }
