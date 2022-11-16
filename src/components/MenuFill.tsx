@@ -83,6 +83,20 @@ function MenuFill() {
               <div>Biały w kropki</div>
               <button className='apply-button'>Otwórz</button>
             </div>
+            <div
+              className='menu-button horizontal'
+              onClick={() =>
+                readTextureSet({
+                  400: 'kitten_400.jpg',
+                  600: 'kitten_600.jpg',
+                  800: 'kitten_800.jpg',
+                })
+              }
+            >
+              <div>Kotek</div>
+              <button className='apply-button'>Otwórz</button>
+            </div>
+
           </div>
         </AnimateHeight>
       </div>
