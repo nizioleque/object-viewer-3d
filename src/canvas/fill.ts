@@ -16,7 +16,8 @@ export function fill(
     size,
   }: DrawArgs,
   ctx: CanvasRenderingContext2D,
-  texture: number[] | undefined
+  texture: number[] | undefined,
+  normalMap: number[] | null
 ): number {
   if (!ctx) return NaN;
 

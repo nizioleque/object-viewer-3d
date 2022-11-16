@@ -33,9 +33,10 @@ interface AppContext {
   readTextureSet: (textureSet: TextureSet) => void;
   size: CanvasSize;
   setSize: Dispatch<SetStateAction<CanvasSize>>;
-  normalMap: number[] | undefined;
+  normalMap: number[] | null;
   readNormalMapFile: (file: Blob) => void;
   readNormalMapSet: (normalMapSet: NormalMapSet) => void;
+  resetNormalMap: () => void;
 }
 
 const appContextDefaultValue: AppContext = {
@@ -76,9 +77,10 @@ const appContextDefaultValue: AppContext = {
   readTextureSet: () => {},
   size: CanvasSize.Medium,
   setSize: () => {},
-  normalMap: undefined,
+  normalMap: null,
   readNormalMapFile: () => {},
   readNormalMapSet: () => {},
+  resetNormalMap: () => {},
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);

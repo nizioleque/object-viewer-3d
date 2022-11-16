@@ -27,7 +27,8 @@ function App() {
   const { styleOptions, updateStyleOptions } = useStyleOptions();
   const { lightOptions, animationActions } = useLightOptions();
   const { texture, readTextureFile, readTextureSet } = useTexture(size);
-  const { normalMap, readNormalMapFile, readNormalMapSet } = useNormalMap();
+  const { normalMap, readNormalMapFile, readNormalMapSet, resetNormalMap } =
+    useNormalMap(size);
 
   const [calculationMode, setCalculationMode] = useState<CalculationMode>(
     CalculationMode.InterpolateColor
@@ -61,6 +62,7 @@ function App() {
         normalMap,
         readNormalMapFile,
         readNormalMapSet,
+        resetNormalMap,
       }}
     >
       <div className='App'>

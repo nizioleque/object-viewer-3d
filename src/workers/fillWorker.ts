@@ -5,6 +5,7 @@ import { DrawArgs } from '../types';
 let offscreenCanvas: HTMLCanvasElement | null = null;
 let ctx: CanvasRenderingContext2D | null = null;
 let texture: number[] | undefined;
+let normalMap: number[] | null;
 
 const worker = {
   init(newOffscreenCanvas: HTMLCanvasElement) {
@@ -16,6 +17,10 @@ const worker = {
     texture = newTexture;
   },
 
+  setNormalMap(newNormalMap: number[] | null) {
+    normalMap = newNormalMap;
+  },
+
   setSize(size: number) {
     if (!offscreenCanvas) return;
     offscreenCanvas.width = size;
@@ -25,7 +30,7 @@ const worker = {
 
   runFill(drawArgs: DrawArgs): number {
     if (!ctx) return NaN;
-    return fill(drawArgs, ctx, texture);
+    return fill(drawArgs, ctx, texture, normalMap);
   },
 };
 
