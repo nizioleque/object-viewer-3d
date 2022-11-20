@@ -39,6 +39,13 @@ function MenuObject() {
           <div>Kula (wektory uśrednione)</div>
           <button className='apply-button'>Otwórz</button>
         </div>
+        <div
+          className='menu-button horizontal'
+          onClick={() => readExampleObject('/torus.obj')}
+        >
+          <div>Torus</div>
+          <button className='apply-button'>Otwórz</button>
+        </div>
       </div>
     </div>
   );
