@@ -42,6 +42,19 @@ export default function useObjectData(size: number) {
       }
     }
 
+    let maxCoordinate = 0;
+    for (const vertex of vertices) {
+      const currentMax = Math.max(Math.abs(vertex.x), Math.abs(vertex.y));
+      console.log(currentMax);
+      if (currentMax > maxCoordinate) maxCoordinate = currentMax;
+    }
+
+    for (const vertex of vertices) {
+      vertex.x /= maxCoordinate;
+      vertex.y /= maxCoordinate;
+      vertex.z /= maxCoordinate;
+    }
+
     for (const faceIndex in faceData) {
       const verticesParsed: Vertex[] = [];
 
