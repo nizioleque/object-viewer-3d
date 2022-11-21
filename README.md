@@ -1,4 +1,4 @@
-# GK LAB 2
+# Object Viewer
 
 Norbert Niziołek – Grafika komputerowa 1
 
@@ -6,7 +6,7 @@ Norbert Niziołek – Grafika komputerowa 1
 
 ### Przez stronę internetową (zalecane)
 
-Aplikacja jest dostępna pod adresem https://gk-lab-2.niziolek.dev.
+Aplikacja jest dostępna pod adresem https://object-viewer.niziolek.dev.
 
 ### Uruchomienie na lokalnej maszynie
 
@@ -17,7 +17,7 @@ Wymagania:
 
 Aplikację można uruchomić na swoim komputerze na dwa sposoby.
 
-Najpierw należy pobrać to repozytorium. Następnie, w rozpakowanym folderze z plikiem `package.json` należy wywołać komendę `npm install` (lub `yarn`) aby pobrać wszystkie zależności.
+Najpierw należy pobrać to repozytorium. Następnie, w rozpakowanym folderze należy wywołać komendę `npm install` (lub `yarn`) aby pobrać wszystkie zależności.
 
 Następnie, aby uruchomić aplikację:
 
@@ -25,3 +25,7 @@ Następnie, aby uruchomić aplikację:
 - poprzez _production build_ (produkcyjna wersja, zoptymalizowana): należy wywołać komendę `npm run build` (lub `yarn build`) aby zbudować produkcyjną wersję aplikacji do folderu `build`. Następnie można uruchomić zbudowaną aplikację z tego folderu używając dowolnego web servera, np. tego rozszerzenia do VS Code: https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
 
 ## Instrukcja obsługi
+
+Wszystkie opcje dostępne są w menu z lewej strony ekranu.
+
+Odradza się korzystania z przeglądarki Safari – nie wspiera ona rysowania na oddzielnym wątku, przez co interfejs użytkownika zacina się.

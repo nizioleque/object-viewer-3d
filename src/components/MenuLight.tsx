@@ -27,10 +27,10 @@ function MenuLight() {
         <h5>Współrzędna Z</h5>
         <div className='horizontal'>
           <button className='menu-button' onClick={() => changeZBy(-1)}>
-            - 1
+            − 1
           </button>
           <button className='menu-button' onClick={() => changeZBy(-0.1)}>
-            - 0.1
+            − 0.1
           </button>
           <input
             type='number'
