@@ -45,7 +45,6 @@ export default function useObjectData(size: number) {
     let maxCoordinate = 0;
     for (const vertex of vertices) {
       const currentMax = Math.max(Math.abs(vertex.x), Math.abs(vertex.y));
-      console.log(currentMax);
       if (currentMax > maxCoordinate) maxCoordinate = currentMax;
     }
 

@@ -1,3 +1,4 @@
+import { MapType } from './hooks/useNormalMap';
 import { Params } from './hooks/useParams';
 import { StyleOptions } from './hooks/useStyleOptions';
 
@@ -105,4 +106,5 @@ export interface DrawArgs {
   calculationMode: CalculationMode;
   styleOptions: StyleOptions;
   size: number;
+  mapType: MapType;
 }

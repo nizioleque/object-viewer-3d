@@ -8,6 +8,11 @@ interface NormalMapSetBlobs {
   [index: number]: Blob;
 }
 
+export enum MapType {
+  NormalMap,
+  HeightMap,
+}
+
 export default function useNormalMap(size: number) {
   const [normalMap, setNormalMap] = useState<number[] | null>(null);
   const [currentNormalMapSet, setCurrentNormalMapSet] =
@@ -15,6 +20,11 @@ export default function useNormalMap(size: number) {
   const [currentNormalMapFile, setCurrentNormalMapFile] = useState<Blob | null>(
     null
   );
+
+  const [mapType, setMapType] = useState<MapType>(MapType.NormalMap);
+  useEffect(() => {
+    console.log('map type changed to', mapType);
+  }, [mapType]);
 
   const readNormalMapFile = (file: Blob, fromSet: boolean = false) => {
     if (!fromSet) {
@@ -40,7 +50,10 @@ export default function useNormalMap(size: number) {
     img.src = URL.createObjectURL(file);
   };
 
-  const readNormalMapSet = async (normalMapSet: NormalMapSet) => {
+  const readNormalMapSet = async (
+    normalMapSet: NormalMapSet,
+    isHeightMap: boolean = false
+  ) => {
     const newBlobs: NormalMapSetBlobs = {};
     for (const size in normalMapSet) {
       const response = await fetch(normalMapSet[size]);
@@ -49,6 +62,7 @@ export default function useNormalMap(size: number) {
     }
     setCurrentNormalMapFile(null);
     setCurrentNormalMapSet(newBlobs);
+    setMapType(isHeightMap ? MapType.HeightMap : MapType.NormalMap);
   };
 
   const updateNormalMap = () => {
@@ -70,5 +84,12 @@ export default function useNormalMap(size: number) {
     setCurrentNormalMapSet(null);
   };
 
-  return { normalMap, readNormalMapFile, readNormalMapSet, resetNormalMap };
+  return {
+    normalMap,
+    readNormalMapFile,
+    readNormalMapSet,
+    resetNormalMap,
+    mapType,
+    setMapType,
+  };
 }

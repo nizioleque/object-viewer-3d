@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 import { LightOptions } from './hooks/useLightOptions';
-import { NormalMapSet } from './hooks/useNormalMap';
+import { MapType, NormalMapSet } from './hooks/useNormalMap';
 import { Params, ParamSetters } from './hooks/useParams';
 import { CanvasSize } from './hooks/useSize';
 import { FillType, StyleOptions } from './hooks/useStyleOptions';
@@ -35,10 +35,12 @@ interface AppContext {
   setSize: Dispatch<SetStateAction<CanvasSize>>;
   normalMap: number[] | null;
   readNormalMapFile: (file: Blob) => void;
-  readNormalMapSet: (normalMapSet: NormalMapSet) => void;
+  readNormalMapSet: (normalMapSet: NormalMapSet, isHeightMap?: boolean) => void;
   resetNormalMap: () => void;
   drawOutline: boolean;
   setDrawOutline: Dispatch<SetStateAction<boolean>>;
+  mapType: MapType;
+  setMapType: Dispatch<SetStateAction<MapType>>;
 }
 
 const appContextDefaultValue: AppContext = {
@@ -85,6 +87,8 @@ const appContextDefaultValue: AppContext = {
   resetNormalMap: () => {},
   drawOutline: false,
   setDrawOutline: () => {},
+  mapType: MapType.NormalMap,
+  setMapType: () => {},
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);

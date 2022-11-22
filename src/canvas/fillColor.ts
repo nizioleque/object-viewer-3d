@@ -1,3 +1,4 @@
+import { MapType } from '../hooks/useNormalMap';
 import { Params } from '../hooks/useParams';
 import { FillType, StyleOptions } from '../hooks/useStyleOptions';
 import { Vertex, Point3D } from '../types';
@@ -9,13 +10,13 @@ export function calculateColor(
   styleOptions: StyleOptions,
   texture: number[] | undefined,
   normalMap: number[] | null,
-  size: number
+  size: number,
+  mapType: MapType
 ) {
   const offset = (vertex.y * size + vertex.x) * 4;
 
-  const normalMapColor = normalMap?.slice(offset, offset + 3);
-  const normalVector = normalMapColor
-    ? getMappedVector(normalMapColor, vertex)
+  const normalVector = normalMap
+    ? getMappedVector(normalMap, vertex, mapType, size)
     : vertex.vector;
 
   let fillColor: number[] | Uint8ClampedArray;
@@ -65,21 +66,80 @@ function calculateL(vertex: Vertex, lightPosition: Point3D): Point3D {
 
 const v001 = { x: 0, y: 0, z: 1 };
 
-function getMappedVector(normalMapColor: number[], vertex: Vertex): Point3D {
-  const nTexture = {
-    x: normalMapColor[0],
-    y: normalMapColor[1],
-    z: normalMapColor[2],
-  };
-  const nSurface = vertex.vector;
-  const b = crossProduct(nSurface, v001);
-  const t = crossProduct(b, nSurface);
+function getMappedVector(
+  normalMap: number[],
+  vertex: Vertex,
+  mapType: MapType,
+  size: number
+): Point3D {
+  if (mapType === MapType.NormalMap) {
+    const offset = (vertex.y * size + vertex.x) * 4;
+    const normalMapColor = normalMap?.slice(offset, offset + 3);
+    return calculateNormalMap(normalMapColor);
+  }
 
-  return normalizeVector({
-    x: t.x * nTexture.x + b.x * nTexture.y + nSurface.x * nTexture.z,
-    y: t.y * nTexture.x + b.y * nTexture.y + nSurface.y * nTexture.z,
-    z: t.z * nTexture.x + b.z * nTexture.y + nSurface.z * nTexture.z,
-  });
+  if (mapType === MapType.HeightMap) {
+    if (vertex.x >= size - 1 || vertex.y >= size - 1) {
+      console.log('no');
+      return vertex.vector;
+    }
+    const offsetCurrent = (vertex.y * size + vertex.x) * 4;
+    const colorCurrent = normalMap[offsetCurrent + 2];
+
+    const offsetRight = (vertex.y * size + vertex.x + 1) * 4;
+    const colorRight = normalMap[offsetRight + 2];
+
+    const offsetBelow = ((vertex.y + 1) * size + vertex.x) * 4;
+    const colorBelow = normalMap[offsetBelow + 2];
+
+    return calculateHeightMap(colorCurrent, colorRight, colorBelow);
+  }
+
+  return { x: 0, y: 0, z: 0 };
+
+  function calculateHeightMap(
+    colorCurrent: number,
+    colorRight: number,
+    colorBelow: number
+  ) {
+    const alpha = 10;
+
+    const deltaX = colorRight - colorCurrent;
+    const deltaY = colorBelow - colorCurrent;
+
+    const nSurface = vertex.vector;
+    const b = crossProduct(nSurface, v001);
+    const t = crossProduct(b, nSurface);
+
+    const d: Point3D = {
+      x: deltaX * t.x + deltaY * b.x,
+      y: deltaX * t.y + deltaY * b.y,
+      z: deltaX * t.z + deltaY * b.z,
+    };
+
+    return normalizeVector({
+      x: vertex.vector.x + alpha * d.x,
+      y: vertex.vector.y + alpha * d.y,
+      z: Math.max(vertex.vector.z + alpha * d.z, 0),
+    });
+  }
+
+  function calculateNormalMap(normalMapColor: number[]) {
+    const nTexture = {
+      x: normalMapColor[0],
+      y: normalMapColor[1],
+      z: normalMapColor[2],
+    };
+    const nSurface = vertex.vector;
+    const b = crossProduct(nSurface, v001);
+    const t = crossProduct(b, nSurface);
+
+    return normalizeVector({
+      x: t.x * nTexture.x + b.x * nTexture.y + nSurface.x * nTexture.z,
+      y: t.y * nTexture.x + b.y * nTexture.y + nSurface.y * nTexture.z,
+      z: t.z * nTexture.x + b.z * nTexture.y + nSurface.z * nTexture.z,
+    });
+  }
 }
 
 function crossProduct(p1: Point3D, p2: Point3D): Point3D {

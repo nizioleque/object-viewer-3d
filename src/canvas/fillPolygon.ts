@@ -1,3 +1,4 @@
+import { MapType } from '../hooks/useNormalMap';
 import { Params } from '../hooks/useParams';
 import { StyleOptions } from '../hooks/useStyleOptions';
 import {
@@ -21,7 +22,8 @@ export function fillPolygon(
   styleOptions: StyleOptions,
   texture: number[] | undefined,
   normalMap: number[] | null,
-  size: number
+  size: number,
+  mapType: MapType
 ) {
   let activeEdgeTable: ActiveEdgeData[] = [];
 
@@ -97,7 +99,8 @@ export function fillPolygon(
       styleOptions,
       texture,
       normalMap,
-      size
+      size,
+      mapType
     );
   }
 }

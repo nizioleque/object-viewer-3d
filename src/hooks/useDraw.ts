@@ -23,6 +23,7 @@ export default function useDraw(
     size,
     normalMap,
     drawOutline,
+    mapType,
   } = useContext(AppContext);
 
   const lightPosition = getLightPoint(lightOptions);
@@ -45,6 +46,7 @@ export default function useDraw(
       calculationMode,
       styleOptions,
       size,
+      mapType,
     };
 
     if (isRendering.current) {

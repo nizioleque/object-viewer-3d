@@ -1,3 +1,4 @@
+import { MapType } from '../hooks/useNormalMap';
 import { Params } from '../hooks/useParams';
 import { StyleOptions } from '../hooks/useStyleOptions';
 import { CalculationMode, DrawArgs, ObjectData, Point3D } from '../types';
@@ -14,6 +15,7 @@ export function fill(
     calculationMode,
     styleOptions,
     size,
+    mapType,
   }: DrawArgs,
   ctx: CanvasRenderingContext2D,
   texture: number[] | undefined,
@@ -36,7 +38,8 @@ export function fill(
       styleOptions,
       texture,
       normalMap,
-      size
+      size,
+      mapType
     );
   }
 
@@ -52,11 +55,11 @@ export function fill(
       styleOptions,
       texture,
       normalMap,
-      size
+      size,
+      mapType
     );
   }
 
-  // ctx.clearRect(0, 0, 1000, 1000);
   ctx.putImageData(imageData, 0, 0);
 
   if (drawOutline) drawOutlines(objectData, ctx);
@@ -72,7 +75,8 @@ function calculateVertexColors(
   styleOptions: StyleOptions,
   texture: number[] | undefined,
   normalMap: number[] | null,
-  size: number
+  size: number,
+  mapType: MapType
 ) {
   for (const rowIndex in objectData.vertices) {
     const row = objectData.vertices[parseInt(rowIndex)];
@@ -85,7 +89,8 @@ function calculateVertexColors(
         styleOptions,
         texture,
         normalMap,
-        size
+        size,
+        mapType
       );
     }
   }

@@ -16,6 +16,7 @@ function Canvas() {
     drawOutline,
     size,
     setErrorText,
+    mapType,
   } = useContext(AppContext);
 
   const { offscreenCanvas, worker, canvasCtx, canvasRef } = useCanvasWorker();
@@ -32,6 +33,7 @@ function Canvas() {
     texture,
     normalMap,
     drawOutline,
+    mapType,
   ]);
 
   useEffect(() => {

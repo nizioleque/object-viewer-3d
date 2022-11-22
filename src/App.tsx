@@ -28,8 +28,14 @@ function App() {
   const { styleOptions, updateStyleOptions } = useStyleOptions();
   const { lightOptions, animationActions } = useLightOptions();
   const { texture, readTextureFile, readTextureSet } = useTexture(size);
-  const { normalMap, readNormalMapFile, readNormalMapSet, resetNormalMap } =
-    useNormalMap(size);
+  const {
+    normalMap,
+    readNormalMapFile,
+    readNormalMapSet,
+    resetNormalMap,
+    mapType,
+    setMapType,
+  } = useNormalMap(size);
   const { drawOutline, setDrawOutline } = useDrawOutline();
 
   const [calculationMode, setCalculationMode] = useState<CalculationMode>(
@@ -67,6 +73,8 @@ function App() {
         resetNormalMap,
         drawOutline,
         setDrawOutline,
+        mapType,
+        setMapType,
       }}
     >
       <div className='App'>
