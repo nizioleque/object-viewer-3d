@@ -1,4 +1,4 @@
-# Object Viewer
+# Object Viewer 3D
 
 Norbert Niziołek – Grafika komputerowa 1
 
@@ -6,7 +6,7 @@ Norbert Niziołek – Grafika komputerowa 1
 
 ### Przez stronę internetową (zalecane)
 
-Aplikacja jest dostępna pod adresem https://object-viewer.niziolek.dev.
+Aplikacja jest dostępna pod adresem https://object-viewer-3d.niziolek.dev.
 
 ### Uruchomienie na lokalnej maszynie
 
