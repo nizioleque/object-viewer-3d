@@ -1,3 +1,4 @@
+import { DrawMode } from '../hooks/useDrawMode';
 import { MapType } from '../hooks/useNormalMap';
 import { Params } from '../hooks/useParams';
 import { StyleOptions } from '../hooks/useStyleOptions';
@@ -11,7 +12,7 @@ export function fill(
     objectData,
     lightPosition,
     params,
-    drawOutline,
+    drawMode,
     calculationMode,
     styleOptions,
     size,
@@ -27,42 +28,48 @@ export function fill(
 
   const canvasWidth = ctx.canvas.width;
   const canvasHeight = ctx.canvas.height;
-  if (canvasHeight === 0 || canvasWidth === 0) return 0;
-  const imageData = ctx.createImageData(canvasWidth, canvasHeight);
 
-  if (calculationMode === CalculationMode.InterpolateColor) {
-    calculateVertexColors(
-      objectData,
-      lightPosition,
-      params,
-      styleOptions,
-      texture,
-      normalMap,
-      size,
-      mapType
-    );
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+  if (drawMode === DrawMode.FillOutline || drawMode === DrawMode.FillOnly) {
+    if (canvasHeight === 0 || canvasWidth === 0) return 0;
+    const imageData = ctx.createImageData(canvasWidth, canvasHeight);
+
+    if (calculationMode === CalculationMode.InterpolateColor) {
+      calculateVertexColors(
+        objectData,
+        lightPosition,
+        params,
+        styleOptions,
+        texture,
+        normalMap,
+        size,
+        mapType
+      );
+    }
+
+    for (const face of objectData.faces) {
+      fillPolygon(
+        face,
+        imageData.data,
+        canvasWidth,
+        canvasHeight,
+        calculationMode,
+        lightPosition,
+        params,
+        styleOptions,
+        texture,
+        normalMap,
+        size,
+        mapType
+      );
+    }
+
+    ctx.putImageData(imageData, 0, 0);
   }
 
-  for (const face of objectData.faces) {
-    fillPolygon(
-      face,
-      imageData.data,
-      canvasWidth,
-      canvasHeight,
-      calculationMode,
-      lightPosition,
-      params,
-      styleOptions,
-      texture,
-      normalMap,
-      size,
-      mapType
-    );
-  }
-
-  ctx.putImageData(imageData, 0, 0);
-
-  if (drawOutline) drawOutlines(objectData, ctx);
+  if (drawMode === DrawMode.FillOutline || drawMode === DrawMode.OutlineOnly)
+    drawOutlines(objectData, ctx);
 
   const t1 = performance.now();
   return t1 - t0;

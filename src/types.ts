@@ -1,3 +1,4 @@
+import { DrawMode } from './hooks/useDrawMode';
 import { MapType } from './hooks/useNormalMap';
 import { Params } from './hooks/useParams';
 import { StyleOptions } from './hooks/useStyleOptions';
@@ -102,7 +103,7 @@ export interface DrawArgs {
   objectData: ObjectData;
   lightPosition: Point3D;
   params: Params;
-  drawOutline: boolean;
+  drawMode: DrawMode;
   calculationMode: CalculationMode;
   styleOptions: StyleOptions;
   size: number;

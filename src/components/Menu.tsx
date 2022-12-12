@@ -7,7 +7,7 @@ import MenuParams from './MenuParams';
 import MenuFill from './MenuFill';
 import MenuLight from './MenuLight';
 import MenuNormalMap from './MenuNormalMap';
-import MenuOutline from './MenuOutline';
+import MenuDrawMode from './MenuDrawMode';
 
 function Menu() {
   const { currentFps, supportsOffscreenCanvas } = useContext(AppContext);
@@ -15,9 +15,9 @@ function Menu() {
   return (
     <div className='menu'>
       <header>
-        <h1>Object Viewer</h1>
+        <h1>Object Viewer 3D</h1>
         <div className='name'>Norbert Niziołek</div>
-        <a href='https://github.com/nizioleque/gk-lab-2' target='_blank'>
+        <a href='https://github.com/nizioleque/gk-lab-4' target='_blank'>
           Kod źródłowy i dokumentacja
         </a>
       </header>
@@ -35,7 +35,7 @@ function Menu() {
       </div>
       <MenuObject />
       <MenuSize />
-      <MenuOutline />
+      <MenuDrawMode />
       <MenuParams />
       <MenuFill />
       <MenuLight />

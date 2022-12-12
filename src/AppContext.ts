@@ -1,4 +1,5 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
+import { DrawMode } from './hooks/useDrawMode';
 import { LightOptions } from './hooks/useLightOptions';
 import { MapType, NormalMapSet } from './hooks/useNormalMap';
 import { Params, ParamSetters } from './hooks/useParams';
@@ -37,8 +38,8 @@ interface AppContext {
   readNormalMapFile: (file: Blob) => void;
   readNormalMapSet: (normalMapSet: NormalMapSet, isHeightMap?: boolean) => void;
   resetNormalMap: () => void;
-  drawOutline: boolean;
-  setDrawOutline: Dispatch<SetStateAction<boolean>>;
+  drawMode: DrawMode;
+  setDrawMode: Dispatch<SetStateAction<DrawMode>>;
   mapType: MapType;
   setMapType: Dispatch<SetStateAction<MapType>>;
 }
@@ -85,8 +86,8 @@ const appContextDefaultValue: AppContext = {
   readNormalMapFile: () => {},
   readNormalMapSet: () => {},
   resetNormalMap: () => {},
-  drawOutline: false,
-  setDrawOutline: () => {},
+  drawMode: DrawMode.FillOnly,
+  setDrawMode: () => {},
   mapType: MapType.NormalMap,
   setMapType: () => {},
 };

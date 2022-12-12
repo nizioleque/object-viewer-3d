@@ -22,7 +22,7 @@ export default function useDraw(
     texture,
     size,
     normalMap,
-    drawOutline,
+    drawMode,
     mapType,
   } = useContext(AppContext);
 
@@ -42,7 +42,7 @@ export default function useDraw(
       objectData,
       lightPosition,
       params,
-      drawOutline,
+      drawMode,
       calculationMode,
       styleOptions,
       size,

@@ -19,11 +19,15 @@ function MenuObject() {
         <h5>Z pliku</h5>
         <input
           type='file'
+          multiple
           accept='.obj'
           onChange={(event) => {
             readObjectFile(event.target.files![0]);
           }}
         />
+        <div className='menu-caption center'>
+          Przytrzymaj CTRL aby wybrać wiele plików
+        </div>
         <h5>Przykład</h5>
         <div
           className='menu-button horizontal'
@@ -41,9 +45,9 @@ function MenuObject() {
         </div>
         <div
           className='menu-button horizontal'
-          onClick={() => readExampleObject('/torus.obj')}
+          onClick={() => readExampleObject('/torus_full.obj')}
         >
-          <div>Torus</div>
+          <div>Torus (pełny)</div>
           <button className='apply-button'>Otwórz</button>
         </div>
       </div>

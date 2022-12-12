@@ -13,7 +13,7 @@ function Canvas() {
     styleOptions,
     texture,
     normalMap,
-    drawOutline,
+    drawMode,
     size,
     setErrorText,
     mapType,
@@ -32,7 +32,7 @@ function Canvas() {
     styleOptions,
     texture,
     normalMap,
-    drawOutline,
+    drawMode,
     mapType,
   ]);
 
