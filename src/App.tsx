@@ -15,6 +15,7 @@ import useTexture from './hooks/useTexture';
 import useSize from './hooks/useSize';
 import useNormalMap from './hooks/useNormalMap';
 import useDrawOutline from './hooks/useDrawMode';
+import useObject3D from './hooks/useObject3D';
 
 function App() {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -43,6 +44,8 @@ function App() {
   );
 
   const [currentFps, setCurrentFps] = useState<number>(0);
+
+  const { objectData3D } = useObject3D();
 
   return (
     <AppContext.Provider
@@ -75,6 +78,7 @@ function App() {
         setDrawMode,
         mapType,
         setMapType,
+        objectData3D
       }}
     >
       <div className='App'>

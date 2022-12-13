@@ -2,6 +2,7 @@ import { createContext, Dispatch, SetStateAction } from 'react';
 import { DrawMode } from './hooks/useDrawMode';
 import { LightOptions } from './hooks/useLightOptions';
 import { MapType, NormalMapSet } from './hooks/useNormalMap';
+import { ObjectData3D } from './hooks/useObject3D';
 import { Params, ParamSetters } from './hooks/useParams';
 import { CanvasSize } from './hooks/useSize';
 import { FillType, StyleOptions } from './hooks/useStyleOptions';
@@ -42,6 +43,7 @@ interface AppContext {
   setDrawMode: Dispatch<SetStateAction<DrawMode>>;
   mapType: MapType;
   setMapType: Dispatch<SetStateAction<MapType>>;
+  objectData3D: ObjectData3D[];
 }
 
 const appContextDefaultValue: AppContext = {
@@ -90,6 +92,7 @@ const appContextDefaultValue: AppContext = {
   setDrawMode: () => {},
   mapType: MapType.NormalMap,
   setMapType: () => {},
+  objectData3D: [],
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);

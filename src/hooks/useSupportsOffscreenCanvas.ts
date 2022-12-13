@@ -11,7 +11,8 @@ export default function useSupportsOffscreenCanvas(
       typeof (document.createElement('canvas') as any)
         .transferControlToOffscreen === 'function';
     if (supported) {
-      setSupportsOffscreenCanvas(true);
+      // setSupportsOffscreenCanvas(true);
+      setSupportsOffscreenCanvas(false);
     } else {
       setSupportsOffscreenCanvas(false);
       setErrorText(

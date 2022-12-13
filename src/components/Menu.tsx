@@ -33,13 +33,15 @@ function Menu() {
           </span>
         </div>
       </div>
-      <MenuObject />
-      <MenuSize />
-      <MenuDrawMode />
-      <MenuParams />
-      <MenuFill />
-      <MenuLight />
-      <MenuNormalMap />
+      <div style={{ display: 'none' }}>
+        <MenuObject />
+        <MenuSize />
+        <MenuDrawMode />
+        <MenuParams />
+        <MenuFill />
+        <MenuLight />
+        <MenuNormalMap />
+      </div>
     </div>
   );
 }
