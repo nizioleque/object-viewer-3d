@@ -27,10 +27,14 @@ export default function useDraw3D(
       const multLook = math.multiply(viewMatrix, multModel);
       const multProj = math.multiply(projectionMatrix, multLook);
       const scale = multProj.get([3, 0]);
-      vertices.push({
-        x: (multProj.get([0, 0]) / scale) * canvasScale + canvasScale,
-        y: (multProj.get([1, 0]) / scale) * canvasScale + canvasScale,
-      });
+      const x = multProj.get([0, 0]) / scale;
+      const y = multProj.get([1, 0]) / scale;
+      if (x > -1 && x < 1 && y > -1 && y < 1) {
+        vertices.push({
+          x: x * canvasScale + canvasScale,
+          y: y * canvasScale + canvasScale,
+        });
+      }
     }
 
     return vertices;
@@ -52,6 +56,7 @@ export default function useDraw3D(
           modelMatrix,
           projectionMatrix
         );
+        if (vertices.length < 3) continue;
 
         canvasCtx.current.beginPath();
         canvasCtx.current.lineWidth = 1;
