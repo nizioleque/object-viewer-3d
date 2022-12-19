@@ -1,18 +1,20 @@
-import { useCallback, useContext, useEffect, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { spawn, Transfer, Worker } from 'threads';
 import { AppContext } from '../AppContext';
 import { FillWorker } from '../workers/fillWorker';
 
 export default function useCanvasWorker() {
-  const { supportsOffscreenCanvas, texture, size, normalMap } =
-    useContext(AppContext);
+  const { supportsOffscreenCanvas, objectData3D } = useContext(AppContext);
 
   const offscreenCanvas = useRef<HTMLCanvasElement>();
   const worker = useRef<FillWorker>();
   const canvasCtx = useRef<CanvasRenderingContext2D>();
 
+  const [workerCreated, setWorkerCreated] = useState<boolean>(false);
+
   const canvasRef = useCallback(
     (node: HTMLCanvasElement) => {
+      console.log('canvasref', node);
       if (supportsOffscreenCanvas === undefined) return;
       if (node !== null) {
         if (supportsOffscreenCanvas) {
@@ -45,21 +47,12 @@ export default function useCanvasWorker() {
       ) as unknown as HTMLCanvasElement
     );
     worker.current = newWorker as unknown as FillWorker;
+    setWorkerCreated(true);
   };
 
   useEffect(() => {
-    if (worker.current) worker.current.setTexture(texture);
-  }, [texture]);
+    if (worker.current) worker.current.setObjectData3D(objectData3D);
+  }, [objectData3D, workerCreated]);
 
-  useEffect(() => {
-    if (worker.current) worker.current.setNormalMap(normalMap);
-  }, [normalMap]);
-
-  useEffect(() => {
-    if (worker.current) {
-      worker.current.setSize(size);
-    }
-  }, [size]);
-
-  return { offscreenCanvas, worker, canvasCtx, canvasRef };
+  return { worker, canvasCtx, canvasRef };
 }

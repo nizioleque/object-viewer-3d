@@ -1,11 +1,11 @@
 import { expose } from 'threads/worker';
-import { fill } from '../canvas/fill';
-import { DrawArgs } from '../types';
+import { paint } from '../canvas3D/paint';
+import { ObjectData3D } from '../hooks/useObject3D';
+import { DrawArgs3D } from '../types';
 
 let offscreenCanvas: HTMLCanvasElement | null = null;
 let ctx: CanvasRenderingContext2D | null = null;
-let texture: number[] | undefined;
-let normalMap: number[] | null;
+let objectData3D: ObjectData3D[] | null;
 
 const worker = {
   init(newOffscreenCanvas: HTMLCanvasElement) {
@@ -13,24 +13,14 @@ const worker = {
     ctx = offscreenCanvas?.getContext('2d');
   },
 
-  setTexture(newTexture: number[] | undefined) {
-    texture = newTexture;
+  setObjectData3D(newObjectData3D: ObjectData3D[]) {
+    console.log('setobjectdata3d');
+    objectData3D = newObjectData3D;
   },
 
-  setNormalMap(newNormalMap: number[] | null) {
-    normalMap = newNormalMap;
-  },
-
-  setSize(size: number) {
-    if (!offscreenCanvas) return;
-    offscreenCanvas.width = size;
-    offscreenCanvas.height = size;
-    ctx = offscreenCanvas?.getContext('2d');
-  },
-
-  runFill(drawArgs: DrawArgs): number {
-    if (!ctx) return NaN;
-    return fill(drawArgs, ctx, texture, normalMap);
+  async runPaint(drawArgs3D: DrawArgs3D) {
+    if (!ctx || !objectData3D) return;
+    await paint(drawArgs3D, ctx, objectData3D);
   },
 };
 

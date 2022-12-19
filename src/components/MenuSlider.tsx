@@ -8,6 +8,7 @@ interface MenuSliderProps {
   max?: number;
   step?: number;
   noDecimal?: boolean;
+  defaultValue?: number;
 }
 
 function MenuSlider({
@@ -18,6 +19,7 @@ function MenuSlider({
   max,
   step,
   noDecimal,
+  defaultValue,
 }: MenuSliderProps) {
   return (
     <div>
@@ -32,7 +34,7 @@ function MenuSlider({
           min={min ?? 0}
           max={max ?? 1}
           step={step ?? 0.01}
-          defaultValue={(max ?? 1) / 2}
+          defaultValue={defaultValue ?? (max ?? 1) / 2}
           onInput={(event) => {
             setFn(parseFloat((event.target as HTMLInputElement).value));
           }}

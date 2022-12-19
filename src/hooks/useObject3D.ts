@@ -1,5 +1,3 @@
-import * as math from 'mathjs';
-import { Matrix } from 'mathjs';
 import { useEffect, useState } from 'react';
 import { Point3D } from '../types';
 import { parsePoint } from '../utils';
@@ -7,15 +5,8 @@ import { parsePoint } from '../utils';
 export interface ObjectData3D {
   vertices: Point3D[];
   faces: number[][];
-  modelMatrixFn: (t: number) => Matrix;
+  rotationModifier: number;
 }
-
-export const viewMatrix: Matrix = math.matrix([
-  [-0.986, 0.164, 4e-18, -1e-16],
-  [-0.027, -0.16, 0.987, 1e-16],
-  [0.162, 0.973, 0.162, -3.082],
-  [0, 0, 0, 1],
-]);
 
 export default function useObject3D() {
   const [objectData3D, setObjectData3D] = useState<ObjectData3D[]>([]);
@@ -36,6 +27,7 @@ export default function useObject3D() {
       y: 0,
       z: 0,
     });
+    console.log('setting object data 3d to', [object1, object2]);
     setObjectData3D([object1, object2]);
   };
 
@@ -46,8 +38,7 @@ export default function useObject3D() {
   ): Promise<ObjectData3D> => {
     const file: Blob = await loadFile(filename);
     const { vertices, faces } = await parseFile(file, offset);
-    const matrix: (t: number) => Matrix = getModelMatrixFn(rotationModifier);
-    return { vertices, faces, modelMatrixFn: matrix };
+    return { vertices, faces, rotationModifier };
   };
 
   const loadFile = async (filename: string) => {
@@ -93,14 +84,6 @@ export default function useObject3D() {
 
     return { vertices, faces };
   };
-
-  const getModelMatrixFn = (rotationModifier: number) => (t: number) =>
-    math.matrix([
-      [1, 0, 0, 0],
-      [0, Math.cos(t * rotationModifier), -Math.sin(t * rotationModifier), 0],
-      [0, Math.sin(t * rotationModifier), Math.cos(t * rotationModifier), 0],
-      [0, 0, 0, 1],
-    ]);
 
   return { objectData3D };
 }

@@ -109,3 +109,7 @@ export interface DrawArgs {
   size: number;
   mapType: MapType;
 }
+
+export interface DrawArgs3D {
+  fov: number;
+}

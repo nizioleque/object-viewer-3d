@@ -18,8 +18,8 @@ function Canvas() {
     objectData3D,
   } = useContext(AppContext);
 
-  const { offscreenCanvas, worker, canvasCtx, canvasRef } = useCanvasWorker();
-  const { draw3D } = useDraw3D(offscreenCanvas, worker, canvasCtx);
+  const { worker, canvasCtx, canvasRef } = useCanvasWorker();
+  const { draw3D } = useDraw3D(worker, canvasCtx);
 
   useEffect(() => {
     draw3D();
@@ -38,7 +38,9 @@ function Canvas() {
     draw3D,
   ]);
 
-  useInterval(() => draw3D(), 1000 / 60);
+  useInterval(() => {
+    draw3D();
+  }, 1000 / 60);
 
   return (
     <canvas

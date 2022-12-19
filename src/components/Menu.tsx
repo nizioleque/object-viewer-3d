@@ -35,6 +35,7 @@ function Menu() {
             min={30}
             max={120}
             step={1}
+            defaultValue={90}
             noDecimal
           />
         </div>

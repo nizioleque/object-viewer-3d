@@ -67,7 +67,7 @@ export default function useDraw(
   const _draw = async (drawArgs: DrawArgs) => {
     let newTime = NaN;
     if (worker.current) {
-      newTime = await worker.current.runFill(drawArgs);
+      // newTime = await worker.current.runFill(drawArgs);
     } else {
       newTime = fill(drawArgs, canvasCtx.current!, texture, normalMap);
     }
