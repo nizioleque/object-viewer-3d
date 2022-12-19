@@ -42,6 +42,8 @@ interface AppContext {
   mapType: MapType;
   setMapType: Dispatch<SetStateAction<MapType>>;
   objectData3D: ObjectData3D[];
+  fov: number;
+  setFov: Dispatch<SetStateAction<number>>;
 }
 
 const appContextDefaultValue: AppContext = {
@@ -89,6 +91,8 @@ const appContextDefaultValue: AppContext = {
   mapType: MapType.NormalMap,
   setMapType: () => {},
   objectData3D: [],
+  fov: 0,
+  setFov: () => {},
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);

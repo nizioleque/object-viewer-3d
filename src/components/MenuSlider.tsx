@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 interface MenuSliderProps {
-  name: ReactNode;
+  name?: ReactNode;
   value: number;
   setFn: (val: number) => void;
   min?: number;
@@ -21,9 +21,11 @@ function MenuSlider({
 }: MenuSliderProps) {
   return (
     <div>
-      <h5>
-        Współczynnik <span className='math'>{name}</span>
-      </h5>
+      {name && (
+        <h5>
+          Współczynnik <span className='math'>{name}</span>
+        </h5>
+      )}
       <div className='horizontal'>
         <input
           type='range'

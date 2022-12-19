@@ -43,6 +43,8 @@ function App() {
     CalculationMode.InterpolateColor
   );
 
+  const [fov, setFov] = useState<number>(90);
+
   const { objectData3D } = useObject3D();
 
   return (
@@ -74,7 +76,9 @@ function App() {
         setDrawMode,
         mapType,
         setMapType,
-        objectData3D
+        objectData3D,
+        fov,
+        setFov
       }}
     >
       <div className='App'>

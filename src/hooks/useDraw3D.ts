@@ -11,7 +11,7 @@ export default function useDraw3D(
   _worker: MutableRefObject<FillWorker | undefined>,
   canvasCtx: MutableRefObject<CanvasRenderingContext2D | undefined>
 ) {
-  const { objectData3D } = useContext(AppContext);
+  const { objectData3D, fov } = useContext(AppContext);
 
   const getVertices = (
     object: ObjectData3D,
@@ -37,7 +37,7 @@ export default function useDraw3D(
   };
 
   const draw3D = () => {
-    const projectionMatrix = getProjectionMatrix();
+    const projectionMatrix = getProjectionMatrix(fov);
     if (!canvasCtx.current) {
       console.error('no canvas context');
       return;
@@ -55,7 +55,7 @@ export default function useDraw3D(
 
         canvasCtx.current.beginPath();
         canvasCtx.current.lineWidth = 1;
-        canvasCtx.current.strokeStyle = 'rgb(255, 0, 255, 0.3)';
+        canvasCtx.current.strokeStyle = 'violet';
         canvasCtx.current.moveTo(vertices[0].x, vertices[0].y);
         for (let i = 1; i < vertices.length; i++) {
           canvasCtx.current.lineTo(vertices[i].x, vertices[i].y);
@@ -66,9 +66,9 @@ export default function useDraw3D(
     }
   };
 
-  const getProjectionMatrix = () => {
-    const fov = 90 / (2 * Math.PI);
-    const e = 1 / Math.tan(fov / 2);
+  const getProjectionMatrix = (fov: number) => {
+    const fovRad = fov * 0.01745329252;
+    const e = 1 / Math.tan(fovRad / 2);
     const a = 1; // aspect ratio
     const n = 0.5; //near
     const f = 3.5; //far

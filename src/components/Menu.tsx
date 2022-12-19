@@ -8,9 +8,10 @@ import MenuFill from './MenuFill';
 import MenuLight from './MenuLight';
 import MenuNormalMap from './MenuNormalMap';
 import MenuDrawMode from './MenuDrawMode';
+import MenuSlider from './MenuSlider';
 
 function Menu() {
-  const {} = useContext(AppContext);
+  const { fov, setFov } = useContext(AppContext);
 
   return (
     <div className='menu'>
@@ -25,6 +26,19 @@ function Menu() {
           Kod źródłowy i dokumentacja
         </a>
       </header>
+      <div className='menu-section'>
+        <h3>FOV</h3>
+        <div className='buttons'>
+          <MenuSlider
+            value={fov}
+            setFn={setFov}
+            min={30}
+            max={120}
+            step={1}
+            noDecimal
+          />
+        </div>
+      </div>
 
       <div style={{ display: 'none' }}>
         <MenuObject />
