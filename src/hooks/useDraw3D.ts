@@ -1,12 +1,14 @@
 import * as math from 'mathjs';
 import { MutableRefObject, useContext, useRef } from 'react';
 import { AppContext } from '../AppContext';
+import { FillWorker } from '../workers/fillWorker';
 import { lookAtMatrix, ObjectData3D } from './useObject3D';
 
 const canvasScale = 500;
 
 export default function useDraw3D(
-  offscreenCanvas: MutableRefObject<HTMLCanvasElement | undefined>,
+  _offscreenCanvas: MutableRefObject<HTMLCanvasElement | undefined>,
+  _worker: MutableRefObject<FillWorker | undefined>,
   canvasCtx: MutableRefObject<CanvasRenderingContext2D | undefined>
 ) {
   const { objectData3D } = useContext(AppContext);
@@ -40,7 +42,6 @@ export default function useDraw3D(
   };
 
   const draw3D = () => {
-    console.log('draw3d...');
     const projectionMatrix = getProjectionMatrix();
     if (!canvasCtx.current) {
       console.error('no canvas context');

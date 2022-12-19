@@ -2,8 +2,7 @@ import { useContext, useEffect } from 'react';
 import { AppContext } from '../AppContext';
 import useCanvasWorker from '../hooks/useCanvasWorker';
 import useDraw3D from '../hooks/useDraw3D';
-// import useDraw from '../hooks/useDraw';
-import { CalculationMode } from '../types';
+import useInterval from '../hooks/useInterval';
 
 function Canvas() {
   const {
@@ -15,21 +14,20 @@ function Canvas() {
     texture,
     normalMap,
     drawMode,
-    setErrorText,
     mapType,
     objectData3D,
   } = useContext(AppContext);
 
-  const { offscreenCanvas, canvasCtx, canvasRef } = useCanvasWorker();
-  // const { draw } = useDraw(offscreenCanvas, worker, canvasCtx);
-  const { draw3D } = useDraw3D(offscreenCanvas, canvasCtx);
+  const { offscreenCanvas, worker, canvasCtx, canvasRef } = useCanvasWorker();
+  const { draw3D } = useDraw3D(offscreenCanvas, worker, canvasCtx);
 
   useEffect(() => {
-    // draw();
     draw3D();
+    console.log('objectData3D in canvas', objectData3D);
   }, [
     objectData,
     objectData3D,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     ...Object.values(params),
     calculationMode,
     lightOptions,
@@ -38,23 +36,10 @@ function Canvas() {
     normalMap,
     drawMode,
     mapType,
+    draw3D,
   ]);
 
-  useEffect(() => {
-    const interval = setInterval(() => draw3D(), 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    if (
-      calculationMode === CalculationMode.InterpolateColor &&
-      (texture || normalMap)
-    ) {
-      setErrorText(
-        'Dla lepszego efektu wizualnego zalecane jest przełączenie w tryb interpolacji "Interpolacja wektora"'
-      );
-    }
-  }, [texture, normalMap]);
+  useInterval(() => draw3D(), 1000);
 
   return (
     <canvas

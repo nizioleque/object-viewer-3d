@@ -23,9 +23,7 @@ export default function useCanvasWorker() {
             initializeWorker();
           }
         } else {
-          canvasCtx.current = node.getContext('2d', {
-            willReadFrequently: true,
-          })!;
+          canvasCtx.current = node.getContext('2d')!;
         }
       }
     },
