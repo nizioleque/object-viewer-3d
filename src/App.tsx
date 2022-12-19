@@ -43,8 +43,6 @@ function App() {
     CalculationMode.InterpolateColor
   );
 
-  const [currentFps, setCurrentFps] = useState<number>(0);
-
   const { objectData3D } = useObject3D();
 
   return (
@@ -59,8 +57,6 @@ function App() {
         calculationMode,
         setCalculationMode,
         supportsOffscreenCanvas,
-        currentFps,
-        setCurrentFps,
         styleOptions,
         updateStyleOptions,
         lightOptions,

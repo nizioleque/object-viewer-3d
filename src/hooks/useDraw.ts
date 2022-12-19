@@ -16,7 +16,6 @@ export default function useDraw(
     objectData,
     lightOptions,
     params,
-    setCurrentFps,
     calculationMode,
     styleOptions,
     texture,
@@ -63,11 +62,6 @@ export default function useDraw(
     }
 
     isRendering.current = false;
-
-    const average =
-      renderTimes.current.reduce((a, b) => a + b, 0) /
-      renderTimes.current.length;
-    setCurrentFps(1000 / average);
   };
 
   const _draw = async (drawArgs: DrawArgs) => {

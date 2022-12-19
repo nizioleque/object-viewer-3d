@@ -19,8 +19,6 @@ interface AppContext {
   calculationMode: CalculationMode;
   setCalculationMode: Dispatch<SetStateAction<CalculationMode>>;
   supportsOffscreenCanvas: boolean | undefined;
-  currentFps: number;
-  setCurrentFps: Dispatch<SetStateAction<number>>;
   styleOptions: StyleOptions;
   updateStyleOptions: (options: Partial<StyleOptions>) => void;
   lightOptions: LightOptions;
@@ -64,8 +62,6 @@ const appContextDefaultValue: AppContext = {
   calculationMode: CalculationMode.InterpolateColor,
   setCalculationMode: () => {},
   supportsOffscreenCanvas: undefined,
-  currentFps: 0,
-  setCurrentFps: () => {},
   styleOptions: {
     fillColor: [],
     fillType: FillType.Color,
