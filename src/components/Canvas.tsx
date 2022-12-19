@@ -39,7 +39,7 @@ function Canvas() {
     draw3D,
   ]);
 
-  useInterval(() => draw3D(), 1000);
+  useInterval(() => draw3D(), 1000 / 60);
 
   return (
     <canvas

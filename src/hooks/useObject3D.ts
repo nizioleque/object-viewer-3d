@@ -79,15 +79,13 @@ export default function useObject3D() {
     return { vertices, faces };
   };
 
-  const getModelMatrixFn = () => {
-    return (_t: number) =>
-      math.matrix([
-        [1, 0, 0, 0],
-        [0, 1, 0, 0],
-        [0, 0, 1, 0],
-        [0, 0, 0, 1],
-      ]);
-  };
+  const getModelMatrixFn = () => (t: number) =>
+    math.matrix([
+      [1, 0, 0, 0],
+      [0, Math.cos(t), -Math.sin(t), 0],
+      [0, Math.sin(t), Math.cos(t), 0],
+      [0, 0, 0, 1],
+    ]);
 
   return { objectData3D };
 }

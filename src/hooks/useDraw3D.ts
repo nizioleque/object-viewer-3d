@@ -1,5 +1,5 @@
 import * as math from 'mathjs';
-import { MutableRefObject, useContext, useRef } from 'react';
+import { MutableRefObject, useContext } from 'react';
 import { AppContext } from '../AppContext';
 import { FillWorker } from '../workers/fillWorker';
 import { lookAtMatrix, ObjectData3D } from './useObject3D';
@@ -13,8 +13,6 @@ export default function useDraw3D(
 ) {
   const { objectData3D } = useContext(AppContext);
 
-  const time = useRef<number>(0);
-
   const getVertices = (
     object: ObjectData3D,
     face: number[],
@@ -24,17 +22,14 @@ export default function useDraw3D(
     const vertices = [];
     for (let i = 1; i < face.length; i++) {
       const v = object.vertices[face[i] - 1];
-      //   console.log(face, i, v);
       const vector = math.matrix([[v.x], [v.y], [v.z], [1]]);
       const multModel = math.multiply(modelMatrix, vector);
       const multLook = math.multiply(lookAtMatrix, multModel);
       const multProj = math.multiply(projectionMatrix, multLook);
-      //   console.log(multProj);
       const scale = multProj.get([3, 0]);
       vertices.push({
         x: (multProj.get([0, 0]) / scale) * canvasScale + canvasScale,
         y: (multProj.get([1, 0]) / scale) * canvasScale + canvasScale,
-        // z: (multProj.get([2, 0]) / scale) * 200 + 200,
       });
     }
 
@@ -48,13 +43,9 @@ export default function useDraw3D(
       return;
     }
     canvasCtx.current.clearRect(0, 0, 1000, 1000);
-    // console.log(objectData3D);
     for (const object of objectData3D) {
-      //   console.log(object);
-      const modelMatrix = object.modelMatrixFn(time.current++);
+      const modelMatrix = object.modelMatrixFn(Date.now() / 2000);
       for (const face of object.faces) {
-        // console.log(face);
-        // console.log('drawing face', face);
         const vertices = getVertices(
           object,
           face,
