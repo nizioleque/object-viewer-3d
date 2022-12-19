@@ -2,7 +2,7 @@ import * as math from 'mathjs';
 import { MutableRefObject, useContext } from 'react';
 import { AppContext } from '../AppContext';
 import { FillWorker } from '../workers/fillWorker';
-import { lookAtMatrix, ObjectData3D } from './useObject3D';
+import { viewMatrix, ObjectData3D } from './useObject3D';
 
 const canvasScale = 500;
 
@@ -24,7 +24,7 @@ export default function useDraw3D(
       const v = object.vertices[face[i] - 1];
       const vector = math.matrix([[v.x], [v.y], [v.z], [1]]);
       const multModel = math.multiply(modelMatrix, vector);
-      const multLook = math.multiply(lookAtMatrix, multModel);
+      const multLook = math.multiply(viewMatrix, multModel);
       const multProj = math.multiply(projectionMatrix, multLook);
       const scale = multProj.get([3, 0]);
       vertices.push({

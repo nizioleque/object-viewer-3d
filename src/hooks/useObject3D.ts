@@ -10,10 +10,10 @@ export interface ObjectData3D {
   modelMatrixFn: (t: number) => Matrix;
 }
 
-export const lookAtMatrix: Matrix = math.matrix([
-  [-0.832, 0.555, -7e-17, 0.277],
-  [-0.412, -0.618, 0.67, 0.361],
-  [0.371, 0.557, 0.743, -4.364],
+export const viewMatrix: Matrix = math.matrix([
+  [-0.986, 0.164, 4e-18, -1e-16],
+  [-0.027, -0.16, 0.987, 1e-16],
+  [0.162, 0.973, 0.162, -3.082],
   [0, 0, 0, 1],
 ]);
 
