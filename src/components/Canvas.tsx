@@ -23,7 +23,6 @@ function Canvas() {
 
   useEffect(() => {
     draw3D();
-    console.log('objectData3D in canvas', objectData3D);
   }, [
     objectData,
     objectData3D,

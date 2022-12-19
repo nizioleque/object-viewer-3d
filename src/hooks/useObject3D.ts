@@ -22,19 +22,31 @@ export default function useObject3D() {
 
   useEffect(() => {
     setExampleObjects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setExampleObjects = async () => {
-    const object1 = await readObjectFile('torus_full.obj');
-    const object2 = await readObjectFile('torus_full.obj');
-    console.log('set example objects', object1, object2);
+    const object1 = await readObjectFile('torus_full.obj', 1, {
+      x: -1.2,
+      y: 0,
+      z: 0,
+    });
+    const object2 = await readObjectFile('torus_full.obj', -2, {
+      x: 1.2,
+      y: 0,
+      z: 0,
+    });
     setObjectData3D([object1, object2]);
   };
 
-  const readObjectFile = async (filename: string): Promise<ObjectData3D> => {
+  const readObjectFile = async (
+    filename: string,
+    rotationModifier: number,
+    offset: Point3D
+  ): Promise<ObjectData3D> => {
     const file: Blob = await loadFile(filename);
-    const { vertices, faces } = await parseFile(file);
-    const matrix: (t: number) => Matrix = getModelMatrixFn();
+    const { vertices, faces } = await parseFile(file, offset);
+    const matrix: (t: number) => Matrix = getModelMatrixFn(rotationModifier);
     return { vertices, faces, modelMatrixFn: matrix };
   };
 
@@ -44,7 +56,7 @@ export default function useObject3D() {
     return blob;
   };
 
-  const parseFile = async (file: Blob) => {
+  const parseFile = async (file: Blob, offset: Point3D) => {
     const vertices: Point3D[] = [];
     const faces: number[][] = [];
 
@@ -73,17 +85,20 @@ export default function useObject3D() {
       vertex.x /= maxCoordinate;
       vertex.y /= maxCoordinate;
       vertex.z /= maxCoordinate;
+
+      vertex.x += offset.x;
+      vertex.y += offset.y;
+      vertex.z += offset.z;
     }
 
-    console.log(vertices, faces);
     return { vertices, faces };
   };
 
-  const getModelMatrixFn = () => (t: number) =>
+  const getModelMatrixFn = (rotationModifier: number) => (t: number) =>
     math.matrix([
       [1, 0, 0, 0],
-      [0, Math.cos(t), -Math.sin(t), 0],
-      [0, Math.sin(t), Math.cos(t), 0],
+      [0, Math.cos(t * rotationModifier), -Math.sin(t * rotationModifier), 0],
+      [0, Math.sin(t * rotationModifier), Math.cos(t * rotationModifier), 0],
       [0, 0, 0, 1],
     ]);
 
