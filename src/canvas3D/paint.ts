@@ -76,31 +76,31 @@ export async function paint(
       const vertices = getVertices(object, face, modelMatrix, projectionMatrix);
       if (vertices.length < 3) continue;
 
-      fillPolygon3D(vertices, imageData);
+      fillPolygon3D(vertices, imageData, object.color);
     }
   }
 
   ctx.putImageData(imageData, 0, 0);
 
   // draw outline
-  for (const object of objectData3D) {
-    const modelMatrix = modelMatrixValue(object.rotationModifier, t);
+  // for (const object of objectData3D) {
+  //   const modelMatrix = modelMatrixValue(object.rotationModifier, t);
 
-    for (const face of object.faces) {
-      const vertices = getVertices(object, face, modelMatrix, projectionMatrix);
-      if (vertices.length < 3) continue;
+  //   for (const face of object.faces) {
+  //     const vertices = getVertices(object, face, modelMatrix, projectionMatrix);
+  //     if (vertices.length < 3) continue;
 
-      ctx.beginPath();
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = 'violet';
-      ctx.moveTo(vertices[0].x, vertices[0].y);
-      for (let i = 1; i < vertices.length; i++) {
-        ctx.lineTo(vertices[i].x, vertices[i].y);
-      }
-      ctx.lineTo(vertices[0].x, vertices[0].y);
-      ctx.stroke();
-    }
-  }
+  //     ctx.beginPath();
+  //     ctx.lineWidth = 1;
+  //     ctx.strokeStyle = 'violet';
+  //     ctx.moveTo(vertices[0].x, vertices[0].y);
+  //     for (let i = 1; i < vertices.length; i++) {
+  //       ctx.lineTo(vertices[i].x, vertices[i].y);
+  //     }
+  //     ctx.lineTo(vertices[0].x, vertices[0].y);
+  //     ctx.stroke();
+  //   }
+  // }
 }
 
 const modelMatrixValue = (rotationModifier: number, t: number) =>
@@ -111,7 +111,11 @@ const modelMatrixValue = (rotationModifier: number, t: number) =>
     [0, 0, 0, 1],
   ]);
 
-function fillPolygon3D(vertices: Point[], imageData: ImageData) {
+function fillPolygon3D(
+  vertices: Point[],
+  imageData: ImageData,
+  color: number[]
+) {
   const edgeTable: EdgeData[][] = [];
 
   for (let i = 0; i < vertices.length; i++) {
@@ -179,7 +183,7 @@ function fillPolygon3D(vertices: Point[], imageData: ImageData) {
         if (x > canvasScale * 2 - 1) continue;
         const offset = (y * canvasScale * 2 + x) * 4;
         let pixelColor: number[];
-        pixelColor = [255, 0, 0, 255];
+        pixelColor = [...color, 255];
         imageData.data.set(pixelColor!, offset);
       }
     }

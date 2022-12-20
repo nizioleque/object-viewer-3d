@@ -6,6 +6,7 @@ export interface ObjectData3D {
   vertices: Point3D[];
   faces: number[][];
   rotationModifier: number;
+  color: number[];
 }
 
 export default function useObject3D() {
@@ -17,16 +18,26 @@ export default function useObject3D() {
   }, []);
 
   const setExampleObjects = async () => {
-    const object1 = await readObjectFile('torus_small.obj', 1, {
-      x: 0,
-      y: 0,
-      z: 0,
-    });
-    const object2 = await readObjectFile('torus_small.obj', -2, {
-      x: 0,
-      y: 0,
-      z: 0,
-    });
+    const object1 = await readObjectFile(
+      'torus_small.obj',
+      1,
+      {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+      [255, 0, 0]
+    );
+    const object2 = await readObjectFile(
+      'torus_small.obj',
+      -2,
+      {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+      [0, 255, 0]
+    );
     console.log('setting object data 3d to', [object1, object2]);
     setObjectData3D([object1, object2]);
   };
@@ -34,11 +45,12 @@ export default function useObject3D() {
   const readObjectFile = async (
     filename: string,
     rotationModifier: number,
-    offset: Point3D
+    offset: Point3D,
+    color: number[]
   ): Promise<ObjectData3D> => {
     const file: Blob = await loadFile(filename);
     const { vertices, faces } = await parseFile(file, offset);
-    return { vertices, faces, rotationModifier };
+    return { vertices, faces, rotationModifier, color };
   };
 
   const loadFile = async (filename: string) => {
