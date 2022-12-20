@@ -3,10 +3,17 @@ import { Point3D } from '../types';
 import { parsePoint } from '../utils';
 
 export interface ObjectData3D {
-  vertices: Point3D[];
+  vertices: Vertex3D[];
   faces: number[][];
   rotationModifier: number;
   color: number[];
+}
+
+export interface Vertex3D {
+  x: number;
+  y: number;
+  z: number;
+  vector: Point3D;
 }
 
 export default function useObject3D() {
@@ -50,6 +57,7 @@ export default function useObject3D() {
   ): Promise<ObjectData3D> => {
     const file: Blob = await loadFile(filename);
     const { vertices, faces } = await parseFile(file, offset);
+    console.log(vertices, faces);
     return { vertices, faces, rotationModifier, color };
   };
 
@@ -60,7 +68,10 @@ export default function useObject3D() {
   };
 
   const parseFile = async (file: Blob, offset: Point3D) => {
+    const faceData: string[][] = [];
     const vertices: Point3D[] = [];
+    const vectors: Point3D[] = [];
+    const verticesParsed: Vertex3D[] = [];
     const faces: number[][] = [];
 
     const readObjectDataString = await file.text();
@@ -72,8 +83,11 @@ export default function useObject3D() {
         case 'v':
           vertices.push(parsePoint(lineContent));
           break;
+        case 'vn':
+          vectors.push(parsePoint(lineContent));
+          break;
         case 'f':
-          faces.push(lineContent.map((x) => parseInt(x.split('//')[0])));
+          faceData.push(lineContent);
           break;
       }
     }
@@ -88,13 +102,32 @@ export default function useObject3D() {
       vertex.x /= maxCoordinate;
       vertex.y /= maxCoordinate;
       vertex.z /= maxCoordinate;
-
-      vertex.x += offset.x;
-      vertex.y += offset.y;
-      vertex.z += offset.z;
     }
 
-    return { vertices, faces };
+    for (const faceIndex in faceData) {
+      const newFace = [];
+      for (const vertex of faceData[parseInt(faceIndex)]) {
+        const index = vertex.split('//');
+        if (index.length !== 2) continue;
+
+        // get indices
+        const vIndex = parseInt(index[0]) - 1;
+        const vnIndex = parseInt(index[1]) - 1;
+
+        // get objects
+        const v = vertices[vIndex];
+        const vn = vectors[vnIndex];
+
+        const newLen = verticesParsed.push({
+          ...v,
+          vector: vn,
+        });
+
+        newFace.push(newLen - 1);
+      }
+      faces.push(newFace);
+    }
+    return { vertices: verticesParsed, faces };
   };
 
   return { objectData3D };

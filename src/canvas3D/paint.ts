@@ -1,5 +1,5 @@
 import * as math from 'mathjs';
-import { ObjectData3D } from '../hooks/useObject3D';
+import { ObjectData3D, Vertex3D } from '../hooks/useObject3D';
 import { ActiveEdgeData, DrawArgs3D, EdgeData, Point3D } from '../types';
 
 const canvasScale = 500;
@@ -10,6 +10,12 @@ export const viewMatrix: math.Matrix = math.matrix([
   [0.943, 0.236, 0.236, -2.121],
   [0, 0, 0, 1],
 ]);
+
+const lightPosition: Point3D = {
+  x: 1.5,
+  y: 1.5,
+  z: 1.5,
+};
 
 export async function paint(
   drawArgs3D: DrawArgs3D,
@@ -23,8 +29,8 @@ export async function paint(
     projectionMatrix: math.Matrix
   ) => {
     const vertices = [];
-    for (let i = 1; i < face.length; i++) {
-      const v = object.vertices[face[i] - 1];
+    for (let i = 0; i < face.length; i++) {
+      const v = object.vertices[face[i]];
       const vector = math.matrix([[v.x], [v.y], [v.z], [1]]);
       const multModel = math.multiply(modelMatrix, vector);
       const multLook = math.multiply(viewMatrix, multModel);
@@ -38,6 +44,7 @@ export async function paint(
           x: (x * canvasScale + canvasScale) << 0,
           y: (y * canvasScale + canvasScale) << 0,
           z: (z * canvasScale + canvasScale) << 0,
+          vector: v.vector,
         });
       }
     }
@@ -74,12 +81,11 @@ export async function paint(
     Array(1000).fill(Infinity)
   );
 
-
   for (const object of objectData3D) {
     const modelMatrix = modelMatrixValue(object.rotationModifier, t);
 
     for (const face of object.faces) {
-      const vertices: Point3D[] = getVertices(
+      const vertices: Vertex3D[] = getVertices(
         object,
         face,
         modelMatrix,
@@ -123,7 +129,7 @@ const modelMatrixValue = (rotationModifier: number, t: number) =>
   ]);
 
 function fillPolygon3D(
-  vertices: Point3D[],
+  vertices: Vertex3D[],
   imageData: ImageData,
   color: number[],
   zBuffer: number[][]
