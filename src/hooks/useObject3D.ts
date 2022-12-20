@@ -18,12 +18,12 @@ export default function useObject3D() {
 
   const setExampleObjects = async () => {
     const object1 = await readObjectFile('torus_small.obj', 1, {
-      x: -1.2,
+      x: 0,
       y: 0,
       z: 0,
     });
     const object2 = await readObjectFile('torus_small.obj', -2, {
-      x: 1.2,
+      x: 0,
       y: 0,
       z: 0,
     });
