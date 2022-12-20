@@ -32,7 +32,7 @@ export default function useObject3D() {
       'torus_small.obj',
       -2,
       {
-        x: 0,
+        x: -0.1,
         y: 0,
         z: 0,
       },

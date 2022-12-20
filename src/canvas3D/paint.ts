@@ -1,6 +1,6 @@
 import * as math from 'mathjs';
 import { ObjectData3D } from '../hooks/useObject3D';
-import { ActiveEdgeData, DrawArgs3D, EdgeData, Point } from '../types';
+import { ActiveEdgeData, DrawArgs3D, EdgeData, Point3D } from '../types';
 
 const canvasScale = 500;
 
@@ -37,6 +37,7 @@ export async function paint(
         vertices.push({
           x: (x * canvasScale + canvasScale) << 0,
           y: (y * canvasScale + canvasScale) << 0,
+          z: (z * canvasScale + canvasScale) << 0,
         });
       }
     }
@@ -49,7 +50,7 @@ export async function paint(
     const e = 1 / Math.tan(fovRad / 2);
     const a = 1; // aspect ratio
     const n = 1; //near
-    const f = 3; //far
+    const f = 5; //far
 
     return math.matrix([
       [e, 0, 0, 0],
@@ -69,14 +70,24 @@ export async function paint(
   const imageData = ctx.createImageData(1000, 1000);
   const t = Date.now() / 2000;
 
+  const zBuffer: number[][] = [...Array(1000)].map((e) =>
+    Array(1000).fill(Infinity)
+  );
+
+
   for (const object of objectData3D) {
     const modelMatrix = modelMatrixValue(object.rotationModifier, t);
 
     for (const face of object.faces) {
-      const vertices = getVertices(object, face, modelMatrix, projectionMatrix);
+      const vertices: Point3D[] = getVertices(
+        object,
+        face,
+        modelMatrix,
+        projectionMatrix
+      );
       if (vertices.length < 3) continue;
 
-      fillPolygon3D(vertices, imageData, object.color);
+      fillPolygon3D(vertices, imageData, object.color, zBuffer);
     }
   }
 
@@ -112,9 +123,10 @@ const modelMatrixValue = (rotationModifier: number, t: number) =>
   ]);
 
 function fillPolygon3D(
-  vertices: Point[],
+  vertices: Point3D[],
   imageData: ImageData,
-  color: number[]
+  color: number[],
+  zBuffer: number[][]
 ) {
   const edgeTable: EdgeData[][] = [];
 
@@ -181,6 +193,30 @@ function fillPolygon3D(
       const endX = activeEdgeTable[i + 1].x << 0;
       for (let x = startX; x <= endX; x++) {
         if (x > canvasScale * 2 - 1) continue;
+
+        const det =
+          (vertices[1].y - vertices[2].y) * (vertices[0].x - vertices[2].x) +
+          (vertices[2].x - vertices[1].x) * (vertices[0].y - vertices[2].y);
+
+        const a1 = vertices[1].y - vertices[2].y;
+        const a2 = vertices[2].x - vertices[1].x;
+        const b1 = vertices[2].y - vertices[0].y;
+        const b2 = vertices[0].x - vertices[2].x;
+
+        const alpha =
+          (a1 * (x - vertices[2].x) + a2 * (y - vertices[2].y)) / det;
+
+        const beta =
+          (b1 * (x - vertices[2].x) + b2 * (y - vertices[2].y)) / det;
+
+        const gamma = 1 - alpha - beta;
+
+        const pointZ =
+          vertices[0].z * alpha + vertices[1].z * beta + vertices[2].z * gamma;
+
+        if (pointZ > zBuffer[x][y]) continue;
+        zBuffer[x][y] = pointZ;
+
         const offset = (y * canvasScale * 2 + x) * 4;
         let pixelColor: number[];
         pixelColor = [...color, 255];
