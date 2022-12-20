@@ -1,6 +1,6 @@
 import * as math from 'mathjs';
 import { ObjectData3D } from '../hooks/useObject3D';
-import { DrawArgs3D } from '../types';
+import { ActiveEdgeData, DrawArgs3D, EdgeData, Point } from '../types';
 
 const canvasScale = 500;
 
@@ -35,8 +35,8 @@ export async function paint(
       const z = multProj.get([2, 0]) / scale;
       if (x > -1 && x < 1 && y > -1 && y < 1 && z > -1 && z < 1) {
         vertices.push({
-          x: x * canvasScale + canvasScale,
-          y: y * canvasScale + canvasScale,
+          x: (x * canvasScale + canvasScale) << 0,
+          y: (y * canvasScale + canvasScale) << 0,
         });
       }
     }
@@ -64,12 +64,28 @@ export async function paint(
     console.error('no canvas context');
     return;
   }
-  ctx.clearRect(0, 0, 1000, 1000);
+
+  // fill
+  const imageData = ctx.createImageData(1000, 1000);
+  const t = Date.now() / 2000;
+
   for (const object of objectData3D) {
-    const modelMatrix = modelMatrixValue(
-      object.rotationModifier,
-      Date.now() / 2000
-    );
+    const modelMatrix = modelMatrixValue(object.rotationModifier, t);
+
+    for (const face of object.faces) {
+      const vertices = getVertices(object, face, modelMatrix, projectionMatrix);
+      if (vertices.length < 3) continue;
+
+      fillPolygon3D(vertices, imageData);
+    }
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+
+  // draw outline
+  for (const object of objectData3D) {
+    const modelMatrix = modelMatrixValue(object.rotationModifier, t);
+
     for (const face of object.faces) {
       const vertices = getVertices(object, face, modelMatrix, projectionMatrix);
       if (vertices.length < 3) continue;
@@ -94,3 +110,84 @@ const modelMatrixValue = (rotationModifier: number, t: number) =>
     [0, Math.sin(t * rotationModifier), Math.cos(t * rotationModifier), 0],
     [0, 0, 0, 1],
   ]);
+
+function fillPolygon3D(vertices: Point[], imageData: ImageData) {
+  const edgeTable: EdgeData[][] = [];
+
+  for (let i = 0; i < vertices.length; i++) {
+    const iNext = (i + 1) % vertices.length;
+
+    const leftVertex =
+      vertices[i].x > vertices[iNext].x ? vertices[iNext] : vertices[i];
+    const rightVertex =
+      vertices[i] === leftVertex ? vertices[iNext] : vertices[i];
+
+    if (leftVertex.y === rightVertex.y) {
+      continue;
+    }
+
+    const yMinVertex =
+      vertices[i].y < vertices[iNext].y ? vertices[i] : vertices[iNext];
+
+    const edgeData: EdgeData = {
+      xofYMin: yMinVertex.x,
+      yMax: Math.max(vertices[i].y, vertices[iNext].y),
+      slopeInverted:
+        (rightVertex.x - leftVertex.x) / (rightVertex.y - leftVertex.y),
+    };
+
+    const yMin = yMinVertex.y;
+    if (!edgeTable[yMin]) edgeTable[yMin] = [];
+
+    edgeTable[yMin].push(edgeData);
+  }
+
+  let activeEdgeTable: ActiveEdgeData[] = [];
+
+  const tempEdgeTable: EdgeData[][] = [];
+  for (const edgeTableRow in edgeTable) {
+    tempEdgeTable[edgeTableRow] = [...edgeTable[edgeTableRow]];
+  }
+
+  let y = Math.min(...Object.keys(tempEdgeTable).map((key) => parseInt(key)));
+
+  do {
+    // move from ET to AET
+    if (tempEdgeTable[y]) {
+      tempEdgeTable[y].forEach((e) => {
+        activeEdgeTable.push({ edgeData: e, x: e.xofYMin });
+      });
+    }
+
+    // remove from AET
+    activeEdgeTable = activeEdgeTable.filter((e) => y < e.edgeData.yMax);
+
+    // sort AET
+    activeEdgeTable.sort((a, b) => a.x - b.x);
+
+    // fill pixels
+    if (y > canvasScale * 2 - 1) return;
+
+    if (activeEdgeTable.length % 2 !== 0) return;
+
+    // console.log(activeEdgeTable.length);
+
+    for (let i = 0; i < activeEdgeTable.length; i += 2) {
+      const startX = activeEdgeTable[i].x << 0;
+      const endX = activeEdgeTable[i + 1].x << 0;
+      for (let x = startX; x <= endX; x++) {
+        if (x > canvasScale * 2 - 1) continue;
+        const offset = (y * canvasScale * 2 + x) * 4;
+        let pixelColor: number[];
+        pixelColor = [255, 0, 0, 255];
+        imageData.data.set(pixelColor!, offset);
+      }
+    }
+
+    // move to next scan line
+    y++;
+
+    // update x in AET
+    activeEdgeTable.forEach((e) => (e.x += e.edgeData.slopeInverted));
+  } while (activeEdgeTable.length > 0 && tempEdgeTable.length > 0);
+}
