@@ -32,7 +32,8 @@ export async function paint(
       const scale = multProj.get([3, 0]);
       const x = multProj.get([0, 0]) / scale;
       const y = multProj.get([1, 0]) / scale;
-      if (x > -1 && x < 1 && y > -1 && y < 1) {
+      const z = multProj.get([2, 0]) / scale;
+      if (x > -1 && x < 1 && y > -1 && y < 1 && z > -1 && z < 1) {
         vertices.push({
           x: x * canvasScale + canvasScale,
           y: y * canvasScale + canvasScale,
@@ -47,8 +48,8 @@ export async function paint(
     const fovRad = fov * 0.01745329252;
     const e = 1 / Math.tan(fovRad / 2);
     const a = 1; // aspect ratio
-    const n = 0.5; //near
-    const f = 3.5; //far
+    const n = 1; //near
+    const f = 3; //far
 
     return math.matrix([
       [e, 0, 0, 0],
