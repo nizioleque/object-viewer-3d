@@ -2,13 +2,6 @@ import { useContext } from 'react';
 import { AppContext } from '../AppContext';
 import MenuFps from './MenuFps';
 import './Menu.css';
-import MenuObject from './MenuObject';
-import MenuSize from './MenuSize';
-import MenuParams from './MenuParams';
-import MenuFill from './MenuFill';
-import MenuLight from './MenuLight';
-import MenuNormalMap from './MenuNormalMap';
-import MenuDrawMode from './MenuDrawMode';
 import MenuSlider from './MenuSlider';
 
 function Menu() {
@@ -41,16 +34,6 @@ function Menu() {
             noDecimal
           />
         </div>
-      </div>
-
-      <div style={{ display: 'none' }}>
-        <MenuObject />
-        <MenuSize />
-        <MenuDrawMode />
-        <MenuParams />
-        <MenuFill />
-        <MenuLight />
-        <MenuNormalMap />
       </div>
     </div>
   );
