@@ -2,7 +2,6 @@ import Canvas from './components/Canvas';
 import './App.css';
 import { useEffect, useRef } from 'react';
 import Menu from './components/Menu';
-import { AppContext } from './AppContext';
 import useError from './hooks/useError';
 import useObject3D from './hooks/useObject3D';
 import { useSetRecoilState } from 'recoil';
@@ -13,7 +12,7 @@ function App() {
 
   const { showError, errorText } = useError();
 
-  const { objectData3D } = useObject3D();
+  useObject3D();
 
   const setErrorData = useSetRecoilState(errorDataState);
 
@@ -27,11 +26,7 @@ function App() {
   }, [setErrorData]);
 
   return (
-    <AppContext.Provider
-      value={{
-        objectData3D,
-      }}
-    >
+    <>
       <div className='App'>
         <Menu />
         <div className='canvas-container' ref={canvasContainerRef}>
@@ -42,7 +37,7 @@ function App() {
         <div className='alert-icon'>⚠️</div>
         <div>{errorText}</div>
       </div>
-    </AppContext.Provider>
+    </>
   );
 }
 

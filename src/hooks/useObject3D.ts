@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { objectDataState } from '../atoms';
 import { Point3D } from '../types';
 import { parsePoint } from '../utils';
+import { useSetRecoilState } from 'recoil';
 
 export interface ObjectData3D {
   vertices: Point3D[];
@@ -10,7 +12,7 @@ export interface ObjectData3D {
 }
 
 export default function useObject3D() {
-  const [objectData3D, setObjectData3D] = useState<ObjectData3D[]>([]);
+  const setObjectData3D = useSetRecoilState(objectDataState);
 
   useEffect(() => {
     setExampleObjects();
@@ -96,6 +98,4 @@ export default function useObject3D() {
 
     return { vertices, faces };
   };
-
-  return { objectData3D };
 }

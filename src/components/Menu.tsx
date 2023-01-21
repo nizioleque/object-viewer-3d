@@ -1,5 +1,3 @@
-import { useContext } from 'react';
-import { AppContext } from '../AppContext';
 import MenuFps from './MenuFps';
 import './Menu.css';
 import MenuSlider from './MenuSlider';
@@ -7,7 +5,6 @@ import { useRecoilState } from 'recoil';
 import { fovState } from '../atoms';
 
 function Menu() {
-  const {} = useContext(AppContext);
   const [fov, setFov] = useRecoilState(fovState);
 
   return (

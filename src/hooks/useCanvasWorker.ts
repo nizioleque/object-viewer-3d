@@ -1,11 +1,11 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { spawn, Transfer, Worker } from 'threads';
-import { AppContext } from '../AppContext';
-import { supportsOffscreenCanvas } from '../atoms';
+import { objectDataState, supportsOffscreenCanvas } from '../atoms';
 import { FillWorker } from '../workers/fillWorker';
+import { useRecoilValue } from 'recoil';
 
 export default function useCanvasWorker() {
-  const { objectData3D } = useContext(AppContext);
+  const objectData3D = useRecoilValue(objectDataState);
 
   const offscreenCanvas = useRef<HTMLCanvasElement>();
   const worker = useRef<FillWorker>();
@@ -13,25 +13,20 @@ export default function useCanvasWorker() {
 
   const [workerCreated, setWorkerCreated] = useState<boolean>(false);
 
-  const canvasRef = useCallback(
-    (node: HTMLCanvasElement) => {
-      console.log('canvasref', node);
-      if (supportsOffscreenCanvas === undefined) return;
-      if (node !== null) {
-        if (supportsOffscreenCanvas) {
-          if (!offscreenCanvas.current) {
-            offscreenCanvas.current = (
-              node as any
-            ).transferControlToOffscreen();
-            initializeWorker();
-          }
-        } else {
-          canvasCtx.current = node.getContext('2d')!;
+  const canvasRef = useCallback((node: HTMLCanvasElement) => {
+    console.log('canvasref', node);
+    if (supportsOffscreenCanvas === undefined) return;
+    if (node !== null) {
+      if (supportsOffscreenCanvas) {
+        if (!offscreenCanvas.current) {
+          offscreenCanvas.current = (node as any).transferControlToOffscreen();
+          initializeWorker();
         }
+      } else {
+        canvasCtx.current = node.getContext('2d')!;
       }
-    },
-    [supportsOffscreenCanvas]
-  );
+    }
+  }, []);
 
   const initializeWorker = async () => {
     const newWorker = await spawn<FillWorker>(

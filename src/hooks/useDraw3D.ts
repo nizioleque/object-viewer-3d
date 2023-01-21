@@ -1,7 +1,6 @@
-import { MutableRefObject, useContext, useRef } from 'react';
+import { MutableRefObject, useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { AppContext } from '../AppContext';
-import { currentFpsState, fovState } from '../atoms';
+import { currentFpsState, fovState, objectDataState } from '../atoms';
 import { paint } from '../canvas3D/paint';
 import { DrawArgs3D } from '../types';
 import { FillWorker } from '../workers/fillWorker';
@@ -12,9 +11,8 @@ export default function useDraw3D(
   worker: MutableRefObject<FillWorker | undefined>,
   canvasCtx: MutableRefObject<CanvasRenderingContext2D | undefined>
 ) {
-  const { objectData3D } = useContext(AppContext);
+  const objectData3D = useRecoilValue(objectDataState);
   const fov = useRecoilValue(fovState);
-
   const setCurrentFps = useSetRecoilState(currentFpsState);
 
   const renderTimes = useRef<number[]>([]);
