@@ -1,8 +1,9 @@
 import { useContext } from 'react';
 import { AppContext } from '../AppContext';
+import { supportsOffscreenCanvas } from '../atoms';
 
 function MenuFps() {
-  const { currentFps, supportsOffscreenCanvas } = useContext(AppContext);
+  const { currentFps } = useContext(AppContext);
 
   return (
     <div className='menu-section center'>

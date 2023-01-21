@@ -1,26 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { errorDataState } from '../atoms';
+import { useRecoilState } from 'recoil';
 
 export default function useError(): {
   showError: boolean;
   errorText: string | undefined;
-  setErrorText: (text: string, timeout?: number) => void;
 } {
-  const [errorText, _setErrorText] = useState<string | undefined>(undefined);
+  const [errorData, setErrorData] = useRecoilState(errorDataState);
+  const errorText = errorData?.message;
+
   const [showError, setShowError] = useState<boolean>(false);
   const [timeouts, setTimeouts] = useState<NodeJS.Timeout[]>([]);
-  const setErrorText = (text: string, timeout: number = 3000) => {
+
+  useEffect(() => {
+    if (!errorData) return;
+
     timeouts.forEach(clearTimeout);
     setTimeouts([]);
-    _setErrorText(text);
     setShowError(true);
     const timeout1 = setTimeout(() => {
       setShowError(false);
-      const timeout2 = setTimeout(() => _setErrorText(undefined), 200);
+      const timeout2 = setTimeout(() => setErrorData(undefined), 200);
       timeouts.push(timeout2);
       setTimeouts([...timeouts, timeout2]);
-    }, timeout);
+    }, errorData.timeout ?? 3000);
     setTimeouts([...timeouts, timeout1]);
-  };
+  }, [errorData]);
 
-  return { showError, errorText, setErrorText };
+  return { showError, errorText };
 }

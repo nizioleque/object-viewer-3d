@@ -1,10 +1,11 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { spawn, Transfer, Worker } from 'threads';
 import { AppContext } from '../AppContext';
+import { supportsOffscreenCanvas } from '../atoms';
 import { FillWorker } from '../workers/fillWorker';
 
 export default function useCanvasWorker() {
-  const { supportsOffscreenCanvas, objectData3D } = useContext(AppContext);
+  const { objectData3D } = useContext(AppContext);
 
   const offscreenCanvas = useRef<HTMLCanvasElement>();
   const worker = useRef<FillWorker>();
