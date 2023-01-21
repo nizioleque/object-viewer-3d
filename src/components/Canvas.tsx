@@ -16,7 +16,7 @@ function Canvas() {
 
   useInterval(() => {
     draw3D();
-  }, 1000 / 3);
+  }, 1000 / 0.2);
 
   return (
     <canvas

@@ -1,6 +1,6 @@
 import Canvas from './components/Canvas';
 import './App.css';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Menu from './components/Menu';
 import { AppContext } from './AppContext';
 import useError from './hooks/useError';
@@ -14,8 +14,6 @@ function App() {
   const { showError, errorText } = useError();
 
   const { objectData3D } = useObject3D();
-
-  const [currentFps, setCurrentFps] = useState<number>(0);
 
   const setErrorData = useSetRecoilState(errorDataState);
 
@@ -31,8 +29,6 @@ function App() {
   return (
     <AppContext.Provider
       value={{
-        currentFps,
-        setCurrentFps,
         objectData3D,
       }}
     >

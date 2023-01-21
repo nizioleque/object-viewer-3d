@@ -1,9 +1,8 @@
-import { useContext } from 'react';
-import { AppContext } from '../AppContext';
-import { supportsOffscreenCanvas } from '../atoms';
+import { currentFpsState, supportsOffscreenCanvas } from '../atoms';
+import { useRecoilValue } from 'recoil';
 
 function MenuFps() {
-  const { currentFps } = useContext(AppContext);
+  const currentFps = useRecoilValue(currentFpsState);
 
   return (
     <div className='menu-section center'>

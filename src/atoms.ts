@@ -18,3 +18,8 @@ export const errorDataState = atom<ErrorData | undefined>({
   key: 'errorTextState',
   default: undefined,
 });
+
+export const currentFpsState = atom<number>({
+  key: 'currentFpsState',
+  default: 0,
+});

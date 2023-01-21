@@ -1,10 +1,12 @@
 import { MutableRefObject, useContext, useRef } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { AppContext } from '../AppContext';
-import { fovState } from '../atoms';
+import { currentFpsState, fovState } from '../atoms';
 import { paint } from '../canvas3D/paint';
 import { DrawArgs3D } from '../types';
 import { FillWorker } from '../workers/fillWorker';
+
+const rendersCount = 20;
 
 export default function useDraw3D(
   worker: MutableRefObject<FillWorker | undefined>,
@@ -12,6 +14,11 @@ export default function useDraw3D(
 ) {
   const { objectData3D } = useContext(AppContext);
   const fov = useRecoilValue(fovState);
+
+  const setCurrentFps = useSetRecoilState(currentFpsState);
+
+  const renderTimes = useRef<number[]>([]);
+  const i = useRef<number>(0);
 
   const isRendering = useRef<boolean>(false);
 
@@ -23,13 +30,22 @@ export default function useDraw3D(
       fov: fov,
     };
 
+    const t0 = performance.now();
     if (worker.current) {
       await worker.current.runPaint(drawArgs3D);
     } else {
       paint(drawArgs3D, canvasCtx.current!, objectData3D);
     }
+    const t1 = performance.now();
+
+    renderTimes.current[i.current++ % rendersCount] = t1 - t0;
 
     isRendering.current = false;
+
+    const average =
+      renderTimes.current.reduce((a, b) => a + b, 0) /
+      renderTimes.current.length;
+    setCurrentFps(1000 / average);
   };
 
   return { draw3D };
