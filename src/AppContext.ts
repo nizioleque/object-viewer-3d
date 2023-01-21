@@ -44,6 +44,8 @@ interface AppContext {
   objectData3D: ObjectData3D[];
   fov: number;
   setFov: Dispatch<SetStateAction<number>>;
+  currentFps: number;
+  setCurrentFps: Dispatch<SetStateAction<number>>;
 }
 
 const appContextDefaultValue: AppContext = {
@@ -93,6 +95,8 @@ const appContextDefaultValue: AppContext = {
   objectData3D: [],
   fov: 0,
   setFov: () => {},
+  currentFps: 0,
+  setCurrentFps: () => {},
 };
 
 export const AppContext = createContext<AppContext>(appContextDefaultValue);

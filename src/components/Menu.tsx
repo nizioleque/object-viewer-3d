@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { AppContext } from '../AppContext';
+import MenuFps from './MenuFps';
 import './Menu.css';
 import MenuObject from './MenuObject';
 import MenuSize from './MenuSize';
@@ -26,6 +27,7 @@ function Menu() {
           Kod źródłowy i dokumentacja
         </a>
       </header>
+      <MenuFps />
       <div className='menu-section'>
         <h3>FOV</h3>
         <div className='buttons'>

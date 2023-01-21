@@ -47,9 +47,13 @@ function App() {
 
   const { objectData3D } = useObject3D();
 
+  const [currentFps, setCurrentFps] = useState<number>(0);
+
   return (
     <AppContext.Provider
       value={{
+        currentFps,
+        setCurrentFps,
         setErrorText,
         forceRerender,
         objectData,
@@ -78,7 +82,7 @@ function App() {
         setMapType,
         objectData3D,
         fov,
-        setFov
+        setFov,
       }}
     >
       <div className='App'>
