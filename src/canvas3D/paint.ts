@@ -92,26 +92,6 @@ export async function paint(
   }
 
   ctx.putImageData(imageData, 0, 0);
-
-  // draw outline
-  // for (const object of objectData3D) {
-  //   const modelMatrix = modelMatrixValue(object.rotationModifier, t);
-
-  //   for (const face of object.faces) {
-  //     const vertices = getVertices(object, face, modelMatrix, projectionMatrix);
-  //     if (vertices.length < 3) continue;
-
-  //     ctx.beginPath();
-  //     ctx.lineWidth = 1;
-  //     ctx.strokeStyle = 'violet';
-  //     ctx.moveTo(vertices[0].x, vertices[0].y);
-  //     for (let i = 1; i < vertices.length; i++) {
-  //       ctx.lineTo(vertices[i].x, vertices[i].y);
-  //     }
-  //     ctx.lineTo(vertices[0].x, vertices[0].y);
-  //     ctx.stroke();
-  //   }
-  // }
 }
 
 const modelMatrixValue = (rotationModifier: number, t: number) =>

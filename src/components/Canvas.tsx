@@ -5,38 +5,14 @@ import useDraw3D from '../hooks/useDraw3D';
 import useInterval from '../hooks/useInterval';
 
 function Canvas() {
-  const {
-    objectData,
-    params,
-    calculationMode,
-    lightOptions,
-    styleOptions,
-    texture,
-    normalMap,
-    drawMode,
-    mapType,
-    objectData3D,
-  } = useContext(AppContext);
+  const { objectData3D } = useContext(AppContext);
 
   const { worker, canvasCtx, canvasRef } = useCanvasWorker();
   const { draw3D } = useDraw3D(worker, canvasCtx);
 
   useEffect(() => {
     draw3D();
-  }, [
-    objectData,
-    objectData3D,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ...Object.values(params),
-    calculationMode,
-    lightOptions,
-    styleOptions,
-    texture,
-    normalMap,
-    drawMode,
-    mapType,
-    draw3D,
-  ]);
+  }, [objectData3D, draw3D]);
 
   useInterval(() => {
     draw3D();

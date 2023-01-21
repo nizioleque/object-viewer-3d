@@ -1,7 +1,3 @@
-import { DrawMode } from './hooks/useDrawMode';
-import { MapType } from './hooks/useNormalMap';
-import { Params } from './hooks/useParams';
-import { StyleOptions } from './hooks/useStyleOptions';
 
 export interface ObjectData {
   vertices: Vertex[][];
@@ -99,21 +95,6 @@ export interface ActiveEdgeData {
   x: number;
 }
 
-export enum CalculationMode {
-  InterpolateColor,
-  InterpolateVector,
-}
-
-export interface DrawArgs {
-  objectData: ObjectData;
-  lightPosition: Point3D;
-  params: Params;
-  drawMode: DrawMode;
-  calculationMode: CalculationMode;
-  styleOptions: StyleOptions;
-  size: number;
-  mapType: MapType;
-}
 
 export interface DrawArgs3D {
   fov: number;
