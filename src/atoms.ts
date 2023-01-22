@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { ObjectData3D } from './hooks/useObject3D';
+import { ObjectData3D, ObjectPosition } from './types';
 
 export const fovState = atom<number>({
   key: 'fovState',
@@ -27,5 +27,10 @@ export const currentFpsState = atom<number>({
 
 export const objectDataState = atom<ObjectData3D[]>({
   key: 'objectDataState',
+  default: [],
+});
+
+export const objectPositionState = atom<ObjectPosition[]>({
+  key: 'objectPositionState',
   default: [],
 });

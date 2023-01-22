@@ -1,18 +1,12 @@
 import { useEffect } from 'react';
-import { objectDataState } from '../atoms';
-import { Point3D } from '../types';
+import { objectDataState, objectPositionState } from '../atoms';
+import { ObjectData3D, ObjectPosition, Point3D } from '../types';
 import { parsePoint } from '../utils';
 import { useSetRecoilState } from 'recoil';
 
-export interface ObjectData3D {
-  vertices: Point3D[];
-  faces: number[][];
-  rotationModifier: number;
-  color: number[];
-}
-
 export default function useObject3D() {
   const setObjectData3D = useSetRecoilState(objectDataState);
+  const setObjectPositionState = useSetRecoilState(objectPositionState);
 
   useEffect(() => {
     setExampleObjects();
@@ -22,7 +16,6 @@ export default function useObject3D() {
   const setExampleObjects = async () => {
     const object1 = await readObjectFile(
       'torus_small.obj',
-      1,
       {
         x: 0,
         y: 0,
@@ -30,9 +23,13 @@ export default function useObject3D() {
       },
       [255, 0, 0]
     );
+    const position1: ObjectPosition = {
+      offset: { x: 0, y: 0, z: 0 },
+      rotation: { x: 0, y: 0, z: 0 },
+      rotationModifier: 1,
+    };
     const object2 = await readObjectFile(
       'torus_small.obj',
-      -2,
       {
         x: -0.1,
         y: 0,
@@ -40,19 +37,24 @@ export default function useObject3D() {
       },
       [0, 255, 0]
     );
+    const position2: ObjectPosition = {
+      offset: { x: 0, y: 0, z: 0 },
+      rotation: { x: 0, y: 0, z: 0 },
+      rotationModifier: -2,
+    };
     console.log('setting object data 3d to', [object1, object2]);
     setObjectData3D([object1, object2]);
+    setObjectPositionState([position1, position2]);
   };
 
   const readObjectFile = async (
     filename: string,
-    rotationModifier: number,
     offset: Point3D,
     color: number[]
   ): Promise<ObjectData3D> => {
     const file: Blob = await loadFile(filename);
     const { vertices, faces } = await parseFile(file, offset);
-    return { vertices, faces, rotationModifier, color };
+    return { vertices, faces, color };
   };
 
   const loadFile = async (filename: string) => {

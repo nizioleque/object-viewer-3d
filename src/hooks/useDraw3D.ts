@@ -1,6 +1,11 @@
 import { MutableRefObject, useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentFpsState, fovState, objectDataState } from '../atoms';
+import {
+  currentFpsState,
+  fovState,
+  objectDataState,
+  objectPositionState,
+} from '../atoms';
 import { paint } from '../canvas3D/paint';
 import { DrawArgs3D } from '../types';
 import { FillWorker } from '../workers/fillWorker';
@@ -13,6 +18,7 @@ export default function useDraw3D(
 ) {
   const objectData3D = useRecoilValue(objectDataState);
   const fov = useRecoilValue(fovState);
+  const objectPosition = useRecoilValue(objectPositionState);
   const setCurrentFps = useSetRecoilState(currentFpsState);
 
   const renderTimes = useRef<number[]>([]);
@@ -25,7 +31,8 @@ export default function useDraw3D(
     isRendering.current = true;
 
     const drawArgs3D: DrawArgs3D = {
-      fov: fov,
+      fov,
+      objectPosition,
     };
 
     const t0 = performance.now();

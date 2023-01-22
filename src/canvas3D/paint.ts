@@ -1,6 +1,13 @@
 import * as math from 'mathjs';
-import { ObjectData3D } from '../hooks/useObject3D';
-import { ActiveEdgeData, DrawArgs3D, EdgeData, Point3D } from '../types';
+import { cos, sin } from 'mathjs';
+import {
+  ActiveEdgeData,
+  DrawArgs3D,
+  EdgeData,
+  ObjectData3D,
+  ObjectPosition,
+  Point3D,
+} from '../types';
 
 const canvasScale = 500;
 
@@ -68,15 +75,17 @@ export async function paint(
 
   // fill
   const imageData = ctx.createImageData(1000, 1000);
-  const t = Date.now() / 2000;
+  // const t = Date.now() / 2000;
 
   const zBuffer: number[][] = [...Array(1000)].map((e) =>
     Array(1000).fill(Infinity)
   );
 
-
-  for (const object of objectData3D) {
-    const modelMatrix = modelMatrixValue(object.rotationModifier, t);
+  for (const objectIndex in objectData3D) {
+    const object = objectData3D[objectIndex];
+    const modelMatrix = modelMatrixValue(
+      drawArgs3D.objectPosition[objectIndex]
+    );
 
     for (const face of object.faces) {
       const vertices: Point3D[] = getVertices(
@@ -94,11 +103,21 @@ export async function paint(
   ctx.putImageData(imageData, 0, 0);
 }
 
-const modelMatrixValue = (rotationModifier: number, t: number) =>
+const modelMatrixValue = ({ rotation: r }: ObjectPosition) =>
   math.matrix([
-    [1, 0, 0, 0],
-    [0, Math.cos(t * rotationModifier), -Math.sin(t * rotationModifier), 0],
-    [0, Math.sin(t * rotationModifier), Math.cos(t * rotationModifier), 0],
+    [
+      cos(r.x) * cos(r.y),
+      cos(r.x) * sin(r.y) * sin(r.z) - sin(r.x) * cos(r.z),
+      cos(r.x) * sin(r.y) * cos(r.z) + sin(r.x) * sin(r.z),
+      0,
+    ],
+    [
+      sin(r.x) * cos(r.y),
+      sin(r.x) * sin(r.y) * sin(r.z) + cos(r.x) * cos(r.z),
+      sin(r.x) * sin(r.y) * cos(r.z) - cos(r.x) * sin(r.z),
+      0,
+    ],
+    [-sin(r.y), cos(r.y) * sin(r.z), cos(r.y) * cos(r.z), 0],
     [0, 0, 0, 1],
   ]);
 

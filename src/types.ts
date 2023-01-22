@@ -1,4 +1,3 @@
-
 export interface ObjectData {
   vertices: Vertex[][];
   faces: Face[];
@@ -95,7 +94,19 @@ export interface ActiveEdgeData {
   x: number;
 }
 
-
 export interface DrawArgs3D {
   fov: number;
+  objectPosition: ObjectPosition[];
+}
+
+export interface ObjectData3D {
+  vertices: Point3D[];
+  faces: number[][];
+  color: number[];
+}
+
+export interface ObjectPosition {
+  offset: Point3D;
+  rotation: Point3D;
+  rotationModifier: number;
 }

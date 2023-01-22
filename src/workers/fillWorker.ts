@@ -1,7 +1,6 @@
 import { expose } from 'threads/worker';
 import { paint } from '../canvas3D/paint';
-import { ObjectData3D } from '../hooks/useObject3D';
-import { DrawArgs3D } from '../types';
+import { DrawArgs3D, ObjectData3D } from '../types';
 
 let offscreenCanvas: HTMLCanvasElement | null = null;
 let ctx: CanvasRenderingContext2D | null = null;
