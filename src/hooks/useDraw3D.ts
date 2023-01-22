@@ -5,6 +5,7 @@ import {
   fovState,
   objectDataState,
   objectPositionState,
+  renderScaleState,
 } from '../atoms';
 import { paint } from '../canvas3D/paint';
 import { DrawArgs3D } from '../types';
@@ -18,6 +19,7 @@ export default function useDraw3D(
 ) {
   const objectData3D = useRecoilValue(objectDataState);
   const fov = useRecoilValue(fovState);
+  const scale = useRecoilValue(renderScaleState);
   const objectPosition = useRecoilValue(objectPositionState);
   const setCurrentFps = useSetRecoilState(currentFpsState);
 
@@ -33,6 +35,7 @@ export default function useDraw3D(
     const drawArgs3D: DrawArgs3D = {
       fov,
       objectPosition,
+      scale,
     };
 
     const t0 = performance.now();

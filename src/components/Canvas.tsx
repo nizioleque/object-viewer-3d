@@ -3,10 +3,15 @@ import useCanvasWorker from '../hooks/useCanvasWorker';
 import useDraw3D from '../hooks/useDraw3D';
 import useInterval from '../hooks/useInterval';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { objectDataState, objectPositionState } from '../atoms';
+import {
+  objectDataState,
+  objectPositionState,
+  renderScaleState,
+} from '../atoms';
 
 function Canvas() {
   const objectData3D = useRecoilValue(objectDataState);
+  const scale = useRecoilValue(renderScaleState);
   const [objectPosition, setObjectPosition] =
     useRecoilState(objectPositionState);
 
@@ -28,14 +33,14 @@ function Canvas() {
         },
       }))
     );
-  }, 1000 / 2);
+  }, 1000 / 60);
 
   return (
     <canvas
       ref={canvasRef}
-      width={1000}
-      height={1000}
-      style={{ border: '5px black inset' }}
+      width={1000 * scale}
+      height={1000 * scale}
+      style={{ border: '5px black inset', width: '800px', height: '800px' }}
     />
   );
 }

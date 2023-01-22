@@ -9,8 +9,6 @@ import {
   Point3D,
 } from '../types';
 
-const canvasScale = 500;
-
 export const viewMatrix: math.Matrix = math.matrix([
   [-0.243, 0.97, 0, 0],
   [-0.229, -0.057, 0.972, 0],
@@ -23,6 +21,14 @@ export async function paint(
   ctx: CanvasRenderingContext2D,
   objectData3D: ObjectData3D[]
 ) {
+  const canvasSize = 1000 * drawArgs3D.scale;
+  const canvasScale = canvasSize / 2;
+
+  if (ctx.canvas.height !== canvasSize) {
+    ctx.canvas.width = canvasSize;
+    ctx.canvas.height = canvasSize;
+  }
+
   const getVertices = (
     object: ObjectData3D,
     face: number[],
@@ -74,11 +80,10 @@ export async function paint(
   }
 
   // fill
-  const imageData = ctx.createImageData(1000, 1000);
-  // const t = Date.now() / 2000;
+  const imageData = ctx.createImageData(canvasSize, canvasSize);
 
-  const zBuffer: number[][] = [...Array(1000)].map((e) =>
-    Array(1000).fill(Infinity)
+  const zBuffer: number[][] = [...Array(canvasSize)].map((e) =>
+    Array(canvasSize).fill(Infinity)
   );
 
   for (const objectIndex in objectData3D) {
@@ -96,7 +101,7 @@ export async function paint(
       );
       if (vertices.length < 3) continue;
 
-      fillPolygon3D(vertices, imageData, object.color, zBuffer);
+      fillPolygon3D(vertices, imageData, object.color, zBuffer, canvasScale);
     }
   }
 
@@ -125,7 +130,8 @@ function fillPolygon3D(
   vertices: Point3D[],
   imageData: ImageData,
   color: number[],
-  zBuffer: number[][]
+  zBuffer: number[][],
+  canvasScale: number
 ) {
   const edgeTable: EdgeData[][] = [];
 
@@ -184,8 +190,6 @@ function fillPolygon3D(
     if (y > canvasScale * 2 - 1) return;
 
     if (activeEdgeTable.length % 2 !== 0) return;
-
-    // console.log(activeEdgeTable.length);
 
     for (let i = 0; i < activeEdgeTable.length; i += 2) {
       const startX = activeEdgeTable[i].x << 0;

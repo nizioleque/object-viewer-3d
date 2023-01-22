@@ -1,12 +1,9 @@
 import MenuFps from './MenuFps';
 import './Menu.css';
-import MenuSlider from './MenuSlider';
-import { useRecoilState } from 'recoil';
-import { fovState } from '../atoms';
+import MenuFov from './MenuFov';
+import MenuScale from './MenuScale';
 
 function Menu() {
-  const [fov, setFov] = useRecoilState(fovState);
-
   return (
     <div className='menu'>
       <header>
@@ -21,20 +18,8 @@ function Menu() {
         </a>
       </header>
       <MenuFps />
-      <div className='menu-section'>
-        <h3>FOV</h3>
-        <div className='buttons'>
-          <MenuSlider
-            value={fov}
-            setFn={setFov}
-            min={30}
-            max={120}
-            step={1}
-            defaultValue={90}
-            noDecimal
-          />
-        </div>
-      </div>
+      <MenuFov />
+      <MenuScale/>
     </div>
   );
 }

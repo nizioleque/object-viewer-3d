@@ -1,6 +1,6 @@
 import Canvas from './components/Canvas';
 import './App.css';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import Menu from './components/Menu';
 import useError from './hooks/useError';
 import useObject3D from './hooks/useObject3D';
@@ -8,8 +8,6 @@ import { useSetRecoilState } from 'recoil';
 import { errorDataState, supportsOffscreenCanvas } from './atoms';
 
 function App() {
-  const canvasContainerRef = useRef<HTMLDivElement>(null);
-
   const { showError, errorText } = useError();
 
   useObject3D();
@@ -29,7 +27,7 @@ function App() {
     <>
       <div className='App'>
         <Menu />
-        <div className='canvas-container' ref={canvasContainerRef}>
+        <div className='canvas-container'>
           <Canvas />
         </div>
       </div>

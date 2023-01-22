@@ -97,6 +97,7 @@ export interface ActiveEdgeData {
 export interface DrawArgs3D {
   fov: number;
   objectPosition: ObjectPosition[];
+  scale: number;
 }
 
 export interface ObjectData3D {

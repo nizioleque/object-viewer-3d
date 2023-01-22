@@ -34,3 +34,8 @@ export const objectPositionState = atom<ObjectPosition[]>({
   key: 'objectPositionState',
   default: [],
 });
+
+export const renderScaleState = atom<number>({
+  key: 'renderScaleState',
+  default: 1,
+});
