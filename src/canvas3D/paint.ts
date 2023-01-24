@@ -1,5 +1,6 @@
 import * as math from 'mathjs';
 import { cos, sin } from 'mathjs';
+import { viewMatrixUp } from '../const';
 import {
   ActiveEdgeData,
   DrawArgs3D,
@@ -25,13 +26,16 @@ export async function paint(
   const getVertices = (
     object: ObjectData3D,
     face: number[],
-    modelMatrix: math.Matrix,
+    rotationMatrix: math.Matrix,
+    translationMatrix: math.Matrix,
     projectionMatrix: math.Matrix
   ) => {
     const vertices = [];
     for (let i = 1; i < face.length; i++) {
       const v = object.vertices[face[i] - 1];
       const vector = math.matrix([[v.x], [v.y], [v.z], [1]]);
+      const multRot = math.multiply(rotationMatrix, vector);
+      const multTrans = math.multiply(translationMatrix, multRot);
       const multLook = math.multiply(viewMatrixUp, multTrans);
       const multProj = math.multiply(projectionMatrix, multLook);
       const scale = multProj.get([3, 0]);
@@ -55,7 +59,7 @@ export async function paint(
     const e = 1 / Math.tan(fovRad / 2);
     const a = 1; // aspect ratio
     const n = 1; //near
-    const f = 5; //far
+    const f = 10; //far
 
     return math.matrix([
       [e, 0, 0, 0],
@@ -80,7 +84,10 @@ export async function paint(
 
   for (const objectIndex in objectData3D) {
     const object = objectData3D[objectIndex];
-    const modelMatrix = modelMatrixValue(
+    const rotationMatrix = rotationMatrixValue(
+      drawArgs3D.objectPosition[objectIndex]
+    );
+    const translationMatrix = translationMatrixValue(
       drawArgs3D.objectPosition[objectIndex]
     );
 
@@ -88,7 +95,8 @@ export async function paint(
       const vertices: Point3D[] = getVertices(
         object,
         face,
-        modelMatrix,
+        rotationMatrix,
+        translationMatrix,
         projectionMatrix
       );
       if (vertices.length < 3) continue;
@@ -100,21 +108,29 @@ export async function paint(
   ctx.putImageData(imageData, 0, 0);
 }
 
-const modelMatrixValue = ({ rotation: r }: ObjectPosition) =>
+const rotationMatrixValue = ({ rotation: r }: ObjectPosition) =>
   math.matrix([
     [
-      cos(r.x) * cos(r.y),
-      cos(r.x) * sin(r.y) * sin(r.z) - sin(r.x) * cos(r.z),
-      cos(r.x) * sin(r.y) * cos(r.z) + sin(r.x) * sin(r.z),
+      cos(r.z) * cos(r.y),
+      cos(r.z) * sin(r.y) * sin(r.x) - sin(r.z) * cos(r.x),
+      cos(r.z) * sin(r.y) * cos(r.x) + sin(r.z) * sin(r.x),
       0,
     ],
     [
-      sin(r.x) * cos(r.y),
-      sin(r.x) * sin(r.y) * sin(r.z) + cos(r.x) * cos(r.z),
-      sin(r.x) * sin(r.y) * cos(r.z) - cos(r.x) * sin(r.z),
+      sin(r.z) * cos(r.y),
+      sin(r.z) * sin(r.y) * sin(r.x) + cos(r.z) * cos(r.x),
+      sin(r.z) * sin(r.y) * cos(r.x) - cos(r.z) * sin(r.x),
       0,
     ],
-    [-sin(r.y), cos(r.y) * sin(r.z), cos(r.y) * cos(r.z), 0],
+    [-sin(r.y), cos(r.y) * sin(r.x), cos(r.y) * cos(r.x), 0],
+    [0, 0, 0, 1],
+  ]);
+
+const translationMatrixValue = ({ offset: o }: ObjectPosition) =>
+  math.matrix([
+    [1, 0, 0, o.x],
+    [0, 1, 0, o.y],
+    [0, 0, 1, o.z],
     [0, 0, 0, 1],
   ]);
 
