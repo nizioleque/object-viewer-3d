@@ -14,32 +14,16 @@ export default function useObject3D() {
   }, []);
 
   const setExampleObjects = async () => {
-    const object1 = await readObjectFile(
-      'torus_small.obj',
-      {
-        x: 0,
-        y: 0,
-        z: 0,
-      },
-      [255, 0, 0]
-    );
+    const object1 = await readObjectFile('Jeep.obj', [0, 0, 0]);
     const position1: ObjectPosition = {
-      offset: { x: 0, y: 0, z: 0 },
-      rotation: { x: 0, y: 0, z: 0 },
+      offset: { x: 4.25, y: 2, z: 2 },
+      rotation: { x: 0, y: 0, z: Math.PI },
       rotationModifier: 1,
     };
-    const object2 = await readObjectFile(
-      'torus_small.obj',
-      {
-        x: -0.1,
-        y: 0,
-        z: 0,
-      },
-      [0, 255, 0]
-    );
+    const object2 = await readObjectFile('Jeep.obj', [0, 255, 0]);
     const position2: ObjectPosition = {
-      offset: { x: 0, y: 0, z: 0 },
-      rotation: { x: 0, y: 0, z: 0 },
+      offset: { x: 5.75, y: 2, z: 2 },
+      rotation: { x: 0, y: 0, z: Math.PI },
       rotationModifier: -2,
     };
     console.log('setting object data 3d to', [object1, object2]);
@@ -49,11 +33,10 @@ export default function useObject3D() {
 
   const readObjectFile = async (
     filename: string,
-    offset: Point3D,
     color: number[]
   ): Promise<ObjectData3D> => {
     const file: Blob = await loadFile(filename);
-    const { vertices, faces } = await parseFile(file, offset);
+    const { vertices, faces } = await parseFile(file);
     return { vertices, faces, color };
   };
 
@@ -63,7 +46,7 @@ export default function useObject3D() {
     return blob;
   };
 
-  const parseFile = async (file: Blob, offset: Point3D) => {
+  const parseFile = async (file: Blob) => {
     const vertices: Point3D[] = [];
     const faces: number[][] = [];
 
@@ -96,10 +79,6 @@ export default function useObject3D() {
       vertex.x /= maxCoordinate;
       vertex.y /= maxCoordinate;
       vertex.z /= maxCoordinate;
-
-      vertex.x += offset.x;
-      vertex.y += offset.y;
-      vertex.z += offset.z;
     }
 
     return { vertices, faces };
