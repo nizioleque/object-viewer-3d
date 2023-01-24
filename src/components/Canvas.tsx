@@ -26,7 +26,7 @@ function Canvas() {
   }, [objectData3D, draw3D, objectPosition]);
 
   useInterval(() => {
-    const t = Date.now() / 3000;
+    const t = Date.now() / 5000;
     const newObjectPosition: ObjectPosition[] = objectPosition.map(
       (objectPosition, index) => objectPositionFn[index](objectPosition, t)
     );

@@ -8,6 +8,8 @@ import { ObjectData3D, ObjectPosition, Point3D } from '../types';
 import { parsePoint } from '../utils';
 import { useSetRecoilState } from 'recoil';
 
+const { PI } = Math;
+
 export default function useObject3D() {
   const setObjectData3D = useSetRecoilState(objectDataState);
   const setObjectPositionState = useSetRecoilState(objectPositionState);
@@ -24,38 +26,36 @@ export default function useObject3D() {
     const object1 = await readObjectFile('Jeep.obj', [159, 153, 229]);
     const position1: ObjectPosition = {
       offset: { x: 4.25, y: 2, z: 2 },
-      rotation: { x: 0, y: 0, z: Math.PI },
-      rotationModifier: 1,
+      rotation: { x: 0, y: 0, z: PI },
     };
 
     const object2 = await readObjectFile('Jeep.obj', [205, 176, 230]);
     const position2: ObjectPosition = {
       offset: { x: 5.75, y: 2, z: 2 },
-      rotation: { x: 0, y: 0, z: Math.PI },
-      rotationModifier: -2,
+      rotation: { x: 0, y: 0, z: PI },
     };
 
     const object3 = await readObjectFile('Jeep.obj', [205, 176, 230]);
     const position3: ObjectPosition = {
       offset: { x: 5.75, y: 2, z: 2 },
-      rotation: { x: 0, y: 0, z: Math.PI },
-      rotationModifier: -2,
+      rotation: { x: 0, y: 0, z: PI },
     };
 
     const xStart = 2.25;
     const xEnd = 7.75;
     const xLength = xEnd - xStart;
-    const zStart = 0;
-    const zEnd = 5;
+    const zStart = -1;
+    const zEnd = 4;
     const zLength = zEnd - zStart;
 
     const posFn3 = function (pos: ObjectPosition, t: number): ObjectPosition {
-      const rotationTime = (t * 3) % (2 * Math.PI);
-      const progress = (rotationTime % (0.5 * Math.PI)) / (0.5 * Math.PI);
+      const rotationTime = (t * 3) % (2 * PI);
+      const progress = (rotationTime % (0.5 * PI)) / (0.5 * PI);
+      const rotation = { x: 0, y: 0, z: PI };
 
-      if (rotationTime < 0.5 * Math.PI) {
+      if (rotationTime < 0.5 * PI) {
         return {
-          ...pos,
+          rotation: { ...rotation, y: 1.5 * PI },
           offset: {
             x: xStart + xLength * progress,
             y: 2,
@@ -64,9 +64,9 @@ export default function useObject3D() {
         };
       }
 
-      if (rotationTime < 1.0 * Math.PI) {
+      if (rotationTime < 1.0 * PI) {
         return {
-          ...pos,
+          rotation: { ...rotation, y: 0 },
           offset: {
             x: xEnd,
             y: 2,
@@ -75,9 +75,9 @@ export default function useObject3D() {
         };
       }
 
-      if (rotationTime < 1.5 * Math.PI) {
+      if (rotationTime < 1.5 * PI) {
         return {
-          ...pos,
+          rotation: { ...rotation, y: 0.5 * PI },
           offset: {
             x: xEnd - xLength * progress,
             y: 2,
@@ -87,7 +87,7 @@ export default function useObject3D() {
       }
 
       return {
-        ...pos,
+        rotation: { ...rotation, y: 1.0 * PI },
         offset: {
           x: xStart,
           y: 2,

@@ -109,7 +109,6 @@ export interface ObjectData3D {
 export interface ObjectPosition {
   offset: Point3D;
   rotation: Point3D;
-  rotationModifier: number;
 }
 
 export type ObjectPositionFn = (
