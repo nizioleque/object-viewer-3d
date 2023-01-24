@@ -84,7 +84,11 @@ export default function useObject3D() {
 
     let maxCoordinate = 0;
     for (const vertex of vertices) {
-      const currentMax = Math.max(Math.abs(vertex.x), Math.abs(vertex.y));
+      const currentMax = Math.max(
+        Math.abs(vertex.x),
+        Math.abs(vertex.y),
+        Math.abs(vertex.z)
+      );
       if (currentMax > maxCoordinate) maxCoordinate = currentMax;
     }
 
