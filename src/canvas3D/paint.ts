@@ -9,13 +9,6 @@ import {
   Point3D,
 } from '../types';
 
-export const viewMatrix: math.Matrix = math.matrix([
-  [-0.243, 0.97, 0, 0],
-  [-0.229, -0.057, 0.972, 0],
-  [0.943, 0.236, 0.236, -2.121],
-  [0, 0, 0, 1],
-]);
-
 export async function paint(
   drawArgs3D: DrawArgs3D,
   ctx: CanvasRenderingContext2D,
@@ -39,8 +32,7 @@ export async function paint(
     for (let i = 1; i < face.length; i++) {
       const v = object.vertices[face[i] - 1];
       const vector = math.matrix([[v.x], [v.y], [v.z], [1]]);
-      const multModel = math.multiply(modelMatrix, vector);
-      const multLook = math.multiply(viewMatrix, multModel);
+      const multLook = math.multiply(viewMatrixUp, multTrans);
       const multProj = math.multiply(projectionMatrix, multLook);
       const scale = multProj.get([3, 0]);
       const x = multProj.get([0, 0]) / scale;
