@@ -5,15 +5,18 @@ import useInterval from '../hooks/useInterval';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   objectDataState,
+  objectPositionFnState,
   objectPositionState,
   renderScaleState,
 } from '../atoms';
+import { ObjectPosition } from '../types';
 
 function Canvas() {
   const objectData3D = useRecoilValue(objectDataState);
   const scale = useRecoilValue(renderScaleState);
   const [objectPosition, setObjectPosition] =
     useRecoilState(objectPositionState);
+  const objectPositionFn = useRecoilValue(objectPositionFnState);
 
   const { worker, canvasCtx, canvasRef } = useCanvasWorker();
   const { draw3D } = useDraw3D(worker, canvasCtx);
@@ -24,16 +27,12 @@ function Canvas() {
 
   useInterval(() => {
     const t = Date.now() / 3000;
-    setObjectPosition((currentValue) =>
-      currentValue.map((pos) => ({
-        ...pos,
-        rotation: {
-          ...pos.rotation,
-          z: t * pos.rotationModifier,
-        },
-      }))
+    const newObjectPosition: ObjectPosition[] = objectPosition.map(
+      (objectPosition, index) => objectPositionFn[index](objectPosition, t)
     );
-  }, 1000 / 60);
+
+    setObjectPosition(newObjectPosition);
+  }, 1000 / parseFloat(process.env.REACT_APP_FPS_LIMIT ?? '60'));
 
   return (
     <canvas

@@ -111,3 +111,8 @@ export interface ObjectPosition {
   rotation: Point3D;
   rotationModifier: number;
 }
+
+export type ObjectPositionFn = (
+  pos: ObjectPosition,
+  t: number
+) => ObjectPosition;

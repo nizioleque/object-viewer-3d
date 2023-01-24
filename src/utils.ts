@@ -13,5 +13,3 @@ export function parsePoint(vertices: string[] | number[]): Point3D {
   }
   return p;
 }
-
-
