@@ -33,7 +33,7 @@ function Canvas() {
     );
 
     setObjectPosition(newObjectPosition);
-  }, 1000 / (limitFps ? parseFloat(process.env.REACT_APP_FPS_LIMIT!) : 60));
+  }, 1000 / (limitFps ? parseFloat(process.env.REACT_APP_FPS_LIMIT ?? '60') : 60));
 
   return (
     <canvas
