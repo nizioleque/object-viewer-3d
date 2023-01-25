@@ -23,6 +23,7 @@ export interface DrawArgs3D {
 
 export interface Vertex extends Point3D {
   vector: Point3D;
+  screen?: Point3D;
 }
 
 export interface ObjectData3D {

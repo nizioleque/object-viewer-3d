@@ -1,6 +1,6 @@
-import { DrawArgs3D, ObjectData3D, Point3D } from '../types';
+import { DrawArgs3D, ObjectData3D } from '../types';
 import fillPolygon from './fillPolygon';
-import getVertices from './getVertices';
+import getFaceScreenCoords from './getFaceScreenCoords';
 import {
   getProjectionMatrix,
   getRotationMatrix,
@@ -42,16 +42,17 @@ export async function paint(
     );
 
     for (const face of object.faces) {
-      const vertices: Point3D[] = getVertices(
+      const drawFace = getFaceScreenCoords(
         face,
         rotationMatrix,
         translationMatrix,
         projectionMatrix,
         canvasScale
       );
-      if (vertices.length < 3) continue;
 
-      fillPolygon(vertices, imageData, object.color, zBuffer, canvasScale);
+      if (drawFace) {
+        fillPolygon(face, imageData, object.color, zBuffer, canvasScale);
+      }
     }
   }
 

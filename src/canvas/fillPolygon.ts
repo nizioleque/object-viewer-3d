@@ -1,7 +1,7 @@
-import { Point3D, EdgeData, ActiveEdgeData } from '../types';
+import { EdgeData, ActiveEdgeData, Vertex } from '../types';
 
 export default function fillPolygon(
-  vertices: Point3D[],
+  face: Vertex[],
   imageData: ImageData,
   color: number[],
   zBuffer: number[][],
@@ -9,29 +9,29 @@ export default function fillPolygon(
 ) {
   const edgeTable: EdgeData[][] = [];
 
-  for (let i = 0; i < vertices.length; i++) {
-    const iNext = (i + 1) % vertices.length;
+  for (let i = 0; i < face.length; i++) {
+    const iNext = (i + 1) % face.length;
 
     const leftVertex =
-      vertices[i].x > vertices[iNext].x ? vertices[iNext] : vertices[i];
-    const rightVertex =
-      vertices[i] === leftVertex ? vertices[iNext] : vertices[i];
+      face[i].screen!.x > face[iNext].screen!.x ? face[iNext] : face[i];
+    const rightVertex = face[i] === leftVertex ? face[iNext] : face[i];
 
-    if (leftVertex.y === rightVertex.y) {
+    if (leftVertex.screen!.y === rightVertex.screen!.y) {
       continue;
     }
 
     const yMinVertex =
-      vertices[i].y < vertices[iNext].y ? vertices[i] : vertices[iNext];
+      face[i].screen!.y < face[iNext].screen!.y ? face[i] : face[iNext];
 
     const edgeData: EdgeData = {
-      xofYMin: yMinVertex.x,
-      yMax: Math.max(vertices[i].y, vertices[iNext].y),
+      xofYMin: yMinVertex.screen!.x,
+      yMax: Math.max(face[i].screen!.y, face[iNext].screen!.y),
       slopeInverted:
-        (rightVertex.x - leftVertex.x) / (rightVertex.y - leftVertex.y),
+        (rightVertex.screen!.x - leftVertex.screen!.x) /
+        (rightVertex.screen!.y - leftVertex.screen!.y),
     };
 
-    const yMin = yMinVertex.y;
+    const yMin = yMinVertex.screen!.y;
     if (!edgeTable[yMin]) edgeTable[yMin] = [];
 
     edgeTable[yMin].push(edgeData);
@@ -72,24 +72,25 @@ export default function fillPolygon(
         if (x > canvasScale * 2 - 1) continue;
 
         const det =
-          (vertices[1].y - vertices[2].y) * (vertices[0].x - vertices[2].x) +
-          (vertices[2].x - vertices[1].x) * (vertices[0].y - vertices[2].y);
+          (face[1].screen!.y - face[2].screen!.y) *
+            (face[0].screen!.x - face[2].screen!.x) +
+          (face[2].screen!.x - face[1].screen!.x) *
+            (face[0].screen!.y - face[2].screen!.y);
 
-        const a1 = vertices[1].y - vertices[2].y;
-        const a2 = vertices[2].x - vertices[1].x;
-        const b1 = vertices[2].y - vertices[0].y;
-        const b2 = vertices[0].x - vertices[2].x;
+        const a1 = face[1].screen!.y - face[2].screen!.y;
+        const a2 = face[2].screen!.x - face[1].screen!.x;
+        const b1 = face[2].screen!.y - face[0].screen!.y;
+        const b2 = face[0].screen!.x - face[2].screen!.x;
 
         const alpha =
-          (a1 * (x - vertices[2].x) + a2 * (y - vertices[2].y)) / det;
+          (a1 * (x - face[2].screen!.x) + a2 * (y - face[2].screen!.y)) / det;
 
         const beta =
-          (b1 * (x - vertices[2].x) + b2 * (y - vertices[2].y)) / det;
+          (b1 * (x - face[2].screen!.x) + b2 * (y - face[2].screen!.y)) / det;
 
         const gamma = 1 - alpha - beta;
 
-        const pointZ =
-          vertices[0].z * alpha + vertices[1].z * beta + vertices[2].z * gamma;
+        const pointZ = face[0].z * alpha + face[1].z * beta + face[2].z * gamma;
 
         if (pointZ > zBuffer[x][y]) continue;
         zBuffer[x][y] = pointZ;

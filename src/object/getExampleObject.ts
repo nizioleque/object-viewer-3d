@@ -27,8 +27,8 @@ export default async function getExampleObjects() {
   const xStart = 2.25;
   const xEnd = 7.75;
   const xLength = xEnd - xStart;
-  const zStart = -1;
-  const zEnd = 4;
+  const zStart = 0;
+  const zEnd = 3;
   const zLength = zEnd - zStart;
 
   const posFn3 = function (pos: ObjectPosition, t: number): ObjectPosition {
