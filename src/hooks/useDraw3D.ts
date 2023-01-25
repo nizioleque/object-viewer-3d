@@ -7,7 +7,7 @@ import {
   objectPositionState,
   renderScaleState,
 } from '../atoms';
-import { paint } from '../canvas3D/paint';
+import { paint } from '../canvas/paint';
 import { DrawArgs3D } from '../types';
 import { FillWorker } from '../workers/fillWorker';
 

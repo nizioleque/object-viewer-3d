@@ -12,6 +12,7 @@ import {
 import { ObjectPosition } from '../types';
 
 function Canvas() {
+  const limitFps = true;
   const objectData3D = useRecoilValue(objectDataState);
   const scale = useRecoilValue(renderScaleState);
   const [objectPosition, setObjectPosition] =
@@ -32,7 +33,7 @@ function Canvas() {
     );
 
     setObjectPosition(newObjectPosition);
-  }, 1000 / parseFloat(process.env.REACT_APP_FPS_LIMIT ?? '60'));
+  }, 1000 / (limitFps ? parseFloat(process.env.REACT_APP_FPS_LIMIT!) : 60));
 
   return (
     <canvas
