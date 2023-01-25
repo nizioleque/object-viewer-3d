@@ -1,4 +1,4 @@
-import { ObjectData3D, Point3D } from '../types';
+import { ObjectData3D, Point3D, Vertex } from '../types';
 import { parsePoint } from '../utils';
 
 export default async function readObjectFile(
@@ -6,8 +6,8 @@ export default async function readObjectFile(
   color: number[]
 ): Promise<ObjectData3D> {
   const file: Blob = await loadFile(filename);
-  const { vertices, faces } = await parseFile(file);
-  return { vertices, faces, color };
+  const faces = await parseFile(file);
+  return { faces, color };
 }
 
 const loadFile = async (filename: string) => {
@@ -18,7 +18,9 @@ const loadFile = async (filename: string) => {
 
 const parseFile = async (file: Blob) => {
   const vertices: Point3D[] = [];
-  const faces: number[][] = [];
+  const vectors: Point3D[] = [];
+  const faces: { vertex: number; vector: number }[][] = [];
+  const facesParsed: Vertex[][] = [];
 
   const readObjectDataString = await file.text();
   const readObjectData = readObjectDataString.split('\n');
@@ -29,8 +31,20 @@ const parseFile = async (file: Blob) => {
       case 'v':
         vertices.push(parsePoint(lineContent));
         break;
+      case 'vn':
+        vectors.push(parsePoint(lineContent));
+        break;
       case 'f':
-        faces.push(lineContent.map((x) => parseInt(x.split('//')[0])));
+        lineContent.shift();
+        faces.push(
+          lineContent.map((x) => {
+            const split = x.split('/');
+            return {
+              vertex: parseInt(split[0]) - 1,
+              vector: parseInt(split[2]) - 1,
+            };
+          })
+        );
         break;
     }
   }
@@ -51,5 +65,14 @@ const parseFile = async (file: Blob) => {
     vertex.z /= maxCoordinate;
   }
 
-  return { vertices, faces };
+  for (const face of faces) {
+    facesParsed.push(
+      face.map((f) => ({
+        ...vertices[f.vertex],
+        vector: vertices[f.vector],
+      }))
+    );
+  }
+
+  return facesParsed;
 };

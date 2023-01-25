@@ -1,18 +1,16 @@
 import { matrix, multiply } from 'mathjs';
 import { viewMatrixUp } from '../const';
-import { ObjectData3D } from '../types';
+import { Vertex } from '../types';
 
 export default function getVertices(
-  object: ObjectData3D,
-  face: number[],
+  face: Vertex[],
   rotationMatrix: math.Matrix,
   translationMatrix: math.Matrix,
   projectionMatrix: math.Matrix,
   canvasScale: number
 ) {
   const vertices = [];
-  for (let i = 1; i < face.length; i++) {
-    const v = object.vertices[face[i] - 1];
+  for (const v of face) {
     const vector = matrix([[v.x], [v.y], [v.z], [1]]);
     const multRot = multiply(rotationMatrix, vector);
     const multTrans = multiply(translationMatrix, multRot);

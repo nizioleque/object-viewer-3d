@@ -43,7 +43,6 @@ export async function paint(
 
     for (const face of object.faces) {
       const vertices: Point3D[] = getVertices(
-        object,
         face,
         rotationMatrix,
         translationMatrix,
