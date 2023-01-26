@@ -1,4 +1,4 @@
-import { matrix, multiply } from 'mathjs';
+import { inv, matrix, multiply, transpose } from 'mathjs';
 import { viewMatrixUp } from '../const';
 import { Vertex } from '../types';
 
@@ -31,8 +31,7 @@ export default function getFaceScreenCoords(
       [1],
     ]);
     const normalVectorRotated = multiply(
-      // transpose(inv(rotationMatrix)),
-      rotationMatrix,
+      transpose(inv(rotationMatrix)),
       normalVectorMatrix
     );
 

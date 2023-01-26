@@ -2,15 +2,15 @@ import { Vertex, Point3D } from '../types';
 
 const lightColor = [1, 1, 1];
 const params = {
-  kd: 2,
-  ks: 0.5,
-  m: 5,
+  kd: 1,
+  ks: 1,
+  m: 2,
 };
 
 export const lightPosition: Point3D = {
-  x: 2,
-  y: 0,
-  z: -3,
+  x: 3,
+  y: -0.5,
+  z: 4.5,
 };
 
 export default function calculateColor(vertex: Vertex) {
