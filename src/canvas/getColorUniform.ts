@@ -1,7 +1,7 @@
 import { Point3D, Vertex } from '../types';
 import calculateColor from './calculateColor';
 
-export default function getFaceColor(face: Vertex[], color: number[]) {
+export default function getColorUniform(face: Vertex[], color: number[]) {
   const centerVector: Point3D = {
     x:
       (face[0].vectorSpace!.x +

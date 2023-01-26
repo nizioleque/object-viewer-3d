@@ -2,6 +2,7 @@ import { MutableRefObject, useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   currentFpsState,
+  fillModeState,
   fovState,
   objectDataState,
   objectPositionState,
@@ -20,7 +21,9 @@ export default function useDraw3D(
   const objectData3D = useRecoilValue(objectDataState);
   const fov = useRecoilValue(fovState);
   const scale = useRecoilValue(renderScaleState);
+  const fillMode = useRecoilValue(fillModeState);
   const objectPosition = useRecoilValue(objectPositionState);
+
   const setCurrentFps = useSetRecoilState(currentFpsState);
 
   const renderTimes = useRef<number[]>([]);
@@ -36,6 +39,7 @@ export default function useDraw3D(
       fov,
       objectPosition,
       scale,
+      fillMode,
     };
 
     const t0 = performance.now();

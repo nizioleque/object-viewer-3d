@@ -1,12 +1,15 @@
-import { EdgeData, ActiveEdgeData, Vertex } from '../types';
-import getFaceColor from './getFaceColor';
+import { EdgeData, ActiveEdgeData, Vertex, FillMode } from '../types';
+import getColorGouraud from './getColorGouraud';
+import getColorPhong from './getColorPhong';
+import getColorUniform from './getColorUniform';
 
 export default function fillPolygon(
   face: Vertex[],
   imageData: ImageData,
   color: number[],
   zBuffer: number[][],
-  canvasScale: number
+  canvasScale: number,
+  fillMode: FillMode
 ) {
   const edgeTable: EdgeData[][] = [];
 
@@ -99,8 +102,20 @@ export default function fillPolygon(
         if (pointZ > zBuffer[x][y]) continue;
         zBuffer[x][y] = pointZ;
 
+        let pixelColor: number[];
+        switch (fillMode) {
+          case FillMode.Uniform:
+            pixelColor = getColorUniform(face, color);
+            break;
+          case FillMode.Gouraud:
+            pixelColor = getColorGouraud(face, color);
+            break;
+          case FillMode.Phong:
+            pixelColor = getColorPhong(face, color);
+            break;
+        }
+
         const offset = (y * canvasScale * 2 + x) * 4;
-        const pixelColor = getFaceColor(face, color);
         imageData.data.set(pixelColor!, offset);
       }
     }

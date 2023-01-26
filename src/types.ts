@@ -19,6 +19,7 @@ export interface DrawArgs3D {
   fov: number;
   objectPosition: ObjectPosition[];
   scale: number;
+  fillMode: FillMode;
 }
 
 export interface Vertex extends Point3D {
@@ -42,3 +43,9 @@ export type ObjectPositionFn = (
   pos: ObjectPosition,
   t: number
 ) => ObjectPosition;
+
+export enum FillMode {
+  Uniform,
+  Gouraud,
+  Phong,
+}

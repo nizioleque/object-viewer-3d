@@ -1,5 +1,10 @@
 import { atom } from 'recoil';
-import { ObjectData3D, ObjectPosition, ObjectPositionFn } from './types';
+import {
+  FillMode,
+  ObjectData3D,
+  ObjectPosition,
+  ObjectPositionFn,
+} from './types';
 
 export const fovState = atom<number>({
   key: 'fovState',
@@ -43,4 +48,9 @@ export const objectPositionFnState = atom<ObjectPositionFn[]>({
 export const renderScaleState = atom<number>({
   key: 'renderScaleState',
   default: 1,
+});
+
+export const fillModeState = atom<FillMode>({
+  key: 'fillModeState',
+  default: FillMode.Uniform,
 });

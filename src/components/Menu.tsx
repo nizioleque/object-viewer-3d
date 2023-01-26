@@ -2,6 +2,7 @@ import MenuFps from './MenuFps';
 import './Menu.css';
 import MenuFov from './MenuFov';
 import MenuScale from './MenuScale';
+import MenuFill from './MenuFill';
 
 function Menu() {
   return (
@@ -20,6 +21,7 @@ function Menu() {
       <MenuFps />
       <MenuFov />
       <MenuScale/>
+      <MenuFill/>
     </div>
   );
 }
