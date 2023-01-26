@@ -8,7 +8,7 @@ export default async function readObjectFile(
 ): Promise<ObjectData3D> {
   const file: Blob = await loadFile(filename);
   const faces = await parseFile(file, scale);
-  return { faces, color };
+  return { faces, color: color.map((x) => x / 255) };
 }
 
 const loadFile = async (filename: string) => {

@@ -19,7 +19,7 @@ export default async function getExampleObjects() {
     rotation: { x: 0, y: 0, z: PI },
   };
 
-  const object3 = await readObjectFile('Jeep.obj', [205, 176, 230]);
+  const object3 = await readObjectFile('Jeep.obj', [227, 57, 111]);
   const position3: ObjectPosition = {
     offset: { x: 5.75, y: 2, z: 2 },
     rotation: { x: 0, y: 0, z: PI },
@@ -28,8 +28,8 @@ export default async function getExampleObjects() {
   const xStart = 2.25;
   const xEnd = 7.75;
   const xLength = xEnd - xStart;
-  const zStart = 0;
-  const zEnd = 3;
+  const zStart = -1;
+  const zEnd = 4;
   const zLength = zEnd - zStart;
 
   const posFn3 = function (pos: ObjectPosition, t: number): ObjectPosition {
@@ -80,10 +80,10 @@ export default async function getExampleObjects() {
     };
   };
 
-  const object4 = await readObjectFile('cube.obj', [205, 176, 230], 0.05);
+  const object4 = await readObjectFile('cube.obj', [255, 255, 0], 0.05);
   const position4: ObjectPosition = {
     offset: lightPosition,
-    rotation: { x: 0, y: 0, z: 0 },
+    rotation: { x: 0.25 * PI, y: 0.25 * PI, z: 0.75 * PI },
   };
 
   return {

@@ -100,7 +100,7 @@ export default function fillPolygon(
         zBuffer[x][y] = pointZ;
 
         const offset = (y * canvasScale * 2 + x) * 4;
-        const pixelColor = getFaceColor(face);
+        const pixelColor = getFaceColor(face, color);
         imageData.data.set(pixelColor!, offset);
       }
     }
