@@ -69,7 +69,7 @@ const parseFile = async (file: Blob) => {
     facesParsed.push(
       face.map((f) => ({
         ...vertices[f.vertex],
-        vector: vertices[f.vector],
+        vector: vectors[f.vector],
       }))
     );
   }

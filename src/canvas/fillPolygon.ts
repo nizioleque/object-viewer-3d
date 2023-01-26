@@ -1,4 +1,5 @@
 import { EdgeData, ActiveEdgeData, Vertex } from '../types';
+import getFaceColor from './getFaceColor';
 
 export default function fillPolygon(
   face: Vertex[],
@@ -96,8 +97,7 @@ export default function fillPolygon(
         zBuffer[x][y] = pointZ;
 
         const offset = (y * canvasScale * 2 + x) * 4;
-        let pixelColor: number[];
-        pixelColor = [...color, 255];
+        const pixelColor = getFaceColor(face);
         imageData.data.set(pixelColor!, offset);
       }
     }

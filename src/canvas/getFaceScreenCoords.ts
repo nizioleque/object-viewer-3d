@@ -24,6 +24,31 @@ export default function getFaceScreenCoords(
       return false;
     }
 
+    const normalVectorMatrix = matrix([
+      [vertex.vector.x],
+      [vertex.vector.y],
+      [vertex.vector.z],
+      [1],
+    ]);
+    const normalVectorRotated = multiply(
+      // transpose(inv(rotationMatrix)),
+      rotationMatrix,
+      normalVectorMatrix
+    );
+
+    const vectorScale = normalVectorRotated.get([3, 0]);
+    vertex.vectorSpace = {
+      x: normalVectorRotated.get([0, 0]) / vectorScale,
+      y: normalVectorRotated.get([1, 0]) / vectorScale,
+      z: normalVectorRotated.get([2, 0]) / vectorScale,
+    };
+
+    vertex.space = {
+      x: multTrans.get([0, 0]),
+      y: multTrans.get([1, 0]),
+      z: multTrans.get([2, 0]),
+    };
+
     vertex.screen = {
       x: (x * canvasScale + canvasScale) << 0,
       y: (y * canvasScale + canvasScale) << 0,

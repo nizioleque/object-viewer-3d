@@ -1,3 +1,4 @@
+import { lightPosition } from '../canvas/calculateColor';
 import { ObjectPosition } from '../types';
 import readObjectFile from './readObjectFile';
 
@@ -6,13 +7,13 @@ const { PI } = Math;
 export default async function getExampleObjects() {
   const noop = (pos: ObjectPosition) => pos;
 
-  const object1 = await readObjectFile('Jeep.obj', [159, 153, 229]);
+  const object1 = await readObjectFile('torus_large.obj', [159, 153, 229]);
   const position1: ObjectPosition = {
     offset: { x: 4.25, y: 2, z: 2 },
     rotation: { x: 0, y: 0, z: PI },
   };
 
-  const object2 = await readObjectFile('Jeep.obj', [205, 176, 230]);
+  const object2 = await readObjectFile('torus_small.obj', [205, 176, 230]);
   const position2: ObjectPosition = {
     offset: { x: 5.75, y: 2, z: 2 },
     rotation: { x: 0, y: 0, z: PI },
@@ -79,9 +80,15 @@ export default async function getExampleObjects() {
     };
   };
 
+  const object4 = await readObjectFile('cube.obj', [205, 176, 230]);
+  const position4: ObjectPosition = {
+    offset: lightPosition,
+    rotation: { x: 0, y: 0, z: 0 },
+  };
+
   return {
-    objectData: [object1, object2, object3],
-    objectPosition: [position1, position2, position3],
-    objectPositionFn: [noop, noop, posFn3],
+    objectData: [object1, object2, object3, object4],
+    objectPosition: [position1, position2, position3, position4],
+    objectPositionFn: [noop, noop, posFn3, noop],
   };
 }
