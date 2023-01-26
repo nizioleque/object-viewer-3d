@@ -80,7 +80,7 @@ export default async function getExampleObjects() {
     };
   };
 
-  const object4 = await readObjectFile('cube.obj', [205, 176, 230]);
+  const object4 = await readObjectFile('cube.obj', [205, 176, 230], 0.05);
   const position4: ObjectPosition = {
     offset: lightPosition,
     rotation: { x: 0, y: 0, z: 0 },

@@ -3,10 +3,11 @@ import { parsePoint } from '../utils';
 
 export default async function readObjectFile(
   filename: string,
-  color: number[]
+  color: number[],
+  scale?: number
 ): Promise<ObjectData3D> {
   const file: Blob = await loadFile(filename);
-  const faces = await parseFile(file);
+  const faces = await parseFile(file, scale);
   return { faces, color };
 }
 
@@ -16,7 +17,7 @@ const loadFile = async (filename: string) => {
   return blob;
 };
 
-const parseFile = async (file: Blob) => {
+const parseFile = async (file: Blob, scale?: number) => {
   const vertices: Point3D[] = [];
   const vectors: Point3D[] = [];
   const faces: { vertex: number; vector: number }[][] = [];
@@ -63,6 +64,14 @@ const parseFile = async (file: Blob) => {
     vertex.x /= maxCoordinate;
     vertex.y /= maxCoordinate;
     vertex.z /= maxCoordinate;
+  }
+
+  if (scale) {
+    for (const vertex of vertices) {
+      vertex.x *= scale;
+      vertex.y *= scale;
+      vertex.z *= scale;
+    }
   }
 
   for (const face of faces) {
