@@ -7,13 +7,13 @@ const { PI } = Math;
 export default async function getExampleObjects() {
   const noop = (pos: ObjectPosition) => pos;
 
-  const object1 = await readObjectFile('torus_large.obj', [159, 153, 229]);
+  const object1 = await readObjectFile('Jeep.obj', [159, 153, 229]);
   const position1: ObjectPosition = {
     offset: { x: 4.25, y: 2, z: 2 },
     rotation: { x: 0, y: 0, z: PI },
   };
 
-  const object2 = await readObjectFile('torus_small.obj', [205, 176, 230]);
+  const object2 = await readObjectFile('Jeep.obj', [205, 176, 230]);
   const position2: ObjectPosition = {
     offset: { x: 5.75, y: 2, z: 2 },
     rotation: { x: 0, y: 0, z: PI },

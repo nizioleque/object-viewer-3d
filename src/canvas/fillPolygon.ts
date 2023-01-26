@@ -91,7 +91,10 @@ export default function fillPolygon(
 
         const gamma = 1 - alpha - beta;
 
-        const pointZ = face[0].z * alpha + face[1].z * beta + face[2].z * gamma;
+        const pointZ =
+          face[0].screen!.z * alpha +
+          face[1].screen!.z * beta +
+          face[2].screen!.z * gamma;
 
         if (pointZ > zBuffer[x][y]) continue;
         zBuffer[x][y] = pointZ;

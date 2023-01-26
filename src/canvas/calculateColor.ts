@@ -2,9 +2,9 @@ import { Vertex, Point3D } from '../types';
 
 const lightColor = [1, 1, 1];
 const params = {
-  kd: 1,
-  ks: 1,
-  m: 1,
+  kd: 2,
+  ks: 0.5,
+  m: 5,
 };
 
 export const lightPosition: Point3D = {
