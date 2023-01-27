@@ -1,5 +1,6 @@
 import { atom } from 'recoil';
 import {
+  CameraMode,
   FillMode,
   ObjectData3D,
   ObjectPosition,
@@ -53,4 +54,9 @@ export const renderScaleState = atom<number>({
 export const fillModeState = atom<FillMode>({
   key: 'fillModeState',
   default: FillMode.Uniform,
+});
+
+export const cameraModeState = atom<CameraMode>({
+  key: 'cameraModeState',
+  default: CameraMode.Stationary,
 });

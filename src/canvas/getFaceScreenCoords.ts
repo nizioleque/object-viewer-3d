@@ -1,5 +1,4 @@
-import { inv, matrix, multiply, transpose } from 'mathjs';
-import { viewMatrixUp } from '../const';
+import math, { inv, matrix, multiply, transpose } from 'mathjs';
 import { Face } from '../types';
 
 export default function getFaceScreenCoords(
@@ -7,13 +6,14 @@ export default function getFaceScreenCoords(
   rotationMatrix: math.Matrix,
   translationMatrix: math.Matrix,
   projectionMatrix: math.Matrix,
+  viewMatrix: math.Matrix,
   canvasScale: number
 ): boolean {
   for (const vertex of face.vertices) {
     const vector = matrix([[vertex.x], [vertex.y], [vertex.z], [1]]);
     const multRot = multiply(rotationMatrix, vector);
     const multTrans = multiply(translationMatrix, multRot);
-    const multLook = multiply(viewMatrixUp, multTrans);
+    const multLook = multiply(viewMatrix, multTrans);
     const multProj = multiply(projectionMatrix, multLook);
     const scale = multProj.get([3, 0]);
     const x = multProj.get([0, 0]) / scale;

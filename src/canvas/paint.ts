@@ -1,4 +1,4 @@
-import { DrawArgs3D, FillMode, ObjectData3D } from '../types';
+import { CameraMode, DrawArgs3D, FillMode, ObjectData3D } from '../types';
 import calculateVertexColor from './calculateVertexColor';
 import fillPolygon from './fillPolygon';
 import getFaceScreenCoords from './getFaceScreenCoords';
@@ -7,6 +7,8 @@ import {
   getProjectionMatrix,
   getRotationMatrix,
   getTranslationMatrix,
+  viewMatrixFollowing,
+  viewMatrixUp,
 } from './matrices';
 
 export async function paint(
@@ -34,6 +36,12 @@ export async function paint(
     Array(canvasSize).fill(Infinity)
   );
 
+  let viewMatrix = viewMatrixUp;
+  if (drawArgs3D.cameraMode === CameraMode.Following) {
+    viewMatrix = viewMatrixFollowing(drawArgs3D.objectPosition[2].offset);
+  } else if (drawArgs3D.cameraMode === CameraMode.Moving) {
+  }
+
   for (const objectIndex in objectData3D) {
     const object = objectData3D[objectIndex];
     const rotationMatrix = getRotationMatrix(
@@ -49,6 +57,7 @@ export async function paint(
         rotationMatrix,
         translationMatrix,
         projectionMatrix,
+        viewMatrix,
         canvasScale
       );
 

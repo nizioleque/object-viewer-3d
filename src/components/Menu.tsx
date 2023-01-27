@@ -3,6 +3,7 @@ import './Menu.css';
 import MenuFov from './MenuFov';
 import MenuScale from './MenuScale';
 import MenuFill from './MenuFill';
+import MenuCamera from './MenuCamera';
 
 function Menu() {
   return (
@@ -22,6 +23,7 @@ function Menu() {
       <MenuFov />
       <MenuScale />
       <MenuFill />
+      <MenuCamera />
     </div>
   );
 }

@@ -20,6 +20,7 @@ export interface DrawArgs3D {
   objectPosition: ObjectPosition[];
   scale: number;
   fillMode: FillMode;
+  cameraMode: CameraMode;
 }
 
 export interface Face {
@@ -53,4 +54,10 @@ export enum FillMode {
   Uniform,
   Gouraud,
   Phong,
+}
+
+export enum CameraMode {
+  Stationary,
+  Following,
+  Moving,
 }

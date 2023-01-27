@@ -52,7 +52,7 @@ function calculateL(vertex: Vertex, lightPosition: Point3D): Point3D {
   return normalizeVector(v);
 }
 
-function normalizeVector(v: Point3D): Point3D {
+export function normalizeVector(v: Point3D): Point3D {
   const len = Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2));
   return { x: v.x / len, y: v.y / len, z: v.z / len };
 }

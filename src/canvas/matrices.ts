@@ -1,5 +1,6 @@
-import { matrix, cos, sin } from 'mathjs';
-import { ObjectPosition } from '../types';
+import { matrix, cos, sin, inv } from 'mathjs';
+import { ObjectPosition, Point3D } from '../types';
+import { normalizeVector } from './calculateVertexColor';
 
 export const getRotationMatrix = ({ rotation: r }: ObjectPosition) =>
   matrix([
@@ -32,7 +33,7 @@ export const getProjectionMatrix = (fov: number) => {
   const e = 1 / Math.tan(fovRad / 2);
   const a = 1; // aspect ratio
   const n = 1; //near
-  const f = 10; //far
+  const f = 20; //far
 
   return matrix([
     [e, 0, 0, 0],
@@ -40,4 +41,49 @@ export const getProjectionMatrix = (fov: number) => {
     [0, 0, -(f + n) / (f - n), (-2 * f * n) / (f - n)],
     [0, 0, -1, 0],
   ]);
+};
+
+// camera position: 5, -2, 5
+// camera target: 5, 5, 0
+export const viewMatrixUp = matrix([
+  [1, 0, 0, -5],
+  [0, 0.581238194, 0.813733471, -2.906190969],
+  [0, -0.813733471, 0.581238194, -4.533657911],
+  [0, 0, 0, 1],
+]);
+
+export const viewMatrixFollowing = (cameraTarget: Point3D) => {
+  const cameraPosition = {
+    x: -3,
+    y: -0.5,
+    z: 3,
+  };
+  const upVector = { x: 0, y: 1, z: 0 };
+
+  const zAxis = normalizeVector({
+    x: cameraPosition.x - cameraTarget.x,
+    y: cameraPosition.y - cameraTarget.y,
+    z: cameraPosition.z - cameraTarget.z,
+  });
+
+  const xAxis = normalizeVector({
+    x: upVector.y * zAxis.z - upVector.z * zAxis.y,
+    y: upVector.z * zAxis.x - upVector.x * zAxis.z,
+    z: upVector.x * zAxis.y - upVector.y * zAxis.x,
+  });
+
+  const yAxis = {
+    x: zAxis.y * xAxis.z - zAxis.z * xAxis.y,
+    y: zAxis.z * xAxis.x - zAxis.x * xAxis.z,
+    z: zAxis.x * xAxis.y - zAxis.y * xAxis.z,
+  };
+
+  const viewMatrixInv = matrix([
+    [xAxis.x, yAxis.x, zAxis.x, cameraPosition.x],
+    [xAxis.y, yAxis.y, zAxis.y, cameraPosition.y],
+    [xAxis.z, yAxis.z, zAxis.z, cameraPosition.z],
+    [0, 0, 0, 1],
+  ]);
+
+  return inv(viewMatrixInv);
 };
