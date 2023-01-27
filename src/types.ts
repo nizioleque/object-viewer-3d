@@ -22,6 +22,15 @@ export interface DrawArgs3D {
   fillMode: FillMode;
 }
 
+export interface Face {
+  vertices: Vertex[];
+  det?: number;
+  a1?: number;
+  a2?: number;
+  b1?: number;
+  b2?: number;
+}
+
 export interface Vertex extends Point3D {
   vector: Point3D;
   vectorSpace?: Point3D;
@@ -31,7 +40,7 @@ export interface Vertex extends Point3D {
 }
 
 export interface ObjectData3D {
-  faces: Vertex[][];
+  faces: Face[];
   color: number[];
 }
 

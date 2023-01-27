@@ -35,6 +35,7 @@ export default function useDraw3D(
     if (isRendering.current) return;
     isRendering.current = true;
 
+    // console.log(fillMode);
     const drawArgs3D: DrawArgs3D = {
       fov,
       objectPosition,

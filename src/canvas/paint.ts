@@ -54,15 +54,24 @@ export async function paint(
 
       if (drawFace) {
         if (drawArgs3D.fillMode === FillMode.Uniform) {
-          const interpolatedVertex = getInterpolatedVertex(face);
-          face[0].color = calculateVertexColor(
+          const interpolatedVertex = getInterpolatedVertex(face.vertices);
+          face.vertices[0].color = calculateVertexColor(
             interpolatedVertex,
             object.color
           );
         } else if (drawArgs3D.fillMode === FillMode.Gouraud) {
-          calculateVertexColor(face[0], object.color);
-          calculateVertexColor(face[1], object.color);
-          calculateVertexColor(face[2], object.color);
+          face.vertices[0].color = calculateVertexColor(
+            face.vertices[0],
+            object.color
+          );
+          face.vertices[1].color = calculateVertexColor(
+            face.vertices[1],
+            object.color
+          );
+          face.vertices[2].color = calculateVertexColor(
+            face.vertices[2],
+            object.color
+          );
         }
 
         fillPolygon(

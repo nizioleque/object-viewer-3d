@@ -1,15 +1,15 @@
 import { inv, matrix, multiply, transpose } from 'mathjs';
 import { viewMatrixUp } from '../const';
-import { Vertex } from '../types';
+import { Face } from '../types';
 
 export default function getFaceScreenCoords(
-  face: Vertex[],
+  face: Face,
   rotationMatrix: math.Matrix,
   translationMatrix: math.Matrix,
   projectionMatrix: math.Matrix,
   canvasScale: number
 ): boolean {
-  for (const vertex of face) {
+  for (const vertex of face.vertices) {
     const vector = matrix([[vertex.x], [vertex.y], [vertex.z], [1]]);
     const multRot = multiply(rotationMatrix, vector);
     const multTrans = multiply(translationMatrix, multRot);
@@ -54,6 +54,17 @@ export default function getFaceScreenCoords(
       z: (z * canvasScale + canvasScale) << 0,
     };
   }
+
+  face.det =
+    (face.vertices[1].space!.y - face.vertices[2].space!.y) *
+      (face.vertices[0].space!.x - face.vertices[2].space!.x) +
+    (face.vertices[2].space!.x - face.vertices[1].space!.x) *
+      (face.vertices[0].space!.y - face.vertices[2].space!.y);
+
+  face.a1 = face.vertices[1].space!.y - face.vertices[2].space!.y;
+  face.a2 = face.vertices[2].space!.x - face.vertices[1].space!.x;
+  face.b1 = face.vertices[2].space!.y - face.vertices[0].space!.y;
+  face.b2 = face.vertices[0].space!.x - face.vertices[2].space!.x;
 
   return true;
 }

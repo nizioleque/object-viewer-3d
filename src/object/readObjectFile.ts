@@ -1,4 +1,4 @@
-import { ObjectData3D, Point3D, Vertex } from '../types';
+import { Face, ObjectData3D, Point3D } from '../types';
 import { parsePoint } from '../utils';
 
 export default async function readObjectFile(
@@ -21,7 +21,7 @@ const parseFile = async (file: Blob, scale?: number) => {
   const vertices: Point3D[] = [];
   const vectors: Point3D[] = [];
   const faces: { vertex: number; vector: number }[][] = [];
-  const facesParsed: Vertex[][] = [];
+  const facesParsed: Face[] = [];
 
   const readObjectDataString = await file.text();
   const readObjectData = readObjectDataString.split('\n');
@@ -75,12 +75,12 @@ const parseFile = async (file: Blob, scale?: number) => {
   }
 
   for (const face of faces) {
-    facesParsed.push(
-      face.map((f) => ({
+    facesParsed.push({
+      vertices: face.map((f) => ({
         ...vertices[f.vertex],
         vector: vectors[f.vector],
-      }))
-    );
+      })),
+    });
   }
 
   return facesParsed;

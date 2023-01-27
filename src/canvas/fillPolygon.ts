@@ -1,9 +1,9 @@
-import { EdgeData, ActiveEdgeData, Vertex, FillMode } from '../types';
+import { EdgeData, ActiveEdgeData, FillMode, Face } from '../types';
 import getColorGouraud from './getColorGouraud';
 import getColorPhong from './getColorPhong';
 
 export default function fillPolygon(
-  face: Vertex[],
+  face: Face,
   imageData: ImageData,
   color: number[],
   zBuffer: number[][],
@@ -12,23 +12,31 @@ export default function fillPolygon(
 ) {
   const edgeTable: EdgeData[][] = [];
 
-  for (let i = 0; i < face.length; i++) {
-    const iNext = (i + 1) % face.length;
+  for (let i = 0; i < face.vertices.length; i++) {
+    const iNext = (i + 1) % face.vertices.length;
 
     const leftVertex =
-      face[i].screen!.x > face[iNext].screen!.x ? face[iNext] : face[i];
-    const rightVertex = face[i] === leftVertex ? face[iNext] : face[i];
+      face.vertices[i].screen!.x > face.vertices[iNext].screen!.x
+        ? face.vertices[iNext]
+        : face.vertices[i];
+    const rightVertex =
+      face.vertices[i] === leftVertex ? face.vertices[iNext] : face.vertices[i];
 
     if (leftVertex.screen!.y === rightVertex.screen!.y) {
       continue;
     }
 
     const yMinVertex =
-      face[i].screen!.y < face[iNext].screen!.y ? face[i] : face[iNext];
+      face.vertices[i].screen!.y < face.vertices[iNext].screen!.y
+        ? face.vertices[i]
+        : face.vertices[iNext];
 
     const edgeData: EdgeData = {
       xofYMin: yMinVertex.screen!.x,
-      yMax: Math.max(face[i].screen!.y, face[iNext].screen!.y),
+      yMax: Math.max(
+        face.vertices[i].screen!.y,
+        face.vertices[iNext].screen!.y
+      ),
       slopeInverted:
         (rightVertex.screen!.x - leftVertex.screen!.x) /
         (rightVertex.screen!.y - leftVertex.screen!.y),
@@ -75,28 +83,32 @@ export default function fillPolygon(
         if (x > canvasScale * 2 - 1) continue;
 
         const det =
-          (face[1].screen!.y - face[2].screen!.y) *
-            (face[0].screen!.x - face[2].screen!.x) +
-          (face[2].screen!.x - face[1].screen!.x) *
-            (face[0].screen!.y - face[2].screen!.y);
+          (face.vertices[1].screen!.y - face.vertices[2].screen!.y) *
+            (face.vertices[0].screen!.x - face.vertices[2].screen!.x) +
+          (face.vertices[2].screen!.x - face.vertices[1].screen!.x) *
+            (face.vertices[0].screen!.y - face.vertices[2].screen!.y);
 
-        const a1 = face[1].screen!.y - face[2].screen!.y;
-        const a2 = face[2].screen!.x - face[1].screen!.x;
-        const b1 = face[2].screen!.y - face[0].screen!.y;
-        const b2 = face[0].screen!.x - face[2].screen!.x;
+        const a1 = face.vertices[1].screen!.y - face.vertices[2].screen!.y;
+        const a2 = face.vertices[2].screen!.x - face.vertices[1].screen!.x;
+        const b1 = face.vertices[2].screen!.y - face.vertices[0].screen!.y;
+        const b2 = face.vertices[0].screen!.x - face.vertices[2].screen!.x;
 
         const alpha =
-          (a1 * (x - face[2].screen!.x) + a2 * (y - face[2].screen!.y)) / det;
+          (a1 * (x - face.vertices[2].screen!.x) +
+            a2 * (y - face.vertices[2].screen!.y)) /
+          det;
 
         const beta =
-          (b1 * (x - face[2].screen!.x) + b2 * (y - face[2].screen!.y)) / det;
+          (b1 * (x - face.vertices[2].screen!.x) +
+            b2 * (y - face.vertices[2].screen!.y)) /
+          det;
 
         const gamma = 1 - alpha - beta;
 
         const pointZ =
-          face[0].screen!.z * alpha +
-          face[1].screen!.z * beta +
-          face[2].screen!.z * gamma;
+          face.vertices[0].screen!.z * alpha +
+          face.vertices[1].screen!.z * beta +
+          face.vertices[2].screen!.z * gamma;
 
         if (pointZ > zBuffer[x][y]) continue;
         zBuffer[x][y] = pointZ;
@@ -104,13 +116,13 @@ export default function fillPolygon(
         let pixelColor: number[];
         switch (fillMode) {
           case FillMode.Uniform:
-            pixelColor = face[0].color!;
+            pixelColor = face.vertices[0].color!;
             break;
           case FillMode.Gouraud:
-            pixelColor = getColorGouraud(face, color);
+            pixelColor = getColorGouraud(face, x, y);
             break;
           case FillMode.Phong:
-            pixelColor = getColorPhong(face, color);
+            pixelColor = getColorPhong(face, x, y);
             break;
         }
 
