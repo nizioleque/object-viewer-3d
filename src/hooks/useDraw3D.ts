@@ -5,6 +5,7 @@ import {
   currentFpsState,
   fillModeState,
   fovState,
+  lightSourcesState,
   objectDataState,
   objectPositionState,
   renderScaleState,
@@ -25,6 +26,7 @@ export default function useDraw3D(
   const fillMode = useRecoilValue(fillModeState);
   const objectPosition = useRecoilValue(objectPositionState);
   const cameraMode = useRecoilValue(cameraModeState);
+  const lightSources = useRecoilValue(lightSourcesState);
 
   const setCurrentFps = useSetRecoilState(currentFpsState);
 
@@ -43,6 +45,7 @@ export default function useDraw3D(
       scale,
       fillMode,
       cameraMode,
+      lightSources,
     };
 
     const t0 = performance.now();

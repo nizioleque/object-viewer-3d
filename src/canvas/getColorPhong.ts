@@ -1,4 +1,4 @@
-import { Face } from '../types';
+import { Face, Point3D } from '../types';
 import calculateVertexColor from './calculateVertexColor';
 
 const p0 = { x: 0, y: 0, z: 0 };
@@ -8,7 +8,8 @@ export default function getColorPhong(
   alpha: number,
   beta: number,
   gamma: number,
-  objectColor: number[]
+  objectColor: number[],
+  lightSources: Point3D[]
 ) {
   const xPoint =
     face.vertices[0].space!.x * alpha +
@@ -43,6 +44,7 @@ export default function getColorPhong(
       vector: p0,
       ...p0,
     },
-    objectColor
+    objectColor,
+    lightSources
   );
 }

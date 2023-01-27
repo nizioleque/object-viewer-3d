@@ -2,35 +2,34 @@ import { Vertex, Point3D } from '../types';
 
 const lightColor = [1, 1, 1];
 const params = {
-  kd: 1,
-  ks: 1,
-  m: 2,
-};
-
-export const lightPosition: Point3D = {
-  x: 3,
-  y: -0.5,
-  z: 4.5,
+  kd: 0.6,
+  ks: 0.2,
+  m: 1,
 };
 
 export default function calculateVertexColor(
   vertex: Vertex,
-  objectColor: number[]
+  objectColor: number[],
+  lightSources: Point3D[]
 ) {
-  const L = calculateL(vertex, lightPosition);
-  const prodNL = prod(vertex.vectorSpace!, L);
-  const cosNL = Math.max(prodNL, 0);
-  const Rz = 2 * prodNL * (vertex.vectorSpace!.z - L.z);
-  const cosVR = Math.max(Rz, 0);
+  let r = 0;
+  let g = 0;
+  let b = 0;
 
-  return [
-    (calculateColorAtIndex(0) * 255) << 0,
-    (calculateColorAtIndex(1) * 255) << 0,
-    (calculateColorAtIndex(2) * 255) << 0,
-    255,
-  ];
+  for (const lightPosition of lightSources) {
+    const L = calculateL(vertex, lightPosition);
+    const prodNL = prod(vertex.vectorSpace!, L);
+    const cosNL = Math.max(prodNL, 0);
+    const Rz = 2 * prodNL * (vertex.vectorSpace!.z - L.z);
+    const cosVR = Math.max(Rz, 0);
+    r += calculateColorAtIndex(0, cosNL, cosVR) * 255;
+    g += calculateColorAtIndex(1, cosNL, cosVR) * 255;
+    b += calculateColorAtIndex(2, cosNL, cosVR) * 255;
+  }
 
-  function calculateColorAtIndex(i: number) {
+  return [r << 0, g << 0, b << 0, 255];
+
+  function calculateColorAtIndex(i: number, cosNL: number, cosVR: number) {
     const I1 = params.kd * lightColor[i] * objectColor[i] * cosNL;
     const I2 =
       params.ks * lightColor[i] * objectColor[i] * Math.pow(cosVR, params.m);

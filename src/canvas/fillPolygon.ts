@@ -1,4 +1,4 @@
-import { EdgeData, ActiveEdgeData, FillMode, Face } from '../types';
+import { EdgeData, ActiveEdgeData, FillMode, Face, Point3D } from '../types';
 import getColorGouraud from './getColorGouraud';
 import getColorPhong from './getColorPhong';
 
@@ -8,7 +8,8 @@ export default function fillPolygon(
   imageData: ImageData,
   zBuffer: number[][],
   canvasScale: number,
-  fillMode: FillMode
+  fillMode: FillMode,
+  lightSources: Point3D[]
 ) {
   const edgeTable: EdgeData[][] = [];
 
@@ -122,7 +123,14 @@ export default function fillPolygon(
             pixelColor = getColorGouraud(face, alpha, beta, gamma);
             break;
           case FillMode.Phong:
-            pixelColor = getColorPhong(face, alpha, beta, gamma, objectColor);
+            pixelColor = getColorPhong(
+              face,
+              alpha,
+              beta,
+              gamma,
+              objectColor,
+              lightSources
+            );
             break;
         }
 

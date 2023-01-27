@@ -21,6 +21,7 @@ export interface DrawArgs3D {
   scale: number;
   fillMode: FillMode;
   cameraMode: CameraMode;
+  lightSources: Point3D[];
 }
 
 export interface Face {

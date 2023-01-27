@@ -1,10 +1,9 @@
-import { lightPosition } from '../canvas/calculateVertexColor';
-import { ObjectPosition } from '../types';
+import { ObjectPosition, Point3D } from '../types';
 import readObjectFile from './readObjectFile';
 
 const { PI } = Math;
 
-export default async function getExampleObjects() {
+export default async function getExampleObjects(lightSources: Point3D[]) {
   const noop = (pos: ObjectPosition) => pos;
 
   const object1 = await readObjectFile('Jeep.obj', [159, 153, 229]);
@@ -82,7 +81,7 @@ export default async function getExampleObjects() {
 
   const object4 = await readObjectFile('cube.obj', [255, 255, 0], 0.05);
   const position4: ObjectPosition = {
-    offset: lightPosition,
+    offset: lightSources[0],
     rotation: { x: 0.25 * PI, y: 0.25 * PI, z: 0.75 * PI },
   };
 
@@ -92,9 +91,71 @@ export default async function getExampleObjects() {
     rotation: { x: 0, y: 0, z: 0 },
   };
 
+  const object6 = await readObjectFile('cube.obj', [255, 255, 0], 0.05);
+  const position6: ObjectPosition = {
+    offset: { x: 5.75, y: 2, z: 2 },
+    rotation: { x: 0, y: 0, z: PI },
+  };
+
+  const posFn6 = function (pos: ObjectPosition, t: number): ObjectPosition {
+    const rotationTime = (t * 3) % (2 * PI);
+    const progress = (rotationTime % (0.5 * PI)) / (0.5 * PI);
+    const rotation = { x: 0, y: 0, z: PI };
+    const offsetFront = 0.9;
+
+    if (rotationTime < 0.5 * PI) {
+      return {
+        rotation: { ...rotation, y: 1.5 * PI },
+        offset: {
+          x: xStart + xLength * progress + offsetFront,
+          y: 2,
+          z: zStart,
+        },
+      };
+    }
+
+    if (rotationTime < 1.0 * PI) {
+      return {
+        rotation: { ...rotation, y: 0 },
+        offset: {
+          x: xEnd,
+          y: 2,
+          z: zStart + zLength * progress + offsetFront,
+        },
+      };
+    }
+
+    if (rotationTime < 1.5 * PI) {
+      return {
+        rotation: { ...rotation, y: 0.5 * PI },
+        offset: {
+          x: xEnd - xLength * progress - offsetFront,
+          y: 2,
+          z: zEnd,
+        },
+      };
+    }
+
+    return {
+      rotation: { ...rotation, y: 1.0 * PI },
+      offset: {
+        x: xStart,
+        y: 2,
+        z: zEnd - zLength * progress - offsetFront,
+      },
+    };
+  };
+
   return {
-    objectData: [object1, object2, object3, object4, object5],
-    objectPosition: [position1, position2, position3, position4, position5],
-    objectPositionFn: [noop, noop, posFn3, noop, noop],
+    objectData: [object1, object2, object3, object4, object5, object6],
+    objectPosition: [
+      position1,
+      position2,
+      position3,
+      position4,
+      position5,
+      position6,
+    ],
+    objectPositionFn: [noop, noop, posFn3, noop, noop, posFn6],
   };
 }

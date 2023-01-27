@@ -71,20 +71,24 @@ export async function paint(
           const interpolatedVertex = getInterpolatedVertex(face.vertices);
           face.vertices[0].color = calculateVertexColor(
             interpolatedVertex,
-            object.color
+            object.color,
+            drawArgs3D.lightSources
           );
         } else if (drawArgs3D.fillMode === FillMode.Gouraud) {
           face.vertices[0].color = calculateVertexColor(
             face.vertices[0],
-            object.color
+            object.color,
+            drawArgs3D.lightSources
           );
           face.vertices[1].color = calculateVertexColor(
             face.vertices[1],
-            object.color
+            object.color,
+            drawArgs3D.lightSources
           );
           face.vertices[2].color = calculateVertexColor(
             face.vertices[2],
-            object.color
+            object.color,
+            drawArgs3D.lightSources
           );
         }
 
@@ -94,7 +98,8 @@ export async function paint(
           imageData,
           zBuffer,
           canvasScale,
-          drawArgs3D.fillMode
+          drawArgs3D.fillMode,
+          drawArgs3D.lightSources
         );
       }
     }

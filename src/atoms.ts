@@ -5,6 +5,7 @@ import {
   ObjectData3D,
   ObjectPosition,
   ObjectPositionFn,
+  Point3D,
 } from './types';
 
 export const fovState = atom<number>({
@@ -59,4 +60,20 @@ export const fillModeState = atom<FillMode>({
 export const cameraModeState = atom<CameraMode>({
   key: 'cameraModeState',
   default: CameraMode.Stationary,
+});
+
+export const lightSourcesState = atom<Point3D[]>({
+  key: 'lightSourcesState',
+  default: [
+    {
+      x: 3,
+      y: -0.5,
+      z: 4.5,
+    },
+    {
+      x: 0,
+      y: -2,
+      z: 0,
+    },
+  ],
 });

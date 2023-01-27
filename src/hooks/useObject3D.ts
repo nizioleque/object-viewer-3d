@@ -1,16 +1,18 @@
 import { useEffect } from 'react';
 import {
+  lightSourcesState,
   objectDataState,
   objectPositionFnState,
   objectPositionState,
 } from '../atoms';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import getExampleObjects from '../object/getExampleObject';
 
 export default function useObject3D() {
   const setObjectData3D = useSetRecoilState(objectDataState);
   const setObjectPositionState = useSetRecoilState(objectPositionState);
   const setObjectPositionFnState = useSetRecoilState(objectPositionFnState);
+  const lightSources = useRecoilValue(lightSourcesState);
 
   useEffect(() => {
     setExampleObjects();
@@ -19,7 +21,7 @@ export default function useObject3D() {
 
   const setExampleObjects = async () => {
     const { objectData, objectPosition, objectPositionFn } =
-      await getExampleObjects();
+      await getExampleObjects(lightSources);
 
     console.log('setting object data 3d to', objectData);
     setObjectData3D(objectData);
