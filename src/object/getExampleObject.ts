@@ -86,9 +86,15 @@ export default async function getExampleObjects() {
     rotation: { x: 0.25 * PI, y: 0.25 * PI, z: 0.75 * PI },
   };
 
+  const object5 = await readObjectFile('sphere.obj', [255, 0, 0], 1.25);
+  const position5: ObjectPosition = {
+    offset: { x: 7.5, y: 2, z: -1 },
+    rotation: { x: 0, y: 0, z: 0 },
+  };
+
   return {
-    objectData: [object1, object2, object3, object4],
-    objectPosition: [position1, position2, position3, position4],
-    objectPositionFn: [noop, noop, posFn3, noop],
+    objectData: [object1, object2, object3, object4, object5],
+    objectPosition: [position1, position2, position3, position4, position5],
+    objectPositionFn: [noop, noop, posFn3, noop, noop],
   };
 }

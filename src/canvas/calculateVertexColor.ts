@@ -17,10 +17,6 @@ export default function calculateVertexColor(
   vertex: Vertex,
   objectColor: number[]
 ) {
-  if (Math.random() < 1e-5) {
-    console.log(vertex);
-  }
-
   const L = calculateL(vertex, lightPosition);
   const prodNL = prod(vertex.vectorSpace!, L);
   const cosNL = Math.max(prodNL, 0);
