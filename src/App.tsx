@@ -27,6 +27,13 @@ function App() {
     <>
       <div className='App'>
         <Menu />
+        <div
+          style={{
+            boxSizing: 'border-box',
+            margin: '35px 0',
+            background: 'rgb(0,0,0,0.15)',
+          }}
+        />
         <div className='canvas-container'>
           <Canvas />
         </div>

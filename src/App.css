@@ -1,8 +1,9 @@
 .App {
   height: 100%;
   display: grid;
-  grid: 1fr / 350px 1fr;
+  grid: 1fr / 350px 2px 1fr;
   grid-template-areas: 'menu canvas-container';
+  background: linear-gradient(#dab7f0, #aba5ee);
 }
 
 .canvas-container {
@@ -43,4 +44,13 @@ canvas {
 .alert.show {
   opacity: 1;
   pointer-events: initial;
+}
+
+canvas {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  width: 1000px;
+  height: 1000px;
 }

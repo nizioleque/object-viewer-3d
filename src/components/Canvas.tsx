@@ -35,14 +35,7 @@ function Canvas() {
     setObjectPosition(newObjectPosition);
   }, 1000 / (limitFps ? parseFloat(process.env.REACT_APP_FPS_LIMIT ?? '60') : 60));
 
-  return (
-    <canvas
-      ref={canvasRef}
-      width={1000 * scale}
-      height={1000 * scale}
-      style={{ border: '5px black inset', width: '800px', height: '800px' }}
-    />
-  );
+  return <canvas ref={canvasRef} width={1000 * scale} height={1000 * scale} />;
 }
 
 export default Canvas;

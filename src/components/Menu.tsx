@@ -20,8 +20,8 @@ function Menu() {
       </header>
       <MenuFps />
       <MenuFov />
-      <MenuScale/>
-      <MenuFill/>
+      <MenuScale />
+      <MenuFill />
     </div>
   );
 }
