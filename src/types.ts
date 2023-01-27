@@ -27,6 +27,7 @@ export interface Vertex extends Point3D {
   vectorSpace?: Point3D;
   space?: Point3D;
   screen?: Point3D;
+  color?: number[];
 }
 
 export interface ObjectData3D {

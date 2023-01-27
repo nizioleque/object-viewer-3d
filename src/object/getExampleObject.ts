@@ -1,4 +1,4 @@
-import { lightPosition } from '../canvas/calculateColor';
+import { lightPosition } from '../canvas/calculateVertexColor';
 import { ObjectPosition } from '../types';
 import readObjectFile from './readObjectFile';
 

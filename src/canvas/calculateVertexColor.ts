@@ -13,7 +13,10 @@ export const lightPosition: Point3D = {
   z: 4.5,
 };
 
-export default function calculateColor(vertex: Vertex, color: number[]) {
+export default function calculateVertexColor(
+  vertex: Vertex,
+  objectColor: number[]
+) {
   if (Math.random() < 1e-5) {
     console.log(vertex);
   }
@@ -32,8 +35,9 @@ export default function calculateColor(vertex: Vertex, color: number[]) {
   ];
 
   function calculateColorAtIndex(i: number) {
-    const I1 = params.kd * lightColor[i] * color[i] * cosNL;
-    const I2 = params.ks * lightColor[i] * color[i] * Math.pow(cosVR, params.m);
+    const I1 = params.kd * lightColor[i] * objectColor[i] * cosNL;
+    const I2 =
+      params.ks * lightColor[i] * objectColor[i] * Math.pow(cosVR, params.m);
     return I1 + I2;
   }
 }

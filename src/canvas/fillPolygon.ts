@@ -1,7 +1,6 @@
 import { EdgeData, ActiveEdgeData, Vertex, FillMode } from '../types';
 import getColorGouraud from './getColorGouraud';
 import getColorPhong from './getColorPhong';
-import getColorUniform from './getColorUniform';
 
 export default function fillPolygon(
   face: Vertex[],
@@ -105,7 +104,7 @@ export default function fillPolygon(
         let pixelColor: number[];
         switch (fillMode) {
           case FillMode.Uniform:
-            pixelColor = getColorUniform(face, color);
+            pixelColor = face[0].color!;
             break;
           case FillMode.Gouraud:
             pixelColor = getColorGouraud(face, color);

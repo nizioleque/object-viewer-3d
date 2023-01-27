@@ -1,6 +1,8 @@
-import { DrawArgs3D, ObjectData3D } from '../types';
+import { DrawArgs3D, FillMode, ObjectData3D } from '../types';
+import calculateVertexColor from './calculateVertexColor';
 import fillPolygon from './fillPolygon';
 import getFaceScreenCoords from './getFaceScreenCoords';
+import getInterpolatedVertex from './getInterpolatedVertex';
 import {
   getProjectionMatrix,
   getRotationMatrix,
@@ -51,6 +53,18 @@ export async function paint(
       );
 
       if (drawFace) {
+        if (drawArgs3D.fillMode === FillMode.Uniform) {
+          const interpolatedVertex = getInterpolatedVertex(face);
+          face[0].color = calculateVertexColor(
+            interpolatedVertex,
+            object.color
+          );
+        } else if (drawArgs3D.fillMode === FillMode.Gouraud) {
+          calculateVertexColor(face[0], object.color);
+          calculateVertexColor(face[1], object.color);
+          calculateVertexColor(face[2], object.color);
+        }
+
         fillPolygon(
           face,
           imageData,
