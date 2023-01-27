@@ -74,7 +74,14 @@ export async function paint(
           );
         }
 
-        fillPolygon(face, imageData, zBuffer, canvasScale, drawArgs3D.fillMode);
+        fillPolygon(
+          face,
+          object.color,
+          imageData,
+          zBuffer,
+          canvasScale,
+          drawArgs3D.fillMode
+        );
       }
     }
   }

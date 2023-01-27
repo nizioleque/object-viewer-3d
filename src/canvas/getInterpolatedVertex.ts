@@ -1,5 +1,7 @@
 import { Point3D, Vertex } from '../types';
 
+const p0 = { x: 0, y: 0, z: 0 };
+
 export default function getInterpolatedVertex(vertices: Vertex[]) {
   const centerVector: Point3D = {
     x:
@@ -24,8 +26,6 @@ export default function getInterpolatedVertex(vertices: Vertex[]) {
     y: (vertices[0].space!.y + vertices[1].space!.y + vertices[2].space!.y) / 3,
     z: (vertices[0].space!.z + vertices[1].space!.z + vertices[2].space!.z) / 3,
   };
-
-  const p0 = { x: 0, y: 0, z: 0 };
 
   return {
     space: centerSpace,
