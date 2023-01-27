@@ -146,8 +146,14 @@ export default async function getExampleObjects(lightSources: Point3D[]) {
     };
   };
 
+  const object7 = await readObjectFile('cube.obj', [255, 255, 0], 0.05);
+  const position7: ObjectPosition = {
+    offset: lightSources[2],
+    rotation: { x: 0.25 * PI, y: 0.25 * PI, z: 0.75 * PI },
+  };
+
   return {
-    objectData: [object1, object2, object3, object4, object5, object6],
+    objectData: [object1, object2, object3, object4, object5, object6, object7],
     objectPosition: [
       position1,
       position2,
@@ -155,7 +161,8 @@ export default async function getExampleObjects(lightSources: Point3D[]) {
       position4,
       position5,
       position6,
+      position7,
     ],
-    objectPositionFn: [noop, noop, posFn3, noop, noop, posFn6],
+    objectPositionFn: [noop, noop, posFn3, noop, noop, posFn6, noop],
   };
 }

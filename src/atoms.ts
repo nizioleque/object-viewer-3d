@@ -75,5 +75,10 @@ export const lightSourcesState = atom<Point3D[]>({
       y: -2,
       z: 0,
     },
+    {
+      x: 2,
+      y: 1,
+      z: -2,
+    },
   ],
 });
