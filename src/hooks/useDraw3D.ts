@@ -12,7 +12,7 @@ import { paint } from '../canvas/paint';
 import { DrawArgs3D } from '../types';
 import { FillWorker } from '../workers/fillWorker';
 
-const rendersCount = 20;
+const rendersCount = 5;
 
 export default function useDraw3D(
   worker: MutableRefObject<FillWorker | undefined>,

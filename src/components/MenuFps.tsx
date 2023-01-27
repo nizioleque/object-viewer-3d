@@ -7,7 +7,7 @@ function MenuFps() {
   return (
     <div className='menu-section center'>
       <div>
-        Średnie FPS: <span className='bold'>{currentFps.toFixed(0)}</span>
+        Średnie FPS: <span className='bold'>{currentFps.toFixed(2)}</span>
       </div>
       <div className='spacer' />
       <div title='Nie działa w Safari!'>
