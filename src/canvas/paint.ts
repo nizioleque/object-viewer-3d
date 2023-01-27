@@ -8,6 +8,7 @@ import {
   getRotationMatrix,
   getTranslationMatrix,
   viewMatrixFollowing,
+  viewMatrixMoving,
   viewMatrixUp,
 } from './matrices';
 
@@ -40,6 +41,10 @@ export async function paint(
   if (drawArgs3D.cameraMode === CameraMode.Following) {
     viewMatrix = viewMatrixFollowing(drawArgs3D.objectPosition[2].offset);
   } else if (drawArgs3D.cameraMode === CameraMode.Moving) {
+    viewMatrix = viewMatrixMoving(
+      drawArgs3D.objectPosition[2].offset,
+      drawArgs3D.objectPosition[2].rotation
+    );
   }
 
   for (const objectIndex in objectData3D) {

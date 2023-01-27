@@ -1,4 +1,4 @@
-import { matrix, cos, sin, inv } from 'mathjs';
+import { matrix, cos, sin, inv, multiply } from 'mathjs';
 import { ObjectPosition, Point3D } from '../types';
 import { normalizeVector } from './calculateVertexColor';
 
@@ -58,6 +58,61 @@ export const viewMatrixFollowing = (cameraTarget: Point3D) => {
     y: -0.5,
     z: 3,
   };
+  const upVector = { x: 0, y: 1, z: 0 };
+
+  const zAxis = normalizeVector({
+    x: cameraPosition.x - cameraTarget.x,
+    y: cameraPosition.y - cameraTarget.y,
+    z: cameraPosition.z - cameraTarget.z,
+  });
+
+  const xAxis = normalizeVector({
+    x: upVector.y * zAxis.z - upVector.z * zAxis.y,
+    y: upVector.z * zAxis.x - upVector.x * zAxis.z,
+    z: upVector.x * zAxis.y - upVector.y * zAxis.x,
+  });
+
+  const yAxis = {
+    x: zAxis.y * xAxis.z - zAxis.z * xAxis.y,
+    y: zAxis.z * xAxis.x - zAxis.x * xAxis.z,
+    z: zAxis.x * xAxis.y - zAxis.y * xAxis.z,
+  };
+
+  const viewMatrixInv = matrix([
+    [xAxis.x, yAxis.x, zAxis.x, cameraPosition.x],
+    [xAxis.y, yAxis.y, zAxis.y, cameraPosition.y],
+    [xAxis.z, yAxis.z, zAxis.z, cameraPosition.z],
+    [0, 0, 0, 1],
+  ]);
+
+  return inv(viewMatrixInv);
+};
+
+export const viewMatrixMoving = (
+  objectPosition: Point3D,
+  cameraDirection: Point3D
+) => {
+  const vector = matrix([[0], [0], [1], [1]]);
+  const cameraTargetOffset = multiply(
+    getRotationMatrix({
+      rotation: cameraDirection,
+      offset: { x: 0, y: 0, z: 0 },
+    }),
+    vector
+  );
+
+  const cameraPosition = {
+    x: objectPosition.x - 3 * cameraTargetOffset.get([0, 0]),
+    y: objectPosition.y - 1.5,
+    z: objectPosition.z - 3 * cameraTargetOffset.get([2, 0]),
+  };
+
+  const cameraTarget = {
+    x: objectPosition.x + cameraTargetOffset.get([0, 0]),
+    y: cameraPosition.y,
+    z: objectPosition.z + cameraTargetOffset.get([2, 0]),
+  };
+
   const upVector = { x: 0, y: 1, z: 0 };
 
   const zAxis = normalizeVector({
