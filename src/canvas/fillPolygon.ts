@@ -5,7 +5,6 @@ import getColorPhong from './getColorPhong';
 export default function fillPolygon(
   face: Face,
   imageData: ImageData,
-  color: number[],
   zBuffer: number[][],
   canvasScale: number,
   fillMode: FillMode
@@ -119,7 +118,7 @@ export default function fillPolygon(
             pixelColor = face.vertices[0].color!;
             break;
           case FillMode.Gouraud:
-            pixelColor = getColorGouraud(face, x, y);
+            pixelColor = getColorGouraud(face, alpha, beta, gamma);
             break;
           case FillMode.Phong:
             pixelColor = getColorPhong(face, x, y);

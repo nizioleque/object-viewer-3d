@@ -24,11 +24,6 @@ export interface DrawArgs3D {
 
 export interface Face {
   vertices: Vertex[];
-  det?: number;
-  a1?: number;
-  a2?: number;
-  b1?: number;
-  b2?: number;
 }
 
 export interface Vertex extends Point3D {

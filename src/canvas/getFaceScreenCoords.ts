@@ -55,16 +55,5 @@ export default function getFaceScreenCoords(
     };
   }
 
-  face.det =
-    (face.vertices[1].space!.y - face.vertices[2].space!.y) *
-      (face.vertices[0].space!.x - face.vertices[2].space!.x) +
-    (face.vertices[2].space!.x - face.vertices[1].space!.x) *
-      (face.vertices[0].space!.y - face.vertices[2].space!.y);
-
-  face.a1 = face.vertices[1].space!.y - face.vertices[2].space!.y;
-  face.a2 = face.vertices[2].space!.x - face.vertices[1].space!.x;
-  face.b1 = face.vertices[2].space!.y - face.vertices[0].space!.y;
-  face.b2 = face.vertices[0].space!.x - face.vertices[2].space!.x;
-
   return true;
 }
