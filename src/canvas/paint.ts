@@ -31,7 +31,9 @@ export async function paint(
   }
 
   // fill
-  const imageData = ctx.createImageData(canvasSize, canvasSize);
+  ctx.fillStyle = `hsl(239,15%,${drawArgs3D.daylight}%)`;
+  ctx.fillRect(0, 0, canvasSize, canvasSize);
+  const imageData = ctx.getImageData(0, 0, canvasSize, canvasSize);
   const projectionMatrix = getProjectionMatrix(drawArgs3D.fov);
   const zBuffer: number[][] = [...Array(canvasSize)].map((e) =>
     Array(canvasSize).fill(Infinity)

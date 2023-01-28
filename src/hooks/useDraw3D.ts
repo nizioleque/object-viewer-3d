@@ -3,6 +3,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   cameraModeState,
   currentFpsState,
+  daylightState,
   fillModeState,
   fovState,
   lightSourcesState,
@@ -27,6 +28,7 @@ export default function useDraw3D(
   const objectPosition = useRecoilValue(objectPositionState);
   const cameraMode = useRecoilValue(cameraModeState);
   const lightSources = useRecoilValue(lightSourcesState);
+  const daylight = useRecoilValue(daylightState);
 
   const setCurrentFps = useSetRecoilState(currentFpsState);
 
@@ -46,6 +48,7 @@ export default function useDraw3D(
       fillMode,
       cameraMode,
       lightSources,
+      daylight,
     };
 
     const t0 = performance.now();

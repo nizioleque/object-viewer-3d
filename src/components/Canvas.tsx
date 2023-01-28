@@ -2,8 +2,9 @@ import { useEffect } from 'react';
 import useCanvasWorker from '../hooks/useCanvasWorker';
 import useDraw3D from '../hooks/useDraw3D';
 import useInterval from '../hooks/useInterval';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
+  daylightState,
   lightSourcesState,
   objectDataState,
   objectOscillationState,
@@ -22,6 +23,7 @@ function Canvas() {
     useRecoilState(objectPositionState);
   const objectPositionFn = useRecoilValue(objectPositionFnState);
   const [lightSources, setLightSources] = useRecoilState(lightSourcesState);
+  const setDaylight = useSetRecoilState(daylightState);
 
   const { worker, canvasCtx, canvasRef } = useCanvasWorker();
   const { draw3D } = useDraw3D(worker, canvasCtx);
@@ -40,8 +42,12 @@ function Canvas() {
     const newLightSources = lightSources.slice();
     newLightSources[1] = newObjectPosition[5].offset;
 
+    let newDaylight = (t * 20) % 200;
+    if (newDaylight > 100) newDaylight = 200 - newDaylight;
+
     setObjectPosition(newObjectPosition);
     setLightSources(newLightSources);
+    setDaylight(newDaylight);
   }, 1000 / (limitFps ? parseFloat(process.env.REACT_APP_FPS_LIMIT ?? '60') : 60));
 
   return <canvas ref={canvasRef} width={1000 * scale} height={1000 * scale} />;

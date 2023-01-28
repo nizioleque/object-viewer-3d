@@ -87,3 +87,8 @@ export const objectOscillationState = atom<boolean>({
   key: 'objectOscillationState',
   default: false,
 });
+
+export const daylightState = atom<number>({
+  key: 'daylightState',
+  default: 100,
+});
