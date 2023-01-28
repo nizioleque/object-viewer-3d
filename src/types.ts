@@ -22,7 +22,7 @@ export interface DrawArgs3D {
   fillMode: FillMode;
   cameraMode: CameraMode;
   lightSources: Point3D[];
-  daylight: number;
+  daylight: number[];
 }
 
 export interface Face {

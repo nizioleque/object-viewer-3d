@@ -13,6 +13,7 @@ import {
   renderScaleState,
 } from '../atoms';
 import { ObjectPosition } from '../types';
+import convert from 'color-convert';
 
 function Canvas() {
   const limitFps = true;
@@ -47,7 +48,7 @@ function Canvas() {
 
     setObjectPosition(newObjectPosition);
     setLightSources(newLightSources);
-    setDaylight(newDaylight);
+    setDaylight(convert.hsl.rgb([239, 15, newDaylight]));
   }, 1000 / (limitFps ? parseFloat(process.env.REACT_APP_FPS_LIMIT ?? '60') : 60));
 
   return <canvas ref={canvasRef} width={1000 * scale} height={1000 * scale} />;

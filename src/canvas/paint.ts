@@ -31,7 +31,7 @@ export async function paint(
   }
 
   // fill
-  ctx.fillStyle = `hsl(239,15%,${drawArgs3D.daylight}%)`;
+  ctx.fillStyle = `rgb(${drawArgs3D.daylight[0]},${drawArgs3D.daylight[1]},${drawArgs3D.daylight[2]})`;
   ctx.fillRect(0, 0, canvasSize, canvasSize);
   const imageData = ctx.getImageData(0, 0, canvasSize, canvasSize);
   const projectionMatrix = getProjectionMatrix(drawArgs3D.fov);
