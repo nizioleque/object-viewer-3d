@@ -6,6 +6,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   lightSourcesState,
   objectDataState,
+  objectOscillationState,
   objectPositionFnState,
   objectPositionState,
   renderScaleState,
@@ -16,6 +17,7 @@ function Canvas() {
   const limitFps = true;
   const objectData3D = useRecoilValue(objectDataState);
   const scale = useRecoilValue(renderScaleState);
+  const objectOscillation = useRecoilValue(objectOscillationState);
   const [objectPosition, setObjectPosition] =
     useRecoilState(objectPositionState);
   const objectPositionFn = useRecoilValue(objectPositionFnState);
@@ -31,7 +33,8 @@ function Canvas() {
   useInterval(() => {
     const t = Date.now() / 5000;
     const newObjectPosition: ObjectPosition[] = objectPosition.map(
-      (objectPosition, index) => objectPositionFn[index](objectPosition, t)
+      (objectPosition, index) =>
+        objectPositionFn[index](objectPosition, t, objectOscillation)
     );
 
     const newLightSources = lightSources.slice();

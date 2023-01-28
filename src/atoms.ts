@@ -82,3 +82,8 @@ export const lightSourcesState = atom<Point3D[]>({
     },
   ],
 });
+
+export const objectOscillationState = atom<boolean>({
+  key: 'objectOscillationState',
+  default: false,
+});

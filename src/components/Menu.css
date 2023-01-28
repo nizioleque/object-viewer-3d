@@ -1,12 +1,12 @@
 .menu {
-  margin: 20px;
-  padding-bottom: 20px;
+  padding: 20px;
 
   display: flex;
   flex-direction: column;
   gap: 16px;
 
   position: relative;
+  overflow-y: auto;
 }
 
 .name {

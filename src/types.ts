@@ -48,7 +48,8 @@ export interface ObjectPosition {
 
 export type ObjectPositionFn = (
   pos: ObjectPosition,
-  t: number
+  t: number,
+  enableOscillation: boolean
 ) => ObjectPosition;
 
 export enum FillMode {

@@ -1,3 +1,4 @@
+import { random } from 'mathjs';
 import { ObjectPosition, Point3D } from '../types';
 import readObjectFile from './readObjectFile';
 
@@ -31,18 +32,26 @@ export default async function getExampleObjects(lightSources: Point3D[]) {
   const zEnd = 4;
   const zLength = zEnd - zStart;
 
-  const posFn3 = function (pos: ObjectPosition, t: number): ObjectPosition {
+  const posFn3 = function (
+    pos: ObjectPosition,
+    t: number,
+    enableOscillation: boolean
+  ): ObjectPosition {
     const rotationTime = (t * 3) % (2 * PI);
     const progress = (rotationTime % (0.5 * PI)) / (0.5 * PI);
     const rotation = { x: 0, y: 0, z: PI };
+
+    const oscillationOffsetFront = enableOscillation ? random(-0.05, 0.05) : 0;
+    const oscillationOffsetUp = enableOscillation ? random(-0.05, 0.05) : 0;
+    const oscillationOffsetSide = enableOscillation ? random(-0.05, 0.05) : 0;
 
     if (rotationTime < 0.5 * PI) {
       return {
         rotation: { ...rotation, y: 1.5 * PI },
         offset: {
-          x: xStart + xLength * progress,
-          y: 2,
-          z: zStart,
+          x: oscillationOffsetFront + xStart + xLength * progress,
+          y: oscillationOffsetUp + 2,
+          z: oscillationOffsetSide + zStart,
         },
       };
     }
@@ -51,9 +60,9 @@ export default async function getExampleObjects(lightSources: Point3D[]) {
       return {
         rotation: { ...rotation, y: 0 },
         offset: {
-          x: xEnd,
-          y: 2,
-          z: zStart + zLength * progress,
+          x: oscillationOffsetSide + xEnd,
+          y: oscillationOffsetUp + 2,
+          z: oscillationOffsetFront + zStart + zLength * progress,
         },
       };
     }
@@ -62,9 +71,9 @@ export default async function getExampleObjects(lightSources: Point3D[]) {
       return {
         rotation: { ...rotation, y: 0.5 * PI },
         offset: {
-          x: xEnd - xLength * progress,
-          y: 2,
-          z: zEnd,
+          x: oscillationOffsetFront + xEnd - xLength * progress,
+          y: oscillationOffsetUp + 2,
+          z: oscillationOffsetSide + zEnd,
         },
       };
     }
@@ -72,9 +81,9 @@ export default async function getExampleObjects(lightSources: Point3D[]) {
     return {
       rotation: { ...rotation, y: 1.0 * PI },
       offset: {
-        x: xStart,
-        y: 2,
-        z: zEnd - zLength * progress,
+        x: oscillationOffsetSide + xStart,
+        y: oscillationOffsetUp + 2,
+        z: oscillationOffsetFront + zEnd - zLength * progress,
       },
     };
   };
