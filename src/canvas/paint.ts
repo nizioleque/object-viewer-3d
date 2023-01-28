@@ -40,13 +40,23 @@ export async function paint(
   );
 
   let viewMatrix = viewMatrixUp;
+  let cameraPosition = {
+    x: 5,
+    y: -2,
+    z: 5,
+  };
   if (drawArgs3D.cameraMode === CameraMode.Following) {
     viewMatrix = viewMatrixFollowing(drawArgs3D.objectPosition[2].offset);
+    cameraPosition = {
+      x: -3,
+      y: -0.5,
+      z: 3,
+    };
   } else if (drawArgs3D.cameraMode === CameraMode.Moving) {
-    viewMatrix = viewMatrixMoving(
+    ({ viewMatrix, cameraPosition } = viewMatrixMoving(
       drawArgs3D.objectPosition[2].offset,
       drawArgs3D.objectPosition[2].rotation
-    );
+    ));
   }
 
   for (const objectIndex in objectData3D) {
@@ -74,23 +84,31 @@ export async function paint(
           face.vertices[0].color = calculateVertexColor(
             interpolatedVertex,
             object.color,
-            drawArgs3D.lightSources
+            drawArgs3D.lightSources,
+            drawArgs3D.fog ? drawArgs3D.daylight : null,
+            drawArgs3D.fog ? cameraPosition : null
           );
         } else if (drawArgs3D.fillMode === FillMode.Gouraud) {
           face.vertices[0].color = calculateVertexColor(
             face.vertices[0],
             object.color,
-            drawArgs3D.lightSources
+            drawArgs3D.lightSources,
+            drawArgs3D.fog ? drawArgs3D.daylight : null,
+            drawArgs3D.fog ? cameraPosition : null
           );
           face.vertices[1].color = calculateVertexColor(
             face.vertices[1],
             object.color,
-            drawArgs3D.lightSources
+            drawArgs3D.lightSources,
+            drawArgs3D.fog ? drawArgs3D.daylight : null,
+            drawArgs3D.fog ? cameraPosition : null
           );
           face.vertices[2].color = calculateVertexColor(
             face.vertices[2],
             object.color,
-            drawArgs3D.lightSources
+            drawArgs3D.lightSources,
+            drawArgs3D.fog ? drawArgs3D.daylight : null,
+            drawArgs3D.fog ? cameraPosition : null
           );
         }
 
@@ -101,7 +119,9 @@ export async function paint(
           zBuffer,
           canvasScale,
           drawArgs3D.fillMode,
-          drawArgs3D.lightSources
+          drawArgs3D.lightSources,
+          drawArgs3D.fog ? drawArgs3D.daylight : null,
+          drawArgs3D.fog ? cameraPosition : null
         );
       }
     }

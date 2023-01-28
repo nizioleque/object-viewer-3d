@@ -23,6 +23,7 @@ export interface DrawArgs3D {
   cameraMode: CameraMode;
   lightSources: Point3D[];
   daylight: number[];
+  fog: boolean;
 }
 
 export interface Face {

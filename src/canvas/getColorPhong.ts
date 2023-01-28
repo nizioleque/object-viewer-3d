@@ -9,7 +9,9 @@ export default function getColorPhong(
   beta: number,
   gamma: number,
   objectColor: number[],
-  lightSources: Point3D[]
+  lightSources: Point3D[],
+  backgroundColor: number[] | null,
+  cameraPosition: Point3D | null
 ) {
   const xPoint =
     face.vertices[0].space!.x * alpha +
@@ -45,6 +47,8 @@ export default function getColorPhong(
       ...p0,
     },
     objectColor,
-    lightSources
+    lightSources,
+    backgroundColor,
+    cameraPosition
   );
 }

@@ -92,4 +92,8 @@ export const daylightState = atom<number[]>({
   key: 'daylightState',
   default: [255, 255, 255],
 });
+
+export const fogState = atom<boolean>({
+  key: 'fogState',
+  default: false,
 });

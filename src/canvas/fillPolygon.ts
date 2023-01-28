@@ -9,7 +9,9 @@ export default function fillPolygon(
   zBuffer: number[][],
   canvasScale: number,
   fillMode: FillMode,
-  lightSources: Point3D[]
+  lightSources: Point3D[],
+  backgroundColor: number[] | null,
+  cameraPosition: Point3D | null
 ) {
   const edgeTable: EdgeData[][] = [];
 
@@ -129,7 +131,9 @@ export default function fillPolygon(
               beta,
               gamma,
               objectColor,
-              lightSources
+              lightSources,
+              backgroundColor,
+              cameraPosition
             );
             break;
         }

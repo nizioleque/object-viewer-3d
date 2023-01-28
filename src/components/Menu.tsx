@@ -5,6 +5,7 @@ import MenuScale from './MenuScale';
 import MenuFill from './MenuFill';
 import MenuCamera from './MenuCamera';
 import MenuOscillations from './MenuOscillations';
+import MenuFog from './MenuFog';
 
 function Menu() {
   return (
@@ -26,6 +27,7 @@ function Menu() {
       <MenuFill />
       <MenuCamera />
       <MenuOscillations />
+      <MenuFog />
     </div>
   );
 }

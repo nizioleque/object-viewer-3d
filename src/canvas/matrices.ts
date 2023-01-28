@@ -140,5 +140,5 @@ export const viewMatrixMoving = (
     [0, 0, 0, 1],
   ]);
 
-  return inv(viewMatrixInv);
+  return { viewMatrix: inv(viewMatrixInv), cameraPosition };
 };
