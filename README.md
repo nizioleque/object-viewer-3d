@@ -2,6 +2,8 @@
 
 Norbert Niziołek – Grafika komputerowa 1
 
+https://user-images.githubusercontent.com/92390086/215239250-cbca186b-79d5-4541-aaee-2c674b60547f.mp4
+
 ## Uruchamianie
 
 ### Przez stronę internetową (zalecane)
